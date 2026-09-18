@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rayalaseema Cloud Kitchen | Fresh Food Bowls & Catering Services</title>
+  <meta name="description" content="Rayalaseema Cloud Kitchen - Healthy, authentic food bowls delivered fresh daily. Veg bowls, Non-veg bowls, fruit bowls, corporate catering, and wholesale food supply." />
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥗</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              yellow: '#F59E0B',
+              'yellow-light': '#FEF3C7',
+              'yellow-dark': '#D97706',
+              green: '#15803D',
+              'green-dark': '#14532D',
+              'green-light': '#DCFCE7',
+              black: '#111827',
+              dark: '#1F2937'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['"Outfit"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- AOS (Animate On Scroll) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-[#FAFAFA] text-zinc-800 antialiased selection:bg-amber-300 selection:text-zinc-950 flex flex-col min-h-screen">
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header id="main-header" class="sticky top-0 z-50 glass-nav border-b border-zinc-100 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo -->
+        <a href="#home" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-2xl bg-amber-400 flex items-center justify-center text-zinc-950 font-black shadow-md group-hover:scale-105 transition">
+            <svg class="w-6 h-6 text-zinc-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xl font-black tracking-tight text-zinc-950 font-heading">Rayalaseema</span>
+              <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-amber-400 text-zinc-950 uppercase">Kitchen</span>
+            </div>
+            <span class="text-[10px] tracking-widest text-emerald-800 font-bold uppercase block -mt-1">FOODS & BOWLS</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-700">
+          <a href="#home" onclick="navigateTo('home'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="home">Home</a>
+          <a href="#categories" onclick="navigateTo('categories'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="categories">Our Bowls</a>
+          <a href="#services" onclick="navigateTo('services'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="services">Our Services</a>
+          <a href="#plans-section" onclick="navigateTo('plans-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Plans</a>
+          <a href="#catering-section" onclick="navigateTo('catering-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Catering</a>
+        </nav>
+
+        <!-- Right Header Action Items -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          
+          <!-- Search trigger to Categories -->
+          <a href="#categories" onclick="navigateTo('categories'); return false;" class="p-2.5 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" title="Search Bowls">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </a>
+
+          <!-- Cart Button with Dynamic Badge -->
+          <a href="#cart" onclick="navigateTo('cart'); return false;" class="relative p-2.5 rounded-full hover:bg-amber-50 text-zinc-800 transition flex items-center gap-2 group cursor-pointer" title="View Cart">
+            <div class="relative">
+              <svg class="w-6 h-6 group-hover:scale-110 transition text-zinc-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+              <span class="cart-badge-count hidden absolute -top-1.5 -right-2 bg-amber-500 text-zinc-950 text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                0
+              </span>
+            </div>
+            <span class="hidden xl:inline text-xs font-bold text-zinc-900 cart-nav-total">₹0</span>
+          </a>
+
+          <!-- User Login / Account Button -->
+          <a href="#login" onclick="navigateTo('login'); return false;" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs transition shadow-sm hover:shadow cursor-pointer">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            <span>Login / Account</span>
+          </a>
+
+          <!-- Mobile Hamburger Menu Button -->
+          <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-zinc-700 hover:bg-zinc-100 focus:outline-none" aria-label="Toggle Menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-zinc-100 bg-white px-4 pt-3 pb-6 space-y-3 shadow-lg">
+      <a href="#home" onclick="navigateTo('home'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-base font-semibold text-zinc-800 hover:bg-amber-50">Home</a>
+      <a href="#categories" onclick="navigateTo('categories'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-base font-semibold text-zinc-800 hover:bg-amber-50">Our Bowls</a>
+      <a href="#services" onclick="navigateTo('services'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-base font-semibold text-zinc-800 hover:bg-amber-50">Our Services</a>
+      <a href="#plans-section" onclick="navigateTo('plans-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-base font-semibold text-zinc-800 hover:bg-amber-50">Plans</a>
+      <a href="#catering-section" onclick="navigateTo('catering-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-base font-semibold text-zinc-800 hover:bg-amber-50">Catering</a>
+      <a href="#cart" onclick="navigateTo('cart'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-base font-semibold text-zinc-800 hover:bg-amber-50">Cart & Checkout</a>
+      <a href="#login" onclick="navigateTo('login'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-base font-semibold text-amber-600 bg-amber-50">Login / My Account</a>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN APPLICATION VIEWS ==================== -->
+  <main class="flex-1">
+
+    <!-- ==================== VIEW 1: HOME PAGE ==================== -->
+    <section id="view-home" class="view-panel">
+      
+      <!-- HERO SECTION -->
+      <section class="relative pt-8 pb-16 md:py-20 overflow-hidden bg-gradient-to-b from-amber-50/40 via-white to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Hero Content -->
+            <div class="lg:col-span-6 space-y-6" data-aos="fade-up">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                Fresh • Healthy • Tasty
+              </div>
+
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 tracking-tight leading-[1.15]">
+                Healthy Meals.<br />
+                <span class="text-amber-500 underline decoration-amber-300 decoration-wavy decoration-2">Delivered Every Day.</span>
+              </h1>
+
+              <p class="text-base sm:text-lg text-zinc-600 max-w-lg leading-relaxed">
+                Fresh <strong>Veg</strong> • <strong>Non-Veg</strong> • <strong>Fruit Bowls</strong> crafted with authentic Rayalaseema spices for your busy workday.
+              </p>
+
+              <!-- CTA Buttons -->
+              <div class="flex flex-wrap items-center gap-4 pt-2">
+                <button onclick="navigateTo('trial-banner')" class="px-8 py-4 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-extrabold rounded-full text-base transition duration-200 shadow-lg shadow-amber-400/30 flex items-center gap-2 group cursor-pointer">
+                  Start 10-Day Trial
+                  <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+                <button onclick="navigateTo('categories')" class="px-7 py-4 bg-white hover:bg-zinc-50 border-2 border-zinc-200 hover:border-zinc-300 text-zinc-800 font-bold rounded-full text-base transition cursor-pointer">
+                  Explore Bowls
+                </button>
+              </div>
+
+              <!-- Value props / badges matching reference image -->
+              <div class="grid grid-cols-3 gap-4 pt-6 border-t border-zinc-200/80">
+                <div class="flex items-center gap-2 text-xs font-bold text-zinc-700 cursor-pointer" onclick="navigateTo('our-bowls-section')">
+                  <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
+                    🌿
+                  </div>
+                  <span>Fresh Ingredients</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-bold text-zinc-700 cursor-pointer" onclick="navigateTo('plans-section')">
+                  <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0">
+                    🛡️
+                  </div>
+                  <span>Flexible Plans</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-bold text-zinc-700 cursor-pointer" onclick="navigateTo('plans-section')">
+                  <div class="w-7 h-7 rounded-lg bg-zinc-100 text-zinc-800 flex items-center justify-center flex-shrink-0">
+                    ⏸️
+                  </div>
+                  <span>Pause Anytime</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Hero Image with Floating Badge (matching reference) -->
+            <div class="lg:col-span-6 relative" data-aos="fade-left" data-aos-delay="150">
+              <div class="relative max-w-md mx-auto lg:max-w-none">
+                <!-- Outer glow aura -->
+                <div class="absolute inset-0 bg-amber-300/30 rounded-full filter blur-3xl transform scale-90"></div>
+                
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1000&q=85" alt="Rayalaseema Gourmet Food Bowl" class="relative z-10 w-full h-[420px] object-cover rounded-[2.5rem] shadow-2xl border-4 border-white" />
+
+                <!-- Floating Badge 1: Good Food Better Mood -->
+                <div class="animate-float absolute -top-5 -left-4 z-20 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-amber-200 flex items-center gap-2.5">
+                  <span class="text-xl">✨</span>
+                  <div>
+                    <span class="text-xs font-black text-zinc-900 block leading-tight">Good Food</span>
+                    <span class="text-[11px] font-bold text-emerald-600 block">Better Mood 🥑</span>
+                  </div>
+                </div>
+
+                <!-- Floating Badge 2: 100% Rayalaseema Spices -->
+                <div class="absolute -bottom-5 right-4 z-20 bg-zinc-950 text-white px-5 py-3 rounded-2xl shadow-xl border border-amber-400 flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-amber-400 text-zinc-950 font-bold flex items-center justify-center text-sm">
+                    ★
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold block text-zinc-300">Daily Lunch Delivered</span>
+                    <span class="text-sm font-black text-amber-400">12:30 PM Sharp</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: OUR BOWLS / 3 CATEGORIES CARDS (matching reference image) -->
+      <section id="our-bowls-section" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+              <div class="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-600 uppercase tracking-widest mb-2">
+                <span>🥗</span>
+                <span>Signature Menu</span>
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-black text-zinc-950">Our Bowls</h2>
+              <p class="text-zinc-500 text-sm mt-1">Choose from a variety of fresh and nutritious workday bowls</p>
+            </div>
+            <button onclick="navigateTo('categories')" class="mt-4 md:mt-0 inline-flex items-center gap-2 text-sm font-bold text-zinc-900 hover:text-amber-600 transition cursor-pointer">
+              View All 12+ Bowls
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+          </div>
+
+          <!-- 3 Main Category Cards (Veg Bowl, Non-Veg Bowl, Fruit Bowl) -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Veg Bowl Card -->
+            <div class="food-card bg-zinc-50 rounded-3xl p-4 border border-zinc-200/80 flex flex-col justify-between" data-aos="fade-up">
+              <div>
+                <div class="relative overflow-hidden rounded-2xl mb-4 h-56">
+                  <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80" alt="Veg Bowl" class="w-full h-full object-cover" />
+                  <span class="absolute top-3 left-3 bg-emerald-600 text-white font-bold text-xs px-3 py-1 rounded-full shadow">
+                    🌱 Veg Special
+                  </span>
+                </div>
+                <h3 class="text-2xl font-bold text-zinc-900">Veg Bowl</h3>
+                <p class="text-zinc-500 text-xs mt-1 mb-4">Fresh, wholesome and nutritious vegetarian meals with sprouts, millets and paneer.</p>
+              </div>
+
+              <div class="pt-4 border-t border-zinc-200/60">
+                <div class="flex items-baseline gap-1 mb-4">
+                  <span class="text-2xl font-black text-zinc-950">₹150</span>
+                  <span class="text-xs text-zinc-500">/ day</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button onclick="handleAddToCart('vb-1')" class="py-2.5 px-3 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1 shadow-sm">
+                    Add to Cart
+                  </button>
+                  <button onclick="navigateTo('categories', 'veg-bowl')" class="py-2.5 px-3 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
+                    Choose Plan →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Non-Veg Bowl Card -->
+            <div class="food-card bg-zinc-50 rounded-3xl p-4 border border-zinc-200/80 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="100">
+              <div>
+                <div class="relative overflow-hidden rounded-2xl mb-4 h-56">
+                  <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" alt="Non-Veg Bowl" class="w-full h-full object-cover" />
+                  <span class="absolute top-3 left-3 bg-amber-500 text-zinc-950 font-bold text-xs px-3 py-1 rounded-full shadow">
+                    🍗 High Protein
+                  </span>
+                </div>
+                <h3 class="text-2xl font-bold text-zinc-900">Non-Veg Bowl</h3>
+                <p class="text-zinc-500 text-xs mt-1 mb-4">Protein-rich meals for your busy workday with tender grilled chicken & egg.</p>
+              </div>
+
+              <div class="pt-4 border-t border-zinc-200/60">
+                <div class="flex items-baseline gap-1 mb-4">
+                  <span class="text-2xl font-black text-zinc-950">₹180</span>
+                  <span class="text-xs text-zinc-500">/ day</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button onclick="handleAddToCart('nvb-1')" class="py-2.5 px-3 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1 shadow-sm">
+                    Add to Cart
+                  </button>
+                  <button onclick="navigateTo('categories', 'non-veg-bowl')" class="py-2.5 px-3 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
+                    Choose Plan →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fruit Bowl Card -->
+            <div class="food-card bg-zinc-50 rounded-3xl p-4 border border-zinc-200/80 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="200">
+              <div>
+                <div class="relative overflow-hidden rounded-2xl mb-4 h-56">
+                  <img src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&w=800&q=80" alt="Fruit Bowl" class="w-full h-full object-cover" />
+                  <span class="absolute top-3 left-3 bg-emerald-500 text-white font-bold text-xs px-3 py-1 rounded-full shadow">
+                    🍓 Fresh & Light
+                  </span>
+                </div>
+                <h3 class="text-2xl font-bold text-zinc-900">Fruit Bowl</h3>
+                <p class="text-zinc-500 text-xs mt-1 mb-4">Fresh seasonal fruits, kiwi, pomegranate, dry fruits and chia seeds for natural energy.</p>
+              </div>
+
+              <div class="pt-4 border-t border-zinc-200/60">
+                <div class="flex items-baseline gap-1 mb-4">
+                  <span class="text-2xl font-black text-zinc-950">₹120</span>
+                  <span class="text-xs text-zinc-500">/ day</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button onclick="handleAddToCart('fb-1')" class="py-2.5 px-3 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1 shadow-sm">
+                    Add to Cart
+                  </button>
+                  <button onclick="navigateTo('categories', 'fruit-bowl')" class="py-2.5 px-3 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
+                    Choose Plan →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: 10 DAYS TRIAL PROMO BANNER (matching reference layout) -->
+      <section id="trial-banner" class="py-12 bg-amber-50/70 border-y border-amber-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="bg-white rounded-3xl p-6 sm:p-10 border border-amber-200 shadow-md grid grid-cols-1 lg:grid-cols-12 gap-8 items-center" data-aos="fade-up">
+            
+            <!-- Left 10-Days Badge & Image -->
+            <div class="lg:col-span-5 relative flex items-center justify-center">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" alt="10 Days Trial Meal" class="w-64 h-64 object-cover rounded-full border-4 border-amber-400 shadow-lg" />
+                <div class="absolute -top-3 -right-2 bg-emerald-800 text-white font-black w-20 h-20 rounded-full flex flex-col items-center justify-center text-center shadow-lg border-2 border-white">
+                  <span class="text-xl leading-tight">10</span>
+                  <span class="text-[10px] uppercase tracking-wider font-bold">DAYS</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Trial Details -->
+            <div class="lg:col-span-7 space-y-5">
+              <div>
+                <span class="text-xs font-bold text-amber-600 uppercase tracking-widest block mb-1">Risk-Free Experience</span>
+                <h3 class="text-3xl font-black text-zinc-950">Not sure yet? Try us for 10 Days.</h3>
+                <p class="text-zinc-600 text-sm mt-1">Choose your bowl → Get daily delivery → Pause when absent → Continue monthly</p>
+              </div>
+
+              <!-- Perks Grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div class="flex items-start gap-3 p-3 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</div>
+                  <div class="text-xs">
+                    <strong class="text-zinc-900 block font-bold">Pay for 10 days</strong>
+                    <span class="text-zinc-500">According to your chosen bowl</span>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">⏸</div>
+                  <div class="text-xs">
+                    <strong class="text-zinc-900 block font-bold">Pause on absent days</strong>
+                    <span class="text-zinc-500">You won't lose your money</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button onclick="handleAddPlanToCart('plan-trial')" class="px-8 py-3.5 bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-full text-sm transition shadow-md flex items-center gap-2">
+                  Start My Trial →
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: HOW IT WORKS (4 STEPS) -->
+      <section id="how-it-works-section" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          
+          <div class="max-w-xl mx-auto mb-12">
+            <h2 class="text-3xl font-black text-zinc-950">How It Works</h2>
+            <p class="text-zinc-500 text-sm mt-1">Getting healthy food delivered is simple and flexible</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- Step 01 -->
+            <div onclick="navigateTo('categories')" class="bg-zinc-50 rounded-2xl p-6 border border-zinc-100 text-left relative cursor-pointer hover:shadow-md transition" data-aos="fade-up">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-lg mb-4">
+                🥗
+              </div>
+              <span class="text-xs font-black text-amber-500 block mb-1">01</span>
+              <h3 class="text-lg font-bold text-zinc-900 mb-1">Choose Your Bowl</h3>
+              <p class="text-zinc-500 text-xs leading-relaxed">Select from Veg, Non-Veg or Fruit bowls freshly prepared daily.</p>
+            </div>
+
+            <!-- Step 02 -->
+            <div onclick="navigateTo('plans-section')" class="bg-zinc-50 rounded-2xl p-6 border border-zinc-100 text-left relative cursor-pointer hover:shadow-md transition" data-aos="fade-up" data-aos-delay="100">
+              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-black text-lg mb-4">
+                📅
+              </div>
+              <span class="text-xs font-black text-amber-500 block mb-1">02</span>
+              <h3 class="text-lg font-bold text-zinc-900 mb-1">Select Your Plan</h3>
+              <p class="text-zinc-500 text-xs leading-relaxed">Pick a 10-day trial or monthly workday meal plan.</p>
+            </div>
+
+            <!-- Step 03 -->
+            <div onclick="navigateTo('categories')" class="bg-zinc-50 rounded-2xl p-6 border border-zinc-100 text-left relative cursor-pointer hover:shadow-md transition" data-aos="fade-up" data-aos-delay="200">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-lg mb-4">
+                🛵
+              </div>
+              <span class="text-xs font-black text-amber-500 block mb-1">03</span>
+              <h3 class="text-lg font-bold text-zinc-900 mb-1">Get It Delivered</h3>
+              <p class="text-zinc-500 text-xs leading-relaxed">Freshly prepared and delivered on time to your office or home.</p>
+            </div>
+
+            <!-- Step 04 -->
+            <div onclick="navigateTo('plans-section')" class="bg-zinc-50 rounded-2xl p-6 border border-zinc-100 text-left relative cursor-pointer hover:shadow-md transition" data-aos="fade-up" data-aos-delay="300">
+              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-black text-lg mb-4">
+                ⏸️
+              </div>
+              <span class="text-xs font-black text-amber-500 block mb-1">04</span>
+              <h3 class="text-lg font-bold text-zinc-900 mb-1">Pause Whenever Need</h3>
+              <p class="text-zinc-500 text-xs leading-relaxed">Skip a day if you're absent or working from home. Zero meal loss.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: OFFICE ABSENCE CALENDAR & MONTHLY PLANS (matching reference) -->
+      <section id="plans-section" class="py-16 bg-[#0E3B28] text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <!-- Left: Calendar & Pause explanation -->
+            <div class="lg:col-span-5 space-y-6" data-aos="fade-right">
+              <div>
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-1">Hassle-Free Flexibility</span>
+                <h2 class="text-3xl font-black leading-tight">Going out of office?<br />No problem.</h2>
+                <p class="text-emerald-100/80 text-sm mt-2">
+                  Pause your bowl for the days you're absent and continue when you're back. Your remaining meal days roll over automatically.
+                </p>
+              </div>
+
+              <!-- Interactive Delivery Calendar UI (matching reference mockup) -->
+              <div class="bg-white text-zinc-900 rounded-3xl p-5 shadow-2xl border border-white/10">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-zinc-100">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-black text-zinc-900">September 2026</span>
+                  </div>
+                  <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Interactive Calendar</span>
+                </div>
+
+                <!-- Days of week -->
+                <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-zinc-400 mb-2">
+                  <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                </div>
+
+                <!-- Calendar Days Grid (populated dynamically) -->
+                <div id="demo-calendar-days" class="grid grid-cols-7 gap-1 text-center"></div>
+
+                <!-- Legend -->
+                <div class="flex items-center justify-center gap-4 text-[11px] text-zinc-500 pt-4 mt-3 border-t border-zinc-100">
+                  <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Delivered</div>
+                  <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Upcoming</div>
+                  <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-200"></span> Paused</div>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button onclick="navigateTo('login')" class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition cursor-pointer">
+                  Manage in Dashboard →
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Subscription Plans -->
+            <div class="lg:col-span-7 space-y-6" data-aos="fade-left">
+              <div>
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-1">Pricing & Options</span>
+                <h3 class="text-3xl font-black">Monthly Plans</h3>
+                <p class="text-emerald-100/80 text-sm mt-1">Choose the meal subscription that suits you best</p>
+              </div>
+
+              <div id="subscription-plans-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-zinc-900">
+                <!-- Populated dynamically by app.js -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: CATERING & CORPORATE EVENTS BANNER (matching reference mockup) -->
+      <section id="catering-section" class="py-16 bg-zinc-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <div class="lg:col-span-7 space-y-4" data-aos="fade-right">
+              <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Office & Celebrations</span>
+              <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+                Planning a Team Lunch or<br />Corporate Event?
+              </h2>
+              <p class="text-zinc-400 text-sm max-w-lg leading-relaxed">
+                From everyday office meals to special company events and festive gatherings, Rayalaseema Cloud Kitchen provides end-to-end catering and bulk supply.
+              </p>
+              
+              <!-- Event Type Badges -->
+              <div class="flex flex-wrap gap-2.5 pt-2">
+                <span class="px-3 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-300 cursor-pointer hover:bg-zinc-700 transition" onclick="openEnquiryModal('Corporate Catering')">🏢 Corporate Catering</span>
+                <span class="px-3 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-300 cursor-pointer hover:bg-zinc-700 transition" onclick="openEnquiryModal('Office Lunch')">🍱 Office Lunch</span>
+                <span class="px-3 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-300 cursor-pointer hover:bg-zinc-700 transition" onclick="openEnquiryModal('Birthday Catering')">🎂 Birthday Catering</span>
+                <span class="px-3 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-300 cursor-pointer hover:bg-zinc-700 transition" onclick="openEnquiryModal('Event Catering')">🎉 Event Catering</span>
+                <span class="px-3 py-1.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-300 cursor-pointer hover:bg-zinc-700 transition" onclick="openEnquiryModal('Function Catering')">🍛 Function Catering</span>
+              </div>
+
+              <div class="pt-4">
+                <button onclick="openEnquiryModal('Corporate & Event Catering')" class="px-8 py-3.5 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black rounded-xl text-sm transition shadow-lg flex items-center gap-2 cursor-pointer">
+                  Request Catering Quote →
+                </button>
+              </div>
+            </div>
+
+            <div class="lg:col-span-5" data-aos="fade-left">
+              <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-zinc-700">
+                <img src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80" alt="Catering Spread" class="w-full h-72 object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4 text-xs text-amber-300 font-bold">
+                  ★ Servicing 50+ IT Companies & Events across Hyderabad
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: TESTIMONIALS (matching reference) -->
+      <section id="reviews-section" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-xl mx-auto mb-12">
+            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-1">Customer Reviews</span>
+            <h2 class="text-3xl font-black text-zinc-950">What Our Customers Say</h2>
+            <p class="text-zinc-500 text-sm mt-1">Real people. Real meal experiences.</p>
+          </div>
+
+          <div id="testimonials-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: FINAL CALL TO ACTION (CTA) -->
+      <section class="py-16 bg-gradient-to-r from-zinc-900 via-emerald-950 to-zinc-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-8 bg-white/5 border border-white/10 rounded-3xl p-8 sm:p-12 backdrop-blur-sm">
+            <div class="space-y-2 text-center md:text-left">
+              <h2 class="text-3xl sm:text-4xl font-black text-white">Your healthy workday starts here.</h2>
+              <p class="text-zinc-400 text-sm max-w-md">Join thousands of happy customers and make the switch to fresh, authentic food bowls today.</p>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-4">
+              <button onclick="navigateTo('trial-banner')" class="px-8 py-4 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-black rounded-2xl text-base transition shadow-xl flex items-center gap-2 cursor-pointer">
+                Start Your 10-Day Trial →
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+
+    <!-- ==================== VIEW 2: CATEGORIES PAGE ==================== -->
+    <section id="view-categories" class="view-panel hidden py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Page Header -->
+        <div class="mb-8">
+          <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-1">Freshly Prepared</span>
+          <h1 class="text-3xl sm:text-4xl font-black text-zinc-950">Browse Our Food Bowls</h1>
+          <p class="text-zinc-500 text-sm mt-1">Filter by category or search your favorite ingredients.</p>
+        </div>
+
+        <!-- Filter and Search Toolbar -->
+        <div class="bg-white rounded-2xl p-4 border border-zinc-200/80 shadow-sm mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          
+          <!-- Category Filter Pills -->
+          <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+            <button onclick="setCategoryFilter('all')" data-category="all" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-zinc-900 text-amber-400 border-zinc-900">
+              All Bowls
+            </button>
+            <button onclick="setCategoryFilter('veg-bowl')" data-category="veg-bowl" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50">
+              🌱 Veg Bowls
+            </button>
+            <button onclick="setCategoryFilter('non-veg-bowl')" data-category="non-veg-bowl" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50">
+              🍗 Non-Veg Bowls
+            </button>
+            <button onclick="setCategoryFilter('fruit-bowl')" data-category="fruit-bowl" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50">
+              🍓 Fruit Bowls
+            </button>
+          </div>
+
+          <!-- Live Search Input -->
+          <div class="relative w-full md:w-72">
+            <input type="text" id="product-search-input" oninput="handleSearchInput(event)" placeholder="Search bowls, paneer, chicken..." class="w-full pl-9 pr-4 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400 focus:bg-white" />
+            <svg class="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+
+        </div>
+
+        <!-- Product Grid -->
+        <div id="categories-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== VIEW 3: OUR SERVICES PAGE ==================== -->
+    <section id="view-services" class="view-panel hidden py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-1">B2B & Bulk Solutions</span>
+          <h1 class="text-3xl sm:text-4xl font-black text-zinc-950">Our Professional Food Services</h1>
+          <p class="text-zinc-500 text-sm mt-2 leading-relaxed">
+            From daily retail doorstep delivery to bulk office contracts and premier corporate catering across Hyderabad & Rayalaseema.
+          </p>
+        </div>
+
+        <!-- Services Grid -->
+        <div id="services-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== VIEW 4: CART & CHECKOUT PAGE ==================== -->
+    <section id="view-cart" class="view-panel hidden py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="mb-8">
+          <h1 class="text-3xl font-black text-zinc-950">Your Shopping Cart</h1>
+          <p class="text-zinc-500 text-sm mt-1">Review your selected meal bowls and proceed to fast checkout.</p>
+        </div>
+
+        <!-- Empty Cart State -->
+        <div id="cart-empty-state" class="hidden bg-white rounded-3xl p-12 text-center border border-zinc-100 shadow-sm max-w-lg mx-auto">
+          <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+            🥣
+          </div>
+          <h2 class="text-2xl font-bold text-zinc-900 mb-2">Your cart is empty</h2>
+          <p class="text-zinc-500 text-sm mb-6 leading-relaxed">Looks like you haven't added any fresh bowls to your cart yet. Explore our signature bowls today!</p>
+          <button onclick="navigateTo('categories')" class="px-8 py-3.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-2xl text-sm transition shadow-md inline-flex items-center gap-2 cursor-pointer">
+            Explore Menu Bowls →
+          </button>
+        </div>
+
+        <!-- Active Cart Layout -->
+        <div id="cart-content-wrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Left: Cart Items List -->
+          <div class="lg:col-span-7 bg-white rounded-3xl p-6 border border-zinc-100 shadow-sm">
+            <div class="flex items-center justify-between pb-4 border-b border-zinc-100 mb-2">
+              <span class="text-sm font-bold text-zinc-700">Order Items</span>
+              <button onclick="app.clearCart()" class="text-xs text-red-500 hover:text-red-700 font-semibold">Clear All</button>
+            </div>
+            
+            <div id="cart-items-container" class="divide-y divide-zinc-100">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Right: Summary & Checkout -->
+          <div id="cart-summary-container" class="lg:col-span-5">
+            <!-- Rendered dynamically -->
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== VIEW 5: USER LOGIN & DASHBOARD ==================== -->
+    <section id="view-login" class="view-panel hidden py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Toggle Tabs: Login vs Customer Dashboard -->
+        <div class="flex justify-center mb-10">
+          <div class="bg-zinc-200/80 p-1.5 rounded-2xl inline-flex gap-2">
+            <button onclick="switchAuthTab('login')" id="tab-btn-login" class="px-6 py-2 rounded-xl text-xs font-bold transition bg-white text-zinc-950 shadow-sm cursor-pointer">
+              Account Login
+            </button>
+            <button onclick="switchAuthTab('dashboard')" id="tab-btn-dashboard" class="px-6 py-2 rounded-xl text-xs font-bold transition text-zinc-600 hover:text-zinc-900 cursor-pointer">
+              Customer Portal (Demo Live)
+            </button>
+          </div>
+        </div>
+
+        <!-- Login Form Box -->
+        <div id="auth-form-box" class="max-w-md mx-auto bg-white rounded-3xl p-8 border border-zinc-200/80 shadow-lg">
+          <div class="text-center mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-amber-400 flex items-center justify-center mx-auto mb-3 text-zinc-950 font-black text-xl shadow">
+              🥗
+            </div>
+            <h2 class="text-2xl font-black text-zinc-950">Welcome Back</h2>
+            <p class="text-zinc-500 text-xs mt-1">Log in to manage your daily bowl subscription and pause dates.</p>
+          </div>
+
+          <form id="auth-form" class="space-y-4">
+            <div>
+              <label class="text-xs font-bold text-zinc-700 block mb-1">Email or Phone Number</label>
+              <input type="text" id="auth-email" value="rahul.kumar@hitec-tech.com" required class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-amber-400" />
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="text-xs font-bold text-zinc-700">Password</label>
+                <a href="javascript:void(0)" onclick="app.showToast('Demo password reset link sent!', 'info')" class="text-xs text-amber-600 font-bold hover:underline">Forgot?</a>
+              </div>
+              <input type="password" id="auth-password" value="password123" required class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-amber-400" />
+            </div>
+
+            <button type="submit" class="w-full py-3.5 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-extrabold rounded-xl text-sm transition shadow-md cursor-pointer">
+              Log In to Portal
+            </button>
+          </form>
+
+          <div class="pt-6 mt-6 border-t border-zinc-100 text-center text-xs text-zinc-500">
+            Don't have a plan yet? <button onclick="navigateTo('trial-banner')" class="text-amber-600 font-bold hover:underline cursor-pointer">Start a 10-day trial</button>
+          </div>
+        </div>
+
+        <!-- Customer Dashboard Container (matching right panel in mockup) -->
+        <div id="customer-dashboard-container" class="hidden">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-zinc-950 text-white pt-16 pb-12 border-t border-zinc-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-zinc-800">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-amber-400 flex items-center justify-center text-zinc-950 font-black shadow">
+              🥗
+            </div>
+            <span class="text-xl font-black font-heading text-white">Rayalaseema Cloud Kitchen</span>
+          </div>
+          <p class="text-zinc-400 text-xs leading-relaxed max-w-sm">
+            Premium South Indian meal bowl subscriptions, wholesale supply, and tailored event catering. Prepared fresh every morning with pure ingredients.
+          </p>
+          <div class="text-xs text-amber-400 font-bold">
+            📍 Central Cloud Kitchen: Hitec City, Hyderabad - 500081
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="space-y-3 text-xs">
+          <h4 class="font-bold text-sm text-white uppercase tracking-wider">Quick Links</h4>
+          <ul class="space-y-2 text-zinc-400">
+            <li><a href="#home" onclick="navigateTo('home'); return false;" class="hover:text-amber-400 transition cursor-pointer">Home</a></li>
+            <li><a href="#categories" onclick="navigateTo('categories'); return false;" class="hover:text-amber-400 transition cursor-pointer">Our Food Bowls</a></li>
+            <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Our Services</a></li>
+            <li><a href="#login" onclick="navigateTo('login'); return false;" class="hover:text-amber-400 transition cursor-pointer">Subscriber Login</a></li>
+            <li><a href="#cart" onclick="navigateTo('cart'); return false;" class="hover:text-amber-400 transition cursor-pointer">Shopping Cart</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Categories -->
+        <div class="space-y-3 text-xs">
+          <h4 class="font-bold text-sm text-white uppercase tracking-wider">Food Bowls</h4>
+          <ul class="space-y-2 text-zinc-400">
+            <li><a href="#categories" onclick="navigateTo('categories', 'veg-bowl'); return false;" class="hover:text-amber-400 transition cursor-pointer">Veg Bowls (₹150/day)</a></li>
+            <li><a href="#categories" onclick="navigateTo('categories', 'non-veg-bowl'); return false;" class="hover:text-amber-400 transition cursor-pointer">Non-Veg Bowls (₹180/day)</a></li>
+            <li><a href="#categories" onclick="navigateTo('categories', 'fruit-bowl'); return false;" class="hover:text-amber-400 transition cursor-pointer">Fruit Bowls (₹120/day)</a></li>
+            <li><a href="#trial-banner" onclick="navigateTo('trial-banner'); return false;" class="hover:text-amber-400 transition cursor-pointer">10-Day Trial Plan</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Services & Help -->
+        <div class="space-y-3 text-xs">
+          <h4 class="font-bold text-sm text-white uppercase tracking-wider">Services</h4>
+          <ul class="space-y-2 text-zinc-400">
+            <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Corporate Catering</a></li>
+            <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Wholesale Food Supply</a></li>
+            <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Retail Doorstep Supply</a></li>
+            <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Hybrid B2B Solutions</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-4">
+        <div>
+          © 2026 Rayalaseema Foods / Cloud Kitchen. All rights reserved.
+        </div>
+        <div class="flex gap-6">
+          <a href="javascript:void(0)" class="hover:text-zinc-300">Privacy Policy</a>
+          <a href="javascript:void(0)" class="hover:text-zinc-300">Terms & Conditions</a>
+          <a href="javascript:void(0)" class="hover:text-zinc-300">Contact Us</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL: SERVICE ENQUIRY ==================== -->
+  <div id="enquiry-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-zinc-100 relative max-h-[90vh] overflow-y-auto">
+      <button id="close-enquiry-modal" class="absolute top-5 right-5 text-zinc-400 hover:text-zinc-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="text-left mb-6">
+        <span class="text-xs font-bold text-amber-600 uppercase tracking-widest block mb-1">Custom Requirement</span>
+        <h3 class="text-2xl font-black text-zinc-950">Service Enquiry & Quote</h3>
+        <p class="text-zinc-500 text-xs mt-1">Fill in your team or event details and we'll prepare a custom quotation.</p>
+      </div>
+
+      <form id="enquiry-form" class="space-y-4">
+        <div>
+          <label class="text-xs font-bold text-zinc-700 block mb-1">Selected Service</label>
+          <input type="text" id="enquiry-service-name" readonly class="w-full px-4 py-2.5 bg-zinc-100 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-800" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Full Name</label>
+            <input type="text" required placeholder="e.g. Anand Varma" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Phone Number</label>
+            <input type="tel" required placeholder="+91 98765 00000" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Company / Event Name</label>
+            <input type="text" placeholder="e.g. Microsoft / Birthday" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Estimated Headcount</label>
+            <input type="number" min="10" placeholder="e.g. 50 people" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-zinc-700 block mb-1">Specific Dietary Needs / Message</label>
+          <textarea rows="3" placeholder="Tell us about food preferences (Veg/Non-veg ratio, spice level, timing)..." class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-xl text-sm transition shadow-md">
+          Submit Enquiry Request
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: CHECKOUT ==================== -->
+  <div id="checkout-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-zinc-100 relative max-h-[90vh] overflow-y-auto">
+      <button id="close-checkout-modal" class="absolute top-5 right-5 text-zinc-400 hover:text-zinc-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="text-left mb-6">
+        <span class="text-xs font-bold text-amber-600 uppercase tracking-widest block mb-1">Secure Ordering</span>
+        <h3 class="text-2xl font-black text-zinc-950">Delivery & Payment</h3>
+        <p class="text-zinc-500 text-xs mt-1">Total Payable: <strong id="checkout-total-display" class="text-zinc-950 font-extrabold">₹0</strong></p>
+      </div>
+
+      <form id="checkout-form" class="space-y-4">
+        <div>
+          <label class="text-xs font-bold text-zinc-700 block mb-1">Your Full Name</label>
+          <input type="text" required value="Rahul Kumar" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-zinc-700 block mb-1">Delivery Address (Office / Flat / Landmark)</label>
+          <input type="text" required value="Tower 4, Mindspace IT Park, Hitec City, Hyderabad" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Delivery Slot</label>
+            <select class="w-full px-3 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400">
+              <option>12:30 PM - 1:15 PM (Lunch)</option>
+              <option>1:15 PM - 2:00 PM (Lunch)</option>
+              <option>8:00 PM - 9:00 PM (Dinner)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Payment Method</label>
+            <select class="w-full px-3 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400">
+              <option>UPI / GPay / PhonePe</option>
+              <option>Credit / Debit Card</option>
+              <option>Cash on Delivery</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-emerald-800 hover:bg-emerald-900 text-white font-black rounded-xl text-sm transition shadow-lg mt-4">
+          Confirm & Place Order Now
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: ORDER SUCCESS ==================== -->
+  <div id="order-success-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-zinc-100 text-center">
+      <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-4 text-3xl">
+        🎉
+      </div>
+      <h3 class="text-2xl font-black text-zinc-950 mb-1">Order Confirmed!</h3>
+      <p class="text-zinc-500 text-xs mb-4">Your order <span id="success-order-id" class="font-bold text-zinc-900">#RCK-12345</span> is being freshly prepared in our cloud kitchen.</p>
+      
+      <div class="bg-zinc-50 rounded-2xl p-4 border border-zinc-100 text-xs text-zinc-600 mb-6 space-y-1 text-left">
+        <div>🕒 <strong>Estimated Arrival:</strong> Today 12:30 PM</div>
+        <div>📍 <strong>Delivering To:</strong> Tower 4, Mindspace IT Park</div>
+      </div>
+
+      <button onclick="document.getElementById('order-success-modal').classList.add('hidden'); window.location.hash = '#dashboard';" class="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-xl text-sm transition">
+        Track in Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Tabs Switcher Helper -->
+  <script>
+    function switchAuthTab(tab) {
+      const formBox = document.getElementById('auth-form-box');
+      const dashboardContainer = document.getElementById('customer-dashboard-container');
+      const tabLogin = document.getElementById('tab-btn-login');
+      const tabDash = document.getElementById('tab-btn-dashboard');
+
+      if (tab === 'dashboard') {
+        formBox.classList.add('hidden');
+        dashboardContainer.classList.remove('hidden');
+        tabDash.classList.add('bg-white', 'text-zinc-950', 'shadow-sm');
+        tabDash.classList.remove('text-zinc-600');
+        tabLogin.classList.remove('bg-white', 'text-zinc-950', 'shadow-sm');
+        tabLogin.classList.add('text-zinc-600');
+        renderDashboardView();
+      } else {
+        formBox.classList.remove('hidden');
+        dashboardContainer.classList.add('hidden');
+        tabLogin.classList.add('bg-white', 'text-zinc-950', 'shadow-sm');
+        tabLogin.classList.remove('text-zinc-600');
+        tabDash.classList.remove('bg-white', 'text-zinc-950', 'shadow-sm');
+        tabDash.classList.add('text-zinc-600');
+      }
+    }
+  </script>
+
+  <!-- Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
