@@ -73,8 +73,15 @@
         </nav>
 
         <!-- Right Header Action Items -->
-        <div class="flex items-center gap-3 sm:gap-4">
+        <div class="flex items-center gap-2 sm:gap-4">
           
+          <!-- Direct Phone Call trigger (Mobile friendly) -->
+          <a href="tel:9063424694" class="p-2.5 rounded-full bg-amber-100 hover:bg-amber-200 text-zinc-950 transition flex items-center justify-center shadow-sm cursor-pointer" title="Call Rayalaseema Kitchen (+91 90634 24694)">
+            <svg class="w-4 h-4 text-amber-900" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 4V3z"></path>
+            </svg>
+          </a>
+
           <!-- Search trigger to Categories -->
           <a href="#categories" onclick="navigateTo('categories'); return false;" class="p-2.5 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" title="Search Meals">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -94,10 +101,10 @@
           </a>
 
           <!-- User Account / My Orders Button -->
-          <div class="relative">
+          <div class="relative hidden sm:block">
             <a href="#account" onclick="navigateTo('account'); return false;" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs transition shadow-sm hover:shadow cursor-pointer">
               <span id="nav-user-avatar" class="w-5 h-5 rounded-full bg-amber-400 text-zinc-950 flex items-center justify-center text-[10px] font-black">RK</span>
-              <span id="nav-user-label" class="hidden sm:inline">My Account</span>
+              <span id="nav-user-label">My Account</span>
             </a>
           </div>
 
@@ -856,32 +863,34 @@
           </div>
         </div>
 
-        <!-- Filter Tabs for Official Menu Card Categories -->
-        <div class="flex flex-wrap gap-2 pb-6 mb-6 border-b border-zinc-200/80">
-          <button onclick="setCategoryFilter('all')" data-category="all" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-zinc-900 text-amber-400 border-zinc-900 shadow-sm cursor-pointer">
-            All Dishes (22)
-          </button>
-          <button onclick="setCategoryFilter('signature-dishes')" data-category="signature-dishes" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer">
-            👑 Signature Dishes (5)
-          </button>
-          <button onclick="setCategoryFilter('bagara-rice')" data-category="bagara-rice" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer">
-            🍚 Bagara Rice (2)
-          </button>
-          <button onclick="setCategoryFilter('special-curries')" data-category="special-curries" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-red-400 transition cursor-pointer">
-            🍗 Special Curries (3)
-          </button>
-          <button onclick="setCategoryFilter('roti-specials')" data-category="roti-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer">
-            🫓 Jonna Roti (2)
-          </button>
-          <button onclick="setCategoryFilter('biryani-specials')" data-category="biryani-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer">
-            🥘 Biryani Specials (3)
-          </button>
-          <button onclick="setCategoryFilter('paneer-specials')" data-category="paneer-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer">
-            🧀 Paneer & Dal (4)
-          </button>
-          <button onclick="setCategoryFilter('rice-specials')" data-category="rice-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer">
-            🍛 Rice Specials (3)
-          </button>
+        <!-- Filter Tabs for Official Menu Card Categories (Horizontal Touch-Scrollable on Mobile) -->
+        <div class="overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 pb-3 mb-6 border-b border-zinc-200/80">
+          <div class="flex items-center gap-2 w-max">
+            <button onclick="setCategoryFilter('all')" data-category="all" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-zinc-900 text-amber-400 border-zinc-900 shadow-sm cursor-pointer whitespace-nowrap">
+              All Dishes (22)
+            </button>
+            <button onclick="setCategoryFilter('signature-dishes')" data-category="signature-dishes" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+              👑 Signature Dishes (5)
+            </button>
+            <button onclick="setCategoryFilter('bagara-rice')" data-category="bagara-rice" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+              🍚 Bagara Rice (2)
+            </button>
+            <button onclick="setCategoryFilter('special-curries')" data-category="special-curries" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-red-400 transition cursor-pointer whitespace-nowrap">
+              🍗 Special Curries (3)
+            </button>
+            <button onclick="setCategoryFilter('roti-specials')" data-category="roti-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer whitespace-nowrap">
+              🫓 Jonna Roti (2)
+            </button>
+            <button onclick="setCategoryFilter('biryani-specials')" data-category="biryani-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+              🥘 Biryani Specials (3)
+            </button>
+            <button onclick="setCategoryFilter('paneer-specials')" data-category="paneer-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer whitespace-nowrap">
+              🧀 Paneer & Dal (4)
+            </button>
+            <button onclick="setCategoryFilter('rice-specials')" data-category="rice-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+              🍛 Rice Specials (3)
+            </button>
+          </div>
         </div>
 
         <!-- Products Grid with Buy Now & Add to Cart -->
@@ -1482,6 +1491,33 @@
     </div>
   </div>
 
+
+  <!-- ==================== MOBILE APP-LIKE BOTTOM NAVIGATION DOCK ==================== -->
+  <nav id="mobile-bottom-dock" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-zinc-200/90 shadow-2xl px-2 py-1.5 flex items-center justify-around">
+    <button onclick="navigateTo('home')" class="mobile-dock-btn flex flex-col items-center justify-center p-1.5 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" data-route="home">
+      <span class="text-lg">🏠</span>
+      <span class="text-[10px] font-bold mt-0.5">Home</span>
+    </button>
+    <button onclick="navigateTo('categories')" class="mobile-dock-btn flex flex-col items-center justify-center p-1.5 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" data-route="categories">
+      <span class="text-lg">🍲</span>
+      <span class="text-[10px] font-bold mt-0.5">Our Meals</span>
+    </button>
+    <button onclick="navigateTo('cart')" class="mobile-dock-btn relative flex flex-col items-center justify-center p-1.5 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" data-route="cart">
+      <span class="text-lg relative">
+        🛒
+        <span class="cart-badge-count hidden absolute -top-1 -right-2.5 bg-amber-500 text-zinc-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm">0</span>
+      </span>
+      <span class="text-[10px] font-bold mt-0.5">Cart</span>
+    </button>
+    <button onclick="navigateTo('account'); switchAccountTab('plans');" class="mobile-dock-btn flex flex-col items-center justify-center p-1.5 text-zinc-600 hover:text-zinc-950 transition cursor-pointer">
+      <span class="text-lg">🥣</span>
+      <span class="text-[10px] font-bold mt-0.5">10-Day Plan</span>
+    </button>
+    <button onclick="navigateTo('account')" class="mobile-dock-btn flex flex-col items-center justify-center p-1.5 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" data-route="account">
+      <span class="text-lg">👤</span>
+      <span class="text-[10px] font-bold mt-0.5">Account</span>
+    </button>
+  </nav>
 
   <!-- Toast Notification Container -->
   <div id="toast-container"></div>
