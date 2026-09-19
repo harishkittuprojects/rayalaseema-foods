@@ -528,8 +528,8 @@ function createProductCardHtml(product) {
 
   return `
     <div class="food-card bg-white rounded-3xl border border-zinc-200/80 overflow-hidden shadow-sm hover:border-amber-300 flex flex-col justify-between" data-aos="fade-up">
-      <div class="relative overflow-hidden group">
-        <img src="${product.image}" alt="${product.name}" class="w-full h-48 sm:h-52 object-cover object-center group-hover:scale-105 transition duration-500" loading="lazy" />
+      <div class="relative overflow-hidden group aspect-[16/10] sm:aspect-auto sm:h-52 bg-zinc-100">
+        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" loading="lazy" />
         
         <div class="absolute top-3 left-3 flex gap-2 items-center">
           <span class="bg-white/95 backdrop-blur px-2.5 py-1 rounded-xl text-xs font-bold text-zinc-900 shadow-sm flex items-center gap-1.5">
@@ -1968,7 +1968,7 @@ function renderServicesPage() {
 
   container.innerHTML = MENU_DATA.services.map((srv, idx) => `
     <div class="bg-white rounded-3xl border border-zinc-200/80 overflow-hidden shadow-sm hover:shadow-xl transition duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="${idx * 100}">
-      <div class="relative h-56 overflow-hidden">
+      <div class="relative aspect-[16/9] sm:aspect-auto sm:h-56 overflow-hidden bg-zinc-900">
         <img src="${srv.image}" alt="${srv.title}" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" loading="lazy" />
         <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
         <div class="absolute top-4 left-4">
