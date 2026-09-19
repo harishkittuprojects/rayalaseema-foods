@@ -40,7 +40,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background: #94A3B8;
 }
 
-/* Floating badge animations */
+/* Floating animations */
 @keyframes floatSlow {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
@@ -56,13 +56,13 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 /* Glassmorphism */
 .glass-nav {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -70,7 +70,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 /* Active Nav link underline */
 .nav-link.active {
   color: #111827;
-  font-weight: 700;
+  font-weight: 800;
   position: relative;
 }
 
@@ -141,6 +141,97 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-bottom: 9px solid #DC2626;
 }
 
+/* Quantity Selector Controls */
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: #F4F4F5;
+  color: #18181B;
+  font-weight: 800;
+  font-size: 14px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.qty-btn:hover {
+  background-color: #E4E4E7;
+  color: #000000;
+}
+
+.qty-btn:active {
+  transform: scale(0.92);
+}
+
+.qty-value {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 13px;
+  color: #18181B;
+}
+
+/* Buy Now Button */
+.btn-buy-now {
+  background: linear-gradient(135deg, #18181B 0%, #09090B 100%);
+  color: #FBBF24;
+  font-weight: 800;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-buy-now:hover {
+  background: linear-gradient(135deg, #27272A 0%, #18181B 100%);
+  color: #FDE68A;
+  border-color: rgba(251, 191, 36, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-buy-now:active {
+  transform: scale(0.97);
+}
+
+/* Order Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-width: 1px;
+}
+
+/* Order Tracking Timeline */
+.timeline-step {
+  position: relative;
+}
+
+.timeline-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  bottom: -18px;
+  width: 2px;
+  background-color: #E4E4E7;
+}
+
+.timeline-step.completed:not(:last-child)::after {
+  background-color: #10B981;
+}
+
+.timeline-step.active:not(:last-child)::after {
+  background-color: #F59E0B;
+}
+
 /* Toast Notifications */
 #toast-container {
   position: fixed;
@@ -151,6 +242,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   flex-direction: column;
   gap: 12px;
   pointer-events: none;
+  max-width: 90vw;
 }
 
 .toast {
@@ -183,6 +275,51 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 /* Modal styling */
 .modal-backdrop {
-  background-color: rgba(17, 24, 39, 0.6);
-  backdrop-filter: blur(4px);
+  background-color: rgba(17, 24, 39, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Account Navigation Sidebar */
+.account-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #52525B;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.account-nav-btn:hover {
+  background-color: #F4F4F5;
+  color: #18181B;
+}
+
+.account-nav-btn.active {
+  background-color: #18181B;
+  color: #FBBF24;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.account-nav-btn.active svg {
+  color: #FBBF24;
+}
+
+/* Responsive Fixes */
+@media (max-width: 640px) {
+  .food-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .food-card-actions .btn-buy-now,
+  .food-card-actions button {
+    width: 100%;
+    justify-content: center;
+  }
 }
