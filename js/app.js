@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Single Page Application Router
 function initRouter() {
   const mainViews = ['home', 'about', 'categories', 'services', 'cart', 'account'];
-  const homeSections = ['our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'catering-section', 'reviews-section'];
+  const homeSections = ['about-section', 'our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'catering-section', 'reviews-section'];
 
   window.navigateTo = function(target, filterCategory = null) {
     if (filterCategory) {
