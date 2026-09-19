@@ -594,7 +594,7 @@ function renderFeaturedProducts() {
   const container = document.getElementById('featured-products-container');
   if (!container) return;
 
-  const featured = MENU_DATA.products.filter(p => p.popular).slice(0, 4);
+  const featured = MENU_DATA.products.filter(p => p.popular).slice(0, 6);
   container.innerHTML = featured.map(product => createProductCardHtml(product)).join('');
 }
 
