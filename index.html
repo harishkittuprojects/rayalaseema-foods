@@ -70,10 +70,6 @@
           <a href="#services" onclick="navigateTo('services'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="services">Our Services</a>
           <a href="#plans-section" onclick="navigateTo('plans-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Plans</a>
           <a href="#catering-section" onclick="navigateTo('catering-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Catering</a>
-          <a href="admin.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-950 font-bold text-xs hover:bg-amber-200 transition border border-amber-300 shadow-sm" title="Kitchen & Admin Panel">
-            <span>👨‍🍳</span>
-            <span>Admin / Kitchen</span>
-          </a>
         </nav>
 
         <!-- Right Header Action Items -->
@@ -127,7 +123,7 @@
       <div class="pt-2 border-t border-zinc-100 space-y-2">
         <a href="#orders" onclick="navigateTo('account'); switchAccountTab('orders'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-zinc-900 bg-amber-50 border border-amber-200">📦 My Orders</a>
         <a href="#account" onclick="navigateTo('account'); switchAccountTab('plans'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-zinc-800 hover:bg-zinc-100">🥣 10-Day Subscription</a>
-        <a href="admin.html" class="block px-3 py-2 rounded-lg text-sm font-bold text-amber-950 bg-amber-100 border border-amber-300">👨‍🍳 Kitchen & Admin Portal</a>
+        <a href="#account" onclick="navigateTo('account'); switchAccountTab('profile'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-zinc-800 hover:bg-zinc-100">⚙️ Account Settings</a>
       </div>
     </div>
   </header>
@@ -1010,12 +1006,6 @@
                 <span class="text-base">📍</span>
                 <span class="flex-1">Saved Addresses</span>
               </button>
-
-              <a href="admin.html" class="account-nav-btn text-amber-950 bg-amber-50 hover:bg-amber-100 border border-amber-200/80">
-                <span class="text-base">👨‍🍳</span>
-                <span class="flex-1 font-bold">Kitchen / Admin Portal</span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-400 text-zinc-950 font-black">Admin</span>
-              </a>
 
               <div class="pt-3 mt-3 border-t border-zinc-100">
                 <button onclick="handleLogout()" class="account-nav-btn text-red-600 hover:bg-red-50 hover:text-red-700">

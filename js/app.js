@@ -1470,9 +1470,6 @@ function renderAccountPlans() {
             <button onclick="switchAccountTab('pause')" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
               ${isPaused ? '▶️ Manage / Resume Plan' : '⏸️ Pause Plan for Tomorrow'}
             </button>
-            <a href="admin.html" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs rounded-xl transition border border-white/10 cursor-pointer flex items-center gap-1.5">
-              <span>👨‍🍳 Admin Portal</span>
-            </a>
           </div>
         </div>
 
