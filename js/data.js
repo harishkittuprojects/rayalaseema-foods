@@ -318,7 +318,7 @@ const MENU_DATA = {
       ctaAction: "order",
       badge: "Instant Delivery",
       image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80",
-      features: ["Live Order Tracking", "30-45 Mins Fast Delivery", "No Minimum Order", "Customizable Add-ons"]
+      features: ["Express Hot Delivery", "30-45 Mins Fast Delivery", "No Minimum Order", "Customizable Add-ons"]
     },
     {
       id: "srv-hybrid",
