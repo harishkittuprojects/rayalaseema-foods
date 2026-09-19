@@ -292,24 +292,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Single Page Application Router
 function initRouter() {
-  const mainViews = ['home', 'categories', 'services', 'cart', 'account'];
+  const mainViews = ['home', 'about', 'categories', 'services', 'cart', 'account'];
   const homeSections = ['about-section', 'our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'catering-section', 'reviews-section'];
 
   window.navigateTo = function(target, filterCategory = null) {
     if (filterCategory) {
       window.setCategoryFilter(filterCategory);
     }
-    
-    // Normalize about alias
-    if (target === 'about') {
-      target = 'about-section';
-    }
 
     // Direct Section Scroll inside Home
-    if (homeSections.includes(target) || target === 'about-section') {
+    if (homeSections.includes(target)) {
       showView('home');
       setTimeout(() => {
-        const el = document.getElementById(target) || document.getElementById('about-section');
+        const el = document.getElementById(target);
         if (el) {
           const headerOffset = 80;
           const elementPosition = el.getBoundingClientRect().top;
@@ -381,15 +376,11 @@ function initRouter() {
 
   function handleHashChange() {
     let hash = window.location.hash.replace('#', '') || 'home';
-    
-    if (hash === 'about') {
-      hash = 'about-section';
-    }
 
-    if (homeSections.includes(hash) || hash === 'about-section') {
+    if (homeSections.includes(hash)) {
       showView('home');
       setTimeout(() => {
-        const el = document.getElementById(hash) || document.getElementById('about-section');
+        const el = document.getElementById(hash);
         if (el) {
           const headerOffset = 80;
           const elementPosition = el.getBoundingClientRect().top;
