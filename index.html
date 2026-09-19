@@ -63,8 +63,9 @@
         </a>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-700">
+        <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-zinc-700">
           <a href="#home" onclick="navigateTo('home'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="home">Home</a>
+          <a href="#about" onclick="navigateTo('about'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="about">About Us</a>
           <a href="#categories" onclick="navigateTo('categories'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="categories">Our Meals</a>
           <a href="#services" onclick="navigateTo('services'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="services">Our Services</a>
           <a href="#plans-section" onclick="navigateTo('plans-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Plans</a>
@@ -112,6 +113,7 @@
     <!-- Mobile Drawer Menu -->
     <div id="mobile-menu" class="hidden md:hidden border-t border-zinc-100 bg-white px-4 pt-3 pb-6 space-y-2.5 shadow-lg">
       <a href="#home" onclick="navigateTo('home'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Home</a>
+      <a href="#about" onclick="navigateTo('about'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">About Us</a>
       <a href="#categories" onclick="navigateTo('categories'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Our Meals</a>
       <a href="#services" onclick="navigateTo('services'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Our Services</a>
       <a href="#plans-section" onclick="navigateTo('plans-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Subscription Plans</a>
@@ -481,6 +483,214 @@
     </section>
 
 
+    <!-- ==================== VIEW: ABOUT US ==================== -->
+    <section id="view-about" class="view-panel hidden py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+        <!-- Hero Header -->
+        <div class="relative rounded-3xl bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 text-zinc-950 p-8 sm:p-14 overflow-hidden shadow-2xl">
+          <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none">
+            <img src="images/logo.png" alt="Rayalaseema Fort Badge" class="w-96 h-96 object-contain" />
+          </div>
+          <div class="relative max-w-3xl space-y-5">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-950/10 border border-zinc-950/20 text-zinc-950 text-xs font-black tracking-wider uppercase">
+              <span>🏰</span>
+              <span>Where Spice Meets Tradition • Heritage Culinary Kitchen</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black font-heading tracking-tight leading-tight text-zinc-950">
+              Honoring Centuries of Rayalaseema Culinary Heritage
+            </h1>
+            <p class="text-zinc-900 text-base sm:text-lg font-medium leading-relaxed">
+              Born from the historic soil of Kurnool, Kadapa, Anantapur, and Chittoor, <span class="font-bold">The Rayalaseema Cloud Kitchen</span> brings time-honored ancestral recipes, wood-stove aroma, and stone-ground spices directly to your office desk and dining table.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <button onclick="navigateTo('categories')" class="px-6 py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white font-extrabold rounded-xl text-sm transition shadow-lg flex items-center gap-2 cursor-pointer">
+                <span>Explore Daily Meals Menu</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </button>
+              <button onclick="navigateTo('services')" class="px-6 py-3.5 bg-white/90 hover:bg-white text-zinc-950 font-extrabold rounded-xl text-sm transition shadow border border-amber-300 cursor-pointer">
+                <span>Our Catering & Wholesale</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Heritage Story & Emblem Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 text-xs font-black text-amber-600 uppercase tracking-widest">
+              <span>🌾</span>
+              <span>Our Roots & Philosophy</span>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">
+              The Legend of Kondareddy Fort & Royal Rayalaseema Flavors
+            </h2>
+            <p class="text-zinc-600 text-sm leading-relaxed">
+              Rayalaseema is legendary for its bold fortitude and unmatched gastronomic pride. For generations, traditional Rayalaseema kitchens have celebrated rustic, slow-simmered dishes cooked over low flames in earthenware pots with cold-pressed groundnut oil, freshly roasted cumin, curry leaves, and sun-dried Guntur red chillies.
+            </p>
+            <p class="text-zinc-600 text-sm leading-relaxed">
+              In an age of ultra-processed food and generic takeaway boxes, <span class="font-semibold text-zinc-900">The Rayalaseema Cloud Kitchen</span> was founded to restore real homestyle nourishment. Every sunrise at 5:00 AM, our master cooks start freshly boiling authentic lentils, stone-grinding secret spice blends, and slow-braising tender country meats.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
+              <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
+                <span class="text-2xl font-black text-amber-700 block font-heading">100%</span>
+                <span class="text-xs font-bold text-zinc-700">Cold-Pressed Oils & Pure Ghee</span>
+              </div>
+              <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                <span class="text-2xl font-black text-emerald-700 block font-heading">Zero</span>
+                <span class="text-xs font-bold text-zinc-700">Artificial Flavors or Colors</span>
+              </div>
+              <div class="p-4 rounded-2xl bg-zinc-100 border border-zinc-200">
+                <span class="text-2xl font-black text-zinc-900 block font-heading">5:00 AM</span>
+                <span class="text-xs font-bold text-zinc-700">Daily Morning Fresh Batches</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="bg-zinc-950 text-white rounded-3xl p-8 border border-zinc-800 shadow-xl relative overflow-hidden text-center">
+              <div class="w-36 h-36 mx-auto rounded-full bg-amber-400/10 p-2 border-2 border-amber-400 mb-6 shadow-inner flex items-center justify-center">
+                <img src="images/logo.png" alt="Rayalaseema Emblem" class="w-full h-full object-cover rounded-full" />
+              </div>
+              <h3 class="text-xl font-black font-heading text-white">The Rayalaseema Cloud Kitchen</h3>
+              <p class="text-amber-400 text-xs font-bold tracking-widest uppercase mt-1">"Where Spice Meets Tradition"</p>
+              <div class="my-6 border-t border-zinc-800"></div>
+              <div class="grid grid-cols-2 gap-4 text-left text-xs">
+                <div class="space-y-1">
+                  <span class="text-zinc-400 block font-medium">Headquarters</span>
+                  <span class="text-white font-bold block">Hitec City, Hyderabad</span>
+                </div>
+                <div class="space-y-1">
+                  <span class="text-zinc-400 block font-medium">Culinary Heritage</span>
+                  <span class="text-white font-bold block">Kurnool & Kadapa</span>
+                </div>
+                <div class="space-y-1">
+                  <span class="text-zinc-400 block font-medium">Certification</span>
+                  <span class="text-emerald-400 font-bold block">FSSAI Grade-A Certified</span>
+                </div>
+                <div class="space-y-1">
+                  <span class="text-zinc-400 block font-medium">Daily Capacity</span>
+                  <span class="text-amber-400 font-bold block">5,000+ Fresh Meals</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Pillars of Excellence -->
+        <div class="space-y-8">
+          <div class="text-center max-w-2xl mx-auto">
+            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-2">Our Quality Creed</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">The 4 Pillars of Rayalaseema Kitchen</h2>
+            <p class="text-zinc-500 text-sm mt-2">Every meal served upholds our non-negotiable promises of purity, health, and authentic taste.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">🪔</div>
+              <h3 class="text-lg font-black text-zinc-900 mb-2">Cold-Pressed Oils & Ghee</h3>
+              <p class="text-zinc-600 text-xs leading-relaxed">
+                We strictly use cold-pressed groundnut oil, sesame oil, and authentic cow ghee. Zero palm oil, zero trans fats, and zero reused oils.
+              </p>
+            </div>
+
+            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">🌶️</div>
+              <h3 class="text-lg font-black text-zinc-900 mb-2">Hand-Pounded Spices</h3>
+              <p class="text-zinc-600 text-xs leading-relaxed">
+                Sun-dried Guntur chillies, authentic Kandi Podi gunpowder, turmeric roots, and roasted coriander crushed fresh every single morning.
+              </p>
+            </div>
+
+            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">🌱</div>
+              <h3 class="text-lg font-black text-zinc-900 mb-2">Farm-To-Pot Freshness</h3>
+              <p class="text-zinc-600 text-xs leading-relaxed">
+                Fresh seasonal vegetables, leafy greens, and certified fresh tender meats sourced daily directly from regional farmers and ethical partners.
+              </p>
+            </div>
+
+            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">📦</div>
+              <h3 class="text-lg font-black text-zinc-900 mb-2">Thermal Hot Delivery</h3>
+              <p class="text-zinc-600 text-xs leading-relaxed">
+                Packed in 100% food-grade, leak-proof tamper-evident meal trays and dispatched in insulated thermal carriers for piping hot desk delivery.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kitchen Hygiene & Safety Standards -->
+        <div class="bg-zinc-900 text-white rounded-3xl p-8 sm:p-12 border border-zinc-800">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div class="space-y-4">
+              <span class="text-xs font-black text-amber-400 uppercase tracking-widest block">World-Class Standards</span>
+              <h2 class="text-3xl font-black font-heading text-white">Central Cloud Kitchen Hygiene & Food Safety</h2>
+              <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed">
+                Our central kitchen in Hitec City operates under strict GMP (Good Manufacturing Practices) and ISO-aligned food safety protocols:
+              </p>
+              <ul class="space-y-2.5 text-xs text-zinc-300 pt-2">
+                <li class="flex items-center gap-2.5">
+                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+                  <span>Triple-Stage RO Water Purification for all cooking, boiling, and washing</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+                  <span>Daily Health & Temperature Checks for 100% of kitchen staff & chefs</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+                  <span>Touchless, Automated Tray Sealing to guarantee zero contamination</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+                  <span>Daily Micro-Batch Quality Testing with strict spice & salt calibration</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
+                <span class="text-3xl font-black text-amber-400 font-heading block mb-1">150K+</span>
+                <span class="text-xs text-zinc-300 font-semibold">Meals Prepared & Delivered</span>
+              </div>
+              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
+                <span class="text-3xl font-black text-emerald-400 font-heading block mb-1">45+</span>
+                <span class="text-xs text-zinc-300 font-semibold">Corporate IT Tech Parks</span>
+              </div>
+              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
+                <span class="text-3xl font-black text-amber-400 font-heading block mb-1">4.9 ★</span>
+                <span class="text-xs text-zinc-300 font-semibold">Customer Happiness Rating</span>
+              </div>
+              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
+                <span class="text-3xl font-black text-emerald-400 font-heading block mb-1">100%</span>
+                <span class="text-xs text-zinc-300 font-semibold">On-Time Lunch Guarantee</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Banner -->
+        <div class="rounded-3xl bg-amber-400 text-zinc-950 p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+          <div class="space-y-1 text-center sm:text-left">
+            <h3 class="text-2xl sm:text-3xl font-black font-heading">Ready to Experience True Rayalaseema Flavor?</h3>
+            <p class="text-zinc-800 text-xs sm:text-sm font-medium">Order individual meals today or choose our flexible monthly corporate meal plans.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="navigateTo('categories')" class="px-6 py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white font-black rounded-xl text-xs sm:text-sm transition shadow-md cursor-pointer">
+              Order Meals Now
+            </button>
+            <button onclick="navigateTo('trial-banner')" class="px-6 py-3.5 bg-white hover:bg-zinc-50 text-zinc-950 font-black rounded-xl text-xs sm:text-sm transition shadow-md border border-amber-500/40 cursor-pointer">
+              10-Day Trial
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
     <!-- ==================== VIEW 2: OUR MEALS / CATEGORIES ==================== -->
     <section id="view-categories" class="view-panel hidden py-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -819,6 +1029,7 @@
           <h4 class="font-bold text-sm text-white uppercase tracking-wider">Quick Links</h4>
           <ul class="space-y-2 text-zinc-400">
             <li><a href="#home" onclick="navigateTo('home'); return false;" class="hover:text-amber-400 transition cursor-pointer">Home</a></li>
+            <li><a href="#about" onclick="navigateTo('about'); return false;" class="hover:text-amber-400 transition cursor-pointer">About Us</a></li>
             <li><a href="#categories" onclick="navigateTo('categories'); return false;" class="hover:text-amber-400 transition cursor-pointer">Our Meals</a></li>
             <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Our Services</a></li>
             <li><a href="#orders" onclick="navigateTo('account'); switchAccountTab('orders'); return false;" class="hover:text-amber-400 transition cursor-pointer">My Orders & Tracking</a></li>
