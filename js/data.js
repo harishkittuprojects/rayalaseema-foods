@@ -339,21 +339,21 @@ const MENU_DATA = {
   subscriptionPlans: [
     {
       id: "plan-trial",
-      name: "10-Day Trial Plan",
-      tag: "Try Before Subscribing",
+      name: "10-Day Food Subscription Plan",
+      tag: "10 Consumed Days Guaranteed",
       pricePerDay: 150,
       totalPrice: 1500,
       days: 10,
       popular: false,
-      description: "Experience the freshest workday meals for 10 workdays. Test our authentic taste and punctual delivery.",
+      description: "Experience 10 authentic Rayalaseema meals. Pause anytime before 5:30 PM without losing a single food day balance.",
       features: [
-        "10 Daily Fresh Deliveries",
-        "Choose Veg, Non-Veg or Fruit Daily",
-        "Pause on Absent Days (Zero Loss)",
-        "Free Office Desk Delivery",
-        "WhatsApp Live Support"
+        "10 Guaranteed Consumption Days",
+        "Pause Plan Before 5:30 PM Today",
+        "Auto-Resumes Day After Paused Day",
+        "Zero Food Loss Policy",
+        "Punctual 12:30 PM Office Delivery"
       ],
-      cta: "Start 10-Day Trial"
+      cta: "Start 10-Day Plan"
     },
     {
       id: "plan-monthly",
@@ -363,13 +363,13 @@ const MENU_DATA = {
       totalPrice: 3640,
       days: 26,
       popular: true,
-      description: "Full workday nutrition plan designed for working professionals. Maximum savings and flexibility.",
+      description: "Full workday nutrition plan designed for working professionals. Maximum savings and flexible pause/resume.",
       features: [
         "26 Workday Deliveries",
-        "Unlimited Pause & Resume",
+        "Pause Before 5:30 PM Cutoff",
         "Complimentary Weekend Fruit Meal",
         "Priority 12:30 PM Lunch Slot",
-        "Nutritionist Consultation Included"
+        "WhatsApp Kitchen Support"
       ],
       cta: "Get Monthly Plan"
     },
@@ -390,6 +390,76 @@ const MENU_DATA = {
         "Dedicated Account Lead"
       ],
       cta: "Get In Touch"
+    }
+  ],
+
+  // Initial customer subscriptions for tracking and admin dashboard
+  initialSubscriptions: [
+    {
+      id: "SUB-10D-89421",
+      customerName: "Rahul Kumar",
+      customerPhone: "+91 98765 43210",
+      customerEmail: "rahul.kumar@hitec-tech.com",
+      customerAddress: "Tower 4, Mindspace IT Park, Hitec City, Hyderabad - 500081",
+      planId: "plan-trial",
+      planName: "10-Day Food Subscription Plan",
+      mealType: "Rayalaseema Deluxe Veg Full Meal",
+      totalDays: 10,
+      consumedDays: 1,
+      remainingDays: 9,
+      status: "Active",
+      isPausedTomorrow: false,
+      pauseCutoff: "5:30 PM",
+      nextDeliveryDate: "Tomorrow (12:30 PM)",
+      pausedDates: [],
+      history: [
+        { dayNumber: 1, date: "19 Sep 2026", status: "Delivered & Consumed", meal: "Rayalaseema Deluxe Veg Full Meal", note: "Day 1 consumed (1/10 consumed, 9 remaining)" }
+      ]
+    },
+    {
+      id: "SUB-10D-74102",
+      customerName: "Priya Nair",
+      customerPhone: "+91 98111 22334",
+      customerEmail: "priya.nair@cybercity.com",
+      customerAddress: "Building 9, Cyber Towers, Madhapur, Hyderabad - 500081",
+      planId: "plan-trial",
+      planName: "10-Day Food Subscription Plan",
+      mealType: "Rayalaseema Chicken Curry & Biryani Meal",
+      totalDays: 10,
+      consumedDays: 3,
+      remainingDays: 7,
+      status: "Paused for Tomorrow",
+      isPausedTomorrow: true,
+      pauseCutoff: "5:30 PM",
+      nextDeliveryDate: "Resuming Day After Tomorrow (12:30 PM)",
+      pausedDates: ["20 Sep 2026"],
+      history: [
+        { dayNumber: 1, date: "16 Sep 2026", status: "Delivered & Consumed", meal: "Rayalaseema Chicken Meal", note: "Day 1 consumed" },
+        { dayNumber: 2, date: "17 Sep 2026", status: "Delivered & Consumed", meal: "Rayalaseema Chicken Meal", note: "Day 2 consumed" },
+        { dayNumber: 3, date: "18 Sep 2026", status: "Delivered & Consumed", meal: "Rayalaseema Chicken Meal", note: "Day 3 consumed" },
+        { dayNumber: null, date: "20 Sep 2026", status: "Paused (Before 5:30 PM)", meal: "None", note: "Customer on leave. Zero balance deducted. (7 remaining)" }
+      ]
+    },
+    {
+      id: "SUB-10D-63219",
+      customerName: "Shandeep Reddy",
+      customerPhone: "+91 97000 88990",
+      customerEmail: "shandeep.reddy@techhub.in",
+      customerAddress: "Block B, Raheja Mindspace, Hitec City, Hyderabad - 500081",
+      planId: "plan-trial",
+      planName: "10-Day Food Subscription Plan",
+      mealType: "Rayalaseema Deluxe Veg Full Meal",
+      totalDays: 10,
+      consumedDays: 10,
+      remainingDays: 0,
+      status: "Completed",
+      isPausedTomorrow: false,
+      pauseCutoff: "5:30 PM",
+      nextDeliveryDate: "All 10 Days Consumed",
+      pausedDates: ["12 Sep 2026", "14 Sep 2026"],
+      history: [
+        { dayNumber: 10, date: "18 Sep 2026", status: "Delivered & Consumed", meal: "Rayalaseema Deluxe Veg Meal", note: "Completed full 10/10 consumed days entitlement" }
+      ]
     }
   ],
 

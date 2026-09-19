@@ -6,6 +6,8 @@ class AppState {
     this.user = this.loadUser();
     this.orders = this.loadOrders();
     this.savedAddresses = this.loadAddresses();
+    this.subscriptions = this.loadSubscriptions();
+    this.simulatedTimeMode = localStorage.getItem('rck_time_mode') || 'before'; // 'before' (3:30 PM) | 'after' (6:15 PM) | 'real'
     this.cardQuantities = {};
     this.activeBuyNowItem = null;
     this.activeCheckoutMode = 'cart'; // 'cart' or 'buy_now'
@@ -34,7 +36,27 @@ class AppState {
   loadUser() {
     try {
       const saved = localStorage.getItem('rck_user');
-      return saved ? JSON.parse(saved) : {
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.activeSubscription) {
+          // Normalise and ensure 10-day plan fields exist
+          if (parsed.activeSubscription.totalDays === undefined) parsed.activeSubscription.totalDays = 10;
+          if (parsed.activeSubscription.consumedDays === undefined) {
+            parsed.activeSubscription.consumedDays = parsed.activeSubscription.usedDays !== undefined ? parsed.activeSubscription.usedDays : 1;
+          }
+          if (parsed.activeSubscription.remainingDays === undefined) {
+            parsed.activeSubscription.remainingDays = parsed.activeSubscription.totalDays - parsed.activeSubscription.consumedDays;
+          }
+          if (parsed.activeSubscription.pausedDates === undefined) parsed.activeSubscription.pausedDates = [];
+          if (parsed.activeSubscription.isPausedTomorrow === undefined) parsed.activeSubscription.isPausedTomorrow = false;
+          if (parsed.activeSubscription.pauseCutoff === undefined) parsed.activeSubscription.pauseCutoff = "5:30 PM";
+          if (!parsed.activeSubscription.nextDelivery) {
+            parsed.activeSubscription.nextDelivery = parsed.activeSubscription.isPausedTomorrow ? "Resumes Day After Tomorrow (12:30 PM)" : "Tomorrow (12:30 PM)";
+          }
+        }
+        return parsed;
+      }
+      return {
         isLoggedIn: true,
         name: "Rahul Kumar",
         phone: "+91 98765 43210",
@@ -42,14 +64,23 @@ class AppState {
         dietPreference: "Balanced / Mixed",
         address: "Tower 4, Mindspace IT Park, Hitec City, Hyderabad - 500081",
         activeSubscription: {
-          planName: "Monthly Regular Plan (Veg + Non-Veg)",
-          planType: "Regular Workday Meal",
-          totalDays: 26,
-          usedDays: 11,
-          remainingDays: 15,
-          status: "Active",
+          id: "SUB-10D-89421",
+          planId: "plan-trial",
+          planName: "10-Day Food Subscription Plan",
+          planType: "Authentic Daily Lunch (Veg & Non-Veg)",
+          mealType: "Rayalaseema Deluxe Veg Full Meal",
+          totalDays: 10,
+          consumedDays: 1, // Consumed today -> 1
+          remainingDays: 9, // Exactly 10 - 1 = 9 guaranteed
+          status: "Active", // "Active" | "Paused for Tomorrow" | "Completed"
+          isPausedTomorrow: false,
+          pauseCutoff: "5:30 PM",
           nextDelivery: "Tomorrow (12:30 PM)",
-          pausedDates: ["2026-09-22", "2026-09-25"]
+          nextDeliveryDate: "Tomorrow (12:30 PM)",
+          pausedDates: [],
+          history: [
+            { dayNumber: 1, date: "19 Sep 2026", status: "Delivered & Consumed", meal: "Rayalaseema Deluxe Veg Full Meal", note: "Day 1 consumed (1/10 consumed, 9 remaining)" }
+          ]
         }
       };
     } catch (e) {
@@ -60,6 +91,47 @@ class AppState {
   saveUser() {
     localStorage.setItem('rck_user', JSON.stringify(this.user));
     this.updateUserUI();
+  }
+
+  loadSubscriptions() {
+    try {
+      const saved = localStorage.getItem('rck_subscriptions');
+      return saved ? JSON.parse(saved) : (MENU_DATA.initialSubscriptions || []);
+    } catch (e) {
+      return MENU_DATA.initialSubscriptions || [];
+    }
+  }
+
+  saveSubscriptions() {
+    localStorage.setItem('rck_subscriptions', JSON.stringify(this.subscriptions));
+  }
+
+  canPauseTomorrow() {
+    if (this.simulatedTimeMode === 'before') {
+      return { allowed: true, timeStr: "3:30 PM", label: "3:30 PM (Before 5:30 PM Cutoff)", reason: "Pause allowed before 5:30 PM cutoff" };
+    }
+    if (this.simulatedTimeMode === 'after') {
+      return { allowed: false, timeStr: "6:15 PM", label: "6:15 PM (After 5:30 PM Cutoff)", reason: "5:30 PM kitchen prep cutoff has passed for tomorrow" };
+    }
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const isBefore = (hours < 17 || (hours === 17 && minutes < 30));
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return {
+      allowed: isBefore,
+      timeStr: timeStr,
+      label: `${timeStr} (${isBefore ? 'Before' : 'After'} 5:30 PM)`,
+      reason: isBefore ? "Pause allowed before 5:30 PM cutoff" : "5:30 PM kitchen prep cutoff has passed for tomorrow"
+    };
+  }
+
+  setTimeMode(mode) {
+    this.simulatedTimeMode = mode;
+    localStorage.setItem('rck_time_mode', mode);
+    this.showToast(`Simulation Clock set to: ${mode === 'before' ? '3:30 PM (Before 5:30 PM)' : mode === 'after' ? '6:15 PM (After 5:30 PM)' : 'Real Device Clock'}`, 'info');
+    renderAccountPause();
+    renderAccountPlans();
   }
 
   loadOrders() {
@@ -847,6 +919,43 @@ window.handlePlaceOrder = function(e) {
   app.orders.unshift(newOrder);
   app.saveOrders();
 
+  // Check if ordered items contain a subscription plan
+  const subPlanItem = orderedItems.find(i => i.id === 'plan-trial' || (i.categoryName && i.categoryName.includes('Subscription')) || (i.name && i.name.includes('10-Day')));
+  if (subPlanItem) {
+    const isTenDay = subPlanItem.id === 'plan-trial' || subPlanItem.name.includes('10-Day');
+    const totalPlanDays = isTenDay ? 10 : 26;
+    
+    app.user.activeSubscription = {
+      id: "SUB-10D-" + Math.floor(10000 + Math.random() * 90000),
+      planId: subPlanItem.id,
+      planName: isTenDay ? "10-Day Food Subscription Plan" : subPlanItem.name,
+      planType: "Authentic Workday Lunch (Veg & Non-Veg)",
+      mealType: "Rayalaseema Deluxe Veg Full Meal",
+      totalDays: totalPlanDays,
+      consumedDays: 1, // Day 1 Consumed Today
+      remainingDays: totalPlanDays - 1, // 9 Days Remaining
+      status: "Active",
+      isPausedTomorrow: false,
+      pauseCutoff: "5:30 PM",
+      nextDelivery: "Tomorrow (12:30 PM)",
+      nextDeliveryDate: "Tomorrow (12:30 PM)",
+      pausedDates: [],
+      history: [
+        { dayNumber: 1, date: formattedDate.split(',')[0], status: "Delivered & Consumed", meal: "Rayalaseema Deluxe Veg Full Meal", note: `Day 1 consumed (1/${totalPlanDays} consumed, ${totalPlanDays - 1} remaining)` }
+      ]
+    };
+    app.saveUser();
+
+    // Push or sync to global subscriptions list
+    const existingIdx = app.subscriptions.findIndex(s => s.id === app.user.activeSubscription.id || s.customerName === name);
+    if (existingIdx !== -1) {
+      app.subscriptions[existingIdx] = JSON.parse(JSON.stringify(app.user.activeSubscription));
+    } else {
+      app.subscriptions.unshift(JSON.parse(JSON.stringify(app.user.activeSubscription)));
+    }
+    app.saveSubscriptions();
+  }
+
   // If order was placed from cart, clear cart
   if (app.activeCheckoutMode === 'cart') {
     app.clearCart();
@@ -1199,54 +1308,205 @@ function renderAccountPlans() {
   const container = document.getElementById('account-plans-container');
   if (!container) return;
 
-  const sub = app.user.activeSubscription;
+  const sub = app.user.activeSubscription || {
+    id: "SUB-10D-89421",
+    planName: "10-Day Food Subscription Plan",
+    mealType: "Rayalaseema Deluxe Veg Full Meal",
+    totalDays: 10,
+    consumedDays: 1,
+    remainingDays: 9,
+    status: "Active",
+    isPausedTomorrow: false,
+    pauseCutoff: "5:30 PM",
+    nextDelivery: "Tomorrow (12:30 PM)",
+    pausedDates: []
+  };
+
+  const isPaused = sub.isPausedTomorrow || sub.status === "Paused for Tomorrow";
+  const isCompleted = sub.status === "Completed" || sub.consumedDays >= sub.totalDays;
+  const cutoffInfo = app.canPauseTomorrow();
+
+  // Generate 10-day milestone progress indicators
+  const totalDays = sub.totalDays || 10;
+  const consumedDays = sub.consumedDays || 0;
+  const remainingDays = Math.max(0, totalDays - consumedDays);
+  const pausedCount = (sub.pausedDates && sub.pausedDates.length) || 0;
+
+  let dayMilestonesHtml = '';
+  for (let d = 1; d <= totalDays; d++) {
+    if (d <= consumedDays) {
+      dayMilestonesHtml += `
+        <div class="flex flex-col items-center gap-1 group">
+          <div class="w-8 h-8 rounded-full bg-emerald-500 text-zinc-950 font-black text-xs flex items-center justify-center shadow-md border-2 border-emerald-300">
+            ✓
+          </div>
+          <span class="text-[10px] font-bold text-emerald-400">Day ${d}</span>
+          <span class="text-[9px] text-zinc-400">Consumed</span>
+        </div>
+      `;
+    } else if (d === consumedDays + 1) {
+      if (isPaused) {
+        dayMilestonesHtml += `
+          <div class="flex flex-col items-center gap-1 group animate-pulse">
+            <div class="w-8 h-8 rounded-full bg-amber-400 text-zinc-950 font-black text-xs flex items-center justify-center shadow-md border-2 border-amber-300">
+              ⏸️
+            </div>
+            <span class="text-[10px] font-bold text-amber-400">Day ${d}</span>
+            <span class="text-[9px] text-amber-300 font-semibold">Paused (Saved)</span>
+          </div>
+        `;
+      } else {
+        dayMilestonesHtml += `
+          <div class="flex flex-col items-center gap-1 group">
+            <div class="w-8 h-8 rounded-full bg-amber-400 text-zinc-950 font-black text-xs flex items-center justify-center shadow-md border-2 border-white ring-2 ring-amber-400/50">
+              🚚
+            </div>
+            <span class="text-[10px] font-bold text-amber-300">Day ${d}</span>
+            <span class="text-[9px] text-white font-semibold">Next Meal</span>
+          </div>
+        `;
+      }
+    } else {
+      dayMilestonesHtml += `
+        <div class="flex flex-col items-center gap-1 opacity-60">
+          <div class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 font-semibold text-xs flex items-center justify-center border border-zinc-700">
+            ${d}
+          </div>
+          <span class="text-[10px] font-medium text-zinc-400">Day ${d}</span>
+          <span class="text-[9px] text-zinc-500">Remaining</span>
+        </div>
+      `;
+    }
+  }
 
   container.innerHTML = `
-    <div class="bg-gradient-to-br from-emerald-950 via-zinc-900 to-zinc-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">Active Meal Plan</span>
-          <h3 class="text-2xl font-black font-heading mt-0.5">${sub.planName}</h3>
+    <div class="space-y-6">
+      
+      <!-- Main Subscription Card -->
+      <div class="bg-gradient-to-br from-emerald-950 via-zinc-900 to-zinc-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/10 relative overflow-hidden">
+        
+        <!-- Top Row: Plan Title, ID & Status Badge -->
+        <div class="flex flex-wrap items-start justify-between gap-4 pb-6 border-b border-white/10">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-amber-400 font-extrabold uppercase tracking-wider bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
+                10-Day Plan Guarantee
+              </span>
+              <span class="text-xs text-zinc-400">ID: ${sub.id || 'SUB-10D-89421'}</span>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-black font-heading mt-1">${sub.planName}</h3>
+            <p class="text-xs text-zinc-300 mt-0.5">Meal: <strong class="text-white">${sub.mealType || 'Rayalaseema Deluxe Veg Full Meal'}</strong> (12:30 PM Delivery)</p>
+          </div>
+          
+          <div class="flex flex-col items-end gap-1">
+            <span class="px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border shadow-sm ${
+              isCompleted ? 'bg-blue-500/20 text-blue-300 border-blue-400/30' :
+              isPaused ? 'bg-amber-500/20 text-amber-300 border-amber-400/30 animate-pulse' :
+              'bg-emerald-500/20 text-emerald-300 border-emerald-400/30'
+            }">
+              ${isCompleted ? '🎉 All 10 Days Completed' : isPaused ? '⏸️ Paused for Tomorrow' : '🟢 Active Subscription'}
+            </span>
+            <span class="text-[11px] text-zinc-400">Pause Cutoff: <strong class="text-amber-300">5:30 PM Daily</strong></span>
+          </div>
         </div>
-        <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs px-3 py-1 rounded-full font-bold">
-          ${sub.status}
-        </span>
+
+        <!-- 4-Stat Metric Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 my-6">
+          <div class="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
+            <span class="text-xs text-zinc-400 block font-semibold">Total Plan Entitlement</span>
+            <span class="text-2xl sm:text-3xl font-black text-amber-400 mt-1 block">${totalDays} Days</span>
+            <span class="text-[10px] text-zinc-400 mt-0.5 block">Guaranteed Food Days</span>
+          </div>
+          
+          <div class="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
+            <span class="text-xs text-zinc-400 block font-semibold">Consumed Days</span>
+            <span class="text-2xl sm:text-3xl font-black text-white mt-1 block">${consumedDays} / ${totalDays}</span>
+            <span class="text-[10px] text-emerald-400 mt-0.5 block font-semibold">✓ Consumed Today</span>
+          </div>
+          
+          <div class="bg-emerald-950/40 rounded-2xl p-4 border border-emerald-500/30 text-center relative overflow-hidden">
+            <div class="absolute -top-1 -right-1 bg-emerald-500 text-zinc-950 text-[9px] font-black px-2 py-0.5 rounded-bl-lg">
+              100% PROTECTED
+            </div>
+            <span class="text-xs text-emerald-300 block font-semibold">Remaining Food Days</span>
+            <span class="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 block">${remainingDays} Days</span>
+            <span class="text-[10px] text-zinc-300 mt-0.5 block">Zero Balance Loss</span>
+          </div>
+          
+          <div class="bg-white/5 rounded-2xl p-4 border border-white/10 text-center">
+            <span class="text-xs text-zinc-400 block font-semibold">Paused Days</span>
+            <span class="text-2xl sm:text-3xl font-black text-amber-300 mt-1 block">${pausedCount}</span>
+            <span class="text-[10px] text-zinc-400 mt-0.5 block">Balance Preserved</span>
+          </div>
+        </div>
+
+        <!-- 10-Day Visual Journey Tracker -->
+        <div class="my-6 p-4 sm:p-5 bg-black/30 rounded-2xl border border-white/10 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-zinc-200">10-Day Food Consumption Tracker</span>
+            <span class="text-amber-400 font-extrabold">${Math.round((consumedDays / totalDays) * 100)}% Consumed (${consumedDays}/${totalDays} Days)</span>
+          </div>
+          
+          <div class="grid grid-cols-5 sm:grid-cols-10 gap-2 pt-1">
+            ${dayMilestonesHtml}
+          </div>
+        </div>
+
+        <!-- Next Delivery & Pause Deadline Notice -->
+        <div class="pt-6 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-zinc-400">Next Scheduled Delivery:</span>
+              <span class="text-xs font-extrabold ${isPaused ? 'text-amber-400' : 'text-emerald-400'}">
+                ${isCompleted ? 'None (Subscription Complete)' : isPaused ? '⏸️ Paused Tomorrow • Resumes Day After' : 'Tomorrow (12:30 PM)'}
+              </span>
+            </div>
+            <div class="text-xs text-zinc-300">
+              ⏰ <strong>5:30 PM Rule:</strong> Click "Pause Plan" before 5:30 PM today if you do not want food tomorrow.
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button onclick="switchAccountTab('pause')" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
+              ${isPaused ? '▶️ Manage / Resume Plan' : '⏸️ Pause Plan for Tomorrow'}
+            </button>
+            <a href="admin.html" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs rounded-xl transition border border-white/10 cursor-pointer flex items-center gap-1.5">
+              <span>👨‍🍳 Admin Portal</span>
+            </a>
+          </div>
+        </div>
+
       </div>
 
-      <div class="grid grid-cols-3 gap-4 my-6 py-4 border-y border-white/10 text-center">
-        <div>
-          <span class="text-2xl font-black text-amber-400">${sub.totalDays}</span>
-          <span class="text-xs text-zinc-300 block">Total Days</span>
+      <!-- Quick Interactive Testing / Simulation Controls -->
+      <div class="bg-zinc-50 rounded-2xl p-5 border border-zinc-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🧪</span>
+            <h4 class="text-xs font-bold text-zinc-900 uppercase tracking-wider">Interactive 10-Day Plan Simulation Controls</h4>
+          </div>
+          <span class="text-[11px] text-zinc-500 font-medium">Test state transitions instantly</span>
         </div>
-        <div>
-          <span class="text-2xl font-black text-white">${sub.usedDays}</span>
-          <span class="text-xs text-zinc-300 block">Used Days</span>
-        </div>
-        <div>
-          <span class="text-2xl font-black text-emerald-400">${sub.remainingDays}</span>
-          <span class="text-xs text-zinc-300 block">Days Left</span>
+        
+        <p class="text-xs text-zinc-600 leading-relaxed">
+          Use these controls to simulate food consumption, pause before/after 5:30 PM cutoff, or reset the 10-day counter for testing:
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+          <button onclick="markDayConsumed()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow cursor-pointer flex items-center gap-1.5">
+            <span>🍽️ Mark Food Consumed (+1 Day)</span>
+          </button>
+          
+          <button onclick="togglePauseTomorrow()" class="px-4 py-2 ${isPaused ? 'bg-amber-500 hover:bg-amber-600 text-zinc-950' : 'bg-zinc-900 hover:bg-zinc-800 text-amber-400'} font-bold text-xs rounded-xl transition shadow cursor-pointer flex items-center gap-1.5">
+            <span>${isPaused ? '▶️ Resume Plan' : '⏸️ Toggle Pause Tomorrow'}</span>
+          </button>
+
+          <button onclick="resetTenDayPlan()" class="px-4 py-2 bg-zinc-200 hover:bg-zinc-300 text-zinc-800 font-bold text-xs rounded-xl transition cursor-pointer flex items-center gap-1.5">
+            <span>🔄 Reset to Day 1 (1/10 Consumed, 9 Left)</span>
+          </button>
         </div>
       </div>
 
-      <div class="space-y-1.5">
-        <div class="flex justify-between text-xs text-zinc-300">
-          <span>Plan Progress</span>
-          <span>${Math.round((sub.usedDays / sub.totalDays) * 100)}% Completed</span>
-        </div>
-        <div class="w-full h-2.5 bg-white/20 rounded-full overflow-hidden">
-          <div class="h-full bg-amber-400 rounded-full transition-all" style="width: ${(sub.usedDays / sub.totalDays) * 100}%"></div>
-        </div>
-      </div>
-
-      <div class="pt-6 mt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <span class="text-xs text-zinc-400 block">Next Scheduled Delivery:</span>
-          <span class="text-sm font-bold text-amber-300">${sub.nextDelivery}</span>
-        </div>
-        <button onclick="handleAddPlanToCart('plan-monthly')" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold text-xs rounded-xl transition shadow cursor-pointer">
-          Renew / Extend Subscription
-        </button>
-      </div>
     </div>
   `;
 }
@@ -1255,32 +1515,125 @@ function renderAccountPause() {
   const container = document.getElementById('account-pause-container');
   if (!container) return;
 
-  const sub = app.user.activeSubscription;
-  const isPaused = sub.nextDelivery.includes('Paused');
+  const sub = app.user.activeSubscription || {
+    id: "SUB-10D-89421",
+    planName: "10-Day Food Subscription Plan",
+    totalDays: 10,
+    consumedDays: 1,
+    remainingDays: 9,
+    status: "Active",
+    isPausedTomorrow: false,
+    pauseCutoff: "5:30 PM",
+    nextDelivery: "Tomorrow (12:30 PM)",
+    pausedDates: []
+  };
+
+  const isPaused = sub.isPausedTomorrow || sub.status === "Paused for Tomorrow";
+  const isCompleted = sub.status === "Completed" || sub.consumedDays >= sub.totalDays;
+  const cutoffInfo = app.canPauseTomorrow();
+  const timeMode = app.simulatedTimeMode;
 
   container.innerHTML = `
     <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200/70 shadow-sm space-y-6">
-      <div class="pb-4 border-b border-zinc-100">
-        <h3 class="text-2xl font-black text-zinc-950 font-heading">Pause or Resume Deliveries</h3>
-        <p class="text-xs text-zinc-500 mt-0.5">Taking leave or out of office? Pause your meal deliveries without losing a single day's balance.</p>
+      
+      <div class="pb-4 border-b border-zinc-100 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h3 class="text-2xl font-black text-zinc-950 font-heading">Pause or Resume 10-Day Plan</h3>
+          <p class="text-xs text-zinc-500 mt-0.5">Pause meals before the 5:30 PM cutoff. Paused days never reduce your 10-day food entitlement.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold px-3 py-1 rounded-full ${
+            cutoffInfo.allowed ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-red-100 text-red-800 border border-red-300'
+          }">
+            ${cutoffInfo.allowed ? '🟢 Cutoff Open (Before 5:30 PM)' : '🔴 Cutoff Closed (After 5:30 PM)'}
+          </span>
+        </div>
       </div>
 
-      <!-- Immediate Pause Tomorrow -->
-      <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span class="text-xs font-bold text-amber-800 uppercase tracking-wider block mb-0.5">Tomorrow's Delivery</span>
-          <h4 class="text-base font-bold text-zinc-900">${sub.nextDelivery}</h4>
-          <p class="text-xs text-zinc-600 mt-1">Pausing will save 1 meal day and push your validity forward.</p>
+      <!-- Cutoff Simulation Switcher (For easy demo & testing) -->
+      <div class="p-4 bg-amber-50/70 rounded-2xl border border-amber-200/80 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold text-amber-900 uppercase tracking-wider">⏱️ 5:30 PM Cutoff Time Simulator</span>
+          <span class="text-xs font-bold text-zinc-700">Simulated Time: <strong class="text-amber-800">${cutoffInfo.label}</strong></span>
+        </div>
+        <p class="text-[11px] text-zinc-600">
+          Switch the simulation clock below to test pausing before 5:30 PM vs after 5:30 PM:
+        </p>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <button onclick="app.setTimeMode('before')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer ${
+            timeMode === 'before' ? 'bg-emerald-600 text-white shadow' : 'bg-white text-zinc-700 border border-zinc-300 hover:bg-zinc-100'
+          }">
+            ✓ Simulate 3:30 PM (Before 5:30 PM Cutoff - Pause Allowed)
+          </button>
+          
+          <button onclick="app.setTimeMode('after')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer ${
+            timeMode === 'after' ? 'bg-red-600 text-white shadow' : 'bg-white text-zinc-700 border border-zinc-300 hover:bg-zinc-100'
+          }">
+            ⚠️ Simulate 6:15 PM (After 5:30 PM Cutoff - Locked)
+          </button>
+          
+          <button onclick="app.setTimeMode('real')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer ${
+            timeMode === 'real' ? 'bg-zinc-900 text-white shadow' : 'bg-white text-zinc-700 border border-zinc-300 hover:bg-zinc-100'
+          }">
+            🕒 Use Real System Clock
+          </button>
+        </div>
+      </div>
+
+      <!-- Tomorrow's Meal Status & Instant Pause Action -->
+      <div class="bg-gradient-to-r ${isPaused ? 'from-amber-50 to-orange-50 border-amber-300' : 'from-emerald-50 to-teal-50 border-emerald-300'} rounded-2xl p-6 border flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-md ${
+              isPaused ? 'bg-amber-200 text-amber-900' : 'bg-emerald-200 text-emerald-900'
+            }">
+              Tomorrow's Lunch Status
+            </span>
+            <span class="text-xs font-bold text-zinc-600">Cutoff: 5:30 PM Today</span>
+          </div>
+
+          <h4 class="text-lg font-black text-zinc-900">
+            ${isPaused ? '⏸️ Paused for Tomorrow (No Food Order)' : '🚚 Scheduled for Tomorrow (12:30 PM)'}
+          </h4>
+          
+          <p class="text-xs text-zinc-600 max-w-lg">
+            ${isPaused 
+              ? 'Your subscription is paused for tomorrow. Zero days deducted! Remaining balance stays preserved at ' + sub.remainingDays + ' food days. It will automatically resume the day after.' 
+              : 'Your fresh meal is scheduled for delivery tomorrow at 12:30 PM. To pause tomorrow’s lunch, click Pause before 5:30 PM today.'}
+          </p>
         </div>
 
-        <button onclick="togglePauseTomorrow()" class="px-5 py-3 ${isPaused ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-amber-400 hover:bg-amber-500 text-zinc-950'} font-bold text-xs rounded-xl transition shadow cursor-pointer whitespace-nowrap">
-          ${isPaused ? '▶️ Resume Tomorrow’s Meal' : '⏸️ Pause Tomorrow’s Meal'}
+        <button onclick="togglePauseTomorrow()" class="px-6 py-3.5 ${
+          isPaused ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-zinc-950 hover:bg-zinc-800 text-amber-400'
+        } font-black text-xs rounded-2xl transition shadow-md cursor-pointer whitespace-nowrap active:scale-95 flex items-center justify-center gap-2">
+          ${isPaused ? '▶️ Resume Tomorrow’s Meal' : '⏸️ Pause Tomorrow’s Meal (Before 5:30 PM)'}
         </button>
       </div>
 
-      <!-- Specific Leave Range -->
+      <!-- 10-Day Food Consumption Balance Status -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-zinc-50 rounded-2xl p-4 border border-zinc-200">
+          <span class="text-xs text-zinc-500 font-semibold block">Consumed Days</span>
+          <span class="text-xl font-black text-zinc-900 mt-1 block">${sub.consumedDays || 1} / ${sub.totalDays || 10} Days</span>
+          <span class="text-[11px] text-emerald-600 font-semibold">1 Consumed Today</span>
+        </div>
+
+        <div class="bg-zinc-50 rounded-2xl p-4 border border-zinc-200">
+          <span class="text-xs text-zinc-500 font-semibold block">Preserved Remaining Days</span>
+          <span class="text-xl font-black text-emerald-600 mt-1 block">${sub.remainingDays || 9} Days Remaining</span>
+          <span class="text-[11px] text-zinc-500 font-medium">100% Entitlement Protected</span>
+        </div>
+
+        <div class="bg-zinc-50 rounded-2xl p-4 border border-zinc-200">
+          <span class="text-xs text-zinc-500 font-semibold block">Next Delivery Date</span>
+          <span class="text-xl font-black text-zinc-900 mt-1 block">${isPaused ? 'Day After Tomorrow' : 'Tomorrow'}</span>
+          <span class="text-[11px] text-amber-600 font-semibold">12:30 PM Lunch Slot</span>
+        </div>
+      </div>
+
+      <!-- Schedule Specific Absence Range -->
       <div class="space-y-3 pt-2">
-        <h4 class="text-xs font-bold text-zinc-800 uppercase tracking-wider">Schedule Upcoming Absences</h4>
+        <h4 class="text-xs font-bold text-zinc-800 uppercase tracking-wider">Schedule Multi-Day Absences</h4>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="text-xs font-semibold text-zinc-600 block mb-1">Pause From Date</label>
@@ -1296,28 +1649,204 @@ function renderAccountPause() {
         </button>
       </div>
 
-      <!-- Policy reminder -->
-      <div class="p-4 bg-zinc-50 rounded-2xl text-xs text-zinc-500 space-y-1">
-        <div class="font-bold text-zinc-800">📌 Zero Loss Guarantee Policy:</div>
-        <div>All paused workday meals are automatically carried forward without expiration. You may pause up to 90 days total per year.</div>
+      <!-- 10-Day Plan Pause / Resume Policy Specification -->
+      <div class="p-5 bg-zinc-50 rounded-2xl border border-zinc-200 text-xs text-zinc-600 space-y-2">
+        <div class="font-black text-zinc-950 uppercase tracking-wider flex items-center gap-1.5">
+          <span>📋</span> 10-Day Food Subscription Pause / Resume Policy:
+        </div>
+        <ul class="space-y-1.5 list-disc list-inside leading-relaxed text-zinc-700">
+          <li><strong>Day 1 Consumed:</strong> Consuming food today counts as 1 consumed day (1/10 consumed, 9 days remaining).</li>
+          <li><strong>5:30 PM Cutoff Rule:</strong> To pause tomorrow's meal, click “Pause Plan” before 5:30 PM today.</li>
+          <li><strong>Zero Loss:</strong> When paused before 5:30 PM, no food/order is generated for tomorrow, tomorrow is NOT counted as a consumed day, and your 9-day balance is preserved.</li>
+          <li><strong>Auto-Resume:</strong> The subscription automatically resumes from the day after the paused day.</li>
+          <li><strong>10 Full Food Days Guarantee:</strong> You will receive exactly 10 actual food-delivery/consumption days. Paused days never reduce your 10-day balance.</li>
+        </ul>
       </div>
+
     </div>
   `;
 }
 
-window.togglePauseTomorrow = function() {
-  const sub = app.user.activeSubscription;
-  const isPaused = sub.nextDelivery.includes('Paused');
+// Global pause toggle with 5:30 PM cutoff validation
+window.togglePauseTomorrow = function(forceSubId) {
+  const isCustomerSelf = !forceSubId;
+  const sub = forceSubId 
+    ? app.subscriptions.find(s => s.id === forceSubId) 
+    : app.user.activeSubscription;
 
-  if (isPaused) {
-    sub.nextDelivery = "Tomorrow (12:30 PM)";
-    app.showToast("Resumed tomorrow's meal delivery! See you at 12:30 PM.", "success");
-  } else {
-    sub.nextDelivery = "Paused for Tomorrow (Resumes Day After)";
-    app.showToast("Paused tomorrow's delivery. Your meal day balance is saved!", "info");
+  if (!sub) return;
+
+  if (sub.status === 'Completed' || (sub.consumedDays >= sub.totalDays)) {
+    app.showToast("This 10-day subscription has already completed all 10 food days!", "info");
+    return;
   }
-  app.saveUser();
-  renderAccountPause();
+
+  const isCurrentlyPaused = sub.isPausedTomorrow || sub.status === "Paused for Tomorrow";
+
+  if (isCurrentlyPaused) {
+    // Resume tomorrow
+    sub.isPausedTomorrow = false;
+    sub.status = "Active";
+    sub.nextDelivery = "Tomorrow (12:30 PM)";
+    sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
+    sub.pausedDates = (sub.pausedDates || []).filter(d => !d.includes("Tomorrow") && !d.includes("20 Sep"));
+
+    // Sync in global subscriptions list
+    const subIdx = app.subscriptions.findIndex(s => s.id === sub.id);
+    if (subIdx !== -1) {
+      app.subscriptions[subIdx] = JSON.parse(JSON.stringify(sub));
+      app.saveSubscriptions();
+    }
+
+    if (isCustomerSelf) {
+      app.user.activeSubscription = sub;
+      app.saveUser();
+      renderAccountPlans();
+      renderAccountPause();
+    } else if (typeof renderAdminSubscriptions === 'function') {
+      renderAdminSubscriptions();
+    }
+
+    app.showToast("▶️ Plan Resumed for Tomorrow! Fresh meal will be delivered at 12:30 PM.", "success");
+    return;
+  }
+
+  // Attempting to pause: check 5:30 PM Cutoff
+  const cutoff = app.canPauseTomorrow();
+  if (!cutoff.allowed && isCustomerSelf) {
+    app.showToast("⚠️ 5:30 PM Cutoff Passed: Kitchen preparations for tomorrow are locked. Tomorrow's meal is scheduled. You can pause starting day after tomorrow.", "error", 6500);
+    return;
+  }
+
+  // Successfully activate pause for tomorrow
+  sub.isPausedTomorrow = true;
+  sub.status = "Paused for Tomorrow";
+  sub.nextDelivery = "Resumes Day After Tomorrow (12:30 PM)";
+  sub.nextDeliveryDate = "Resumes Day After Tomorrow (12:30 PM)";
+  
+  const tomorrowDateStr = "20 Sep 2026";
+  if (!sub.pausedDates) sub.pausedDates = [];
+  if (!sub.pausedDates.includes(tomorrowDateStr)) {
+    sub.pausedDates.push(tomorrowDateStr);
+  }
+
+  // Preserved balance check
+  sub.remainingDays = sub.totalDays - sub.consumedDays;
+
+  // Sync in global subscriptions list
+  const subIdx = app.subscriptions.findIndex(s => s.id === sub.id);
+  if (subIdx !== -1) {
+    app.subscriptions[subIdx] = JSON.parse(JSON.stringify(sub));
+    app.saveSubscriptions();
+  }
+
+  if (isCustomerSelf) {
+    app.user.activeSubscription = sub;
+    app.saveUser();
+    renderAccountPlans();
+    renderAccountPause();
+  } else if (typeof renderAdminSubscriptions === 'function') {
+    renderAdminSubscriptions();
+  }
+
+  app.showToast(`⏸️ Plan Paused for Tomorrow (before 5:30 PM). No order generated. ${sub.remainingDays} remaining food days preserved!`, "success", 5000);
+};
+
+// Record Day Consumed (+1)
+window.markDayConsumed = function(subId) {
+  const isCustomerSelf = !subId;
+  const sub = subId 
+    ? app.subscriptions.find(s => s.id === subId) 
+    : app.user.activeSubscription;
+
+  if (!sub) return;
+
+  if (sub.consumedDays >= sub.totalDays) {
+    app.showToast("All 10 days of food have already been delivered and consumed!", "info");
+    return;
+  }
+
+  sub.consumedDays = (sub.consumedDays || 0) + 1;
+  sub.remainingDays = Math.max(0, sub.totalDays - sub.consumedDays);
+  sub.isPausedTomorrow = false;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  if (sub.consumedDays >= sub.totalDays) {
+    sub.status = "Completed";
+    sub.nextDelivery = "All 10 Days Consumed (Completed)";
+    sub.nextDeliveryDate = "All 10 Days Consumed (Completed)";
+  } else {
+    sub.status = "Active";
+    sub.nextDelivery = "Tomorrow (12:30 PM)";
+    sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
+  }
+
+  if (!sub.history) sub.history = [];
+  sub.history.push({
+    dayNumber: sub.consumedDays,
+    date: dateStr,
+    status: "Delivered & Consumed",
+    meal: sub.mealType || "Rayalaseema Deluxe Veg Full Meal",
+    note: `Day ${sub.consumedDays} consumed (${sub.consumedDays}/${sub.totalDays} consumed, ${sub.remainingDays} remaining)`
+  });
+
+  const subIdx = app.subscriptions.findIndex(s => s.id === sub.id);
+  if (subIdx !== -1) {
+    app.subscriptions[subIdx] = JSON.parse(JSON.stringify(sub));
+    app.saveSubscriptions();
+  }
+
+  if (isCustomerSelf) {
+    app.user.activeSubscription = sub;
+    app.saveUser();
+    renderAccountPlans();
+    renderAccountPause();
+  } else if (typeof renderAdminSubscriptions === 'function') {
+    renderAdminSubscriptions();
+  }
+
+  app.showToast(`🍽️ Recorded Day ${sub.consumedDays}/10 Food Consumed! Exactly ${sub.remainingDays} food days remaining.`, "success");
+};
+
+// Reset 10-Day Plan to Day 1 consumed for demo
+window.resetTenDayPlan = function(subId) {
+  const isCustomerSelf = !subId;
+  const sub = subId 
+    ? app.subscriptions.find(s => s.id === subId) 
+    : app.user.activeSubscription;
+
+  if (!sub) return;
+
+  sub.totalDays = 10;
+  sub.consumedDays = 1;
+  sub.remainingDays = 9;
+  sub.status = "Active";
+  sub.isPausedTomorrow = false;
+  sub.nextDelivery = "Tomorrow (12:30 PM)";
+  sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
+  sub.pausedDates = [];
+  sub.history = [
+    { dayNumber: 1, date: "19 Sep 2026", status: "Delivered & Consumed", meal: sub.mealType || "Rayalaseema Deluxe Veg Full Meal", note: "Day 1 consumed (1/10 consumed, 9 remaining)" }
+  ];
+
+  const subIdx = app.subscriptions.findIndex(s => s.id === sub.id);
+  if (subIdx !== -1) {
+    app.subscriptions[subIdx] = JSON.parse(JSON.stringify(sub));
+    app.saveSubscriptions();
+  }
+
+  if (isCustomerSelf) {
+    app.user.activeSubscription = sub;
+    app.saveUser();
+    renderAccountPlans();
+    renderAccountPause();
+  } else if (typeof renderAdminSubscriptions === 'function') {
+    renderAdminSubscriptions();
+  }
+
+  app.showToast("🔄 Plan reset to Day 1: 1/10 Consumed, 9 Food Days Remaining.", "info");
 };
 
 window.handleSchedulePause = function() {
@@ -1327,7 +1856,17 @@ window.handleSchedulePause = function() {
     app.showToast('Please select both from and to dates.', 'error');
     return;
   }
-  app.showToast(`Leave scheduled from ${start} to ${end}. Your subscription validity is extended!`, 'success');
+  
+  const sub = app.user.activeSubscription;
+  if (sub) {
+    if (!sub.pausedDates) sub.pausedDates = [];
+    sub.pausedDates.push(`${start} to ${end}`);
+    app.saveUser();
+  }
+  
+  app.showToast(`Leave scheduled from ${start} to ${end}. Your 10-day food balance is 100% preserved!`, 'success');
+  renderAccountPlans();
+  renderAccountPause();
 };
 
 function renderAccountAddresses() {

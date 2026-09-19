@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin & Kitchen Dashboard | The Rayalaseema Foods</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-heading {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+</head>
+<body class="bg-zinc-100 text-zinc-900 min-h-screen flex flex-col">
+
+  <!-- ==================== ADMIN HEADER ==================== -->
+  <header class="bg-zinc-950 text-white sticky top-0 z-40 shadow-xl border-b border-zinc-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <img src="image.png" alt="Rayalaseema Foods Emblem" class="w-10 h-10 rounded-full object-cover border border-amber-400 bg-white" />
+          <div>
+            <span class="text-base font-black font-heading text-white block group-hover:text-amber-400 transition">Rayalaseema Cloud Kitchen</span>
+            <span class="text-[10px] tracking-widest text-amber-400 font-extrabold uppercase block">Admin & Kitchen Dispatch Operations</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Cutoff Clock & Mode Switcher -->
+      <div class="flex flex-wrap items-center gap-3">
+        <div id="admin-cutoff-badge" class="px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>5:30 PM Cutoff: <strong id="admin-time-display">3:30 PM (Open)</strong></span>
+        </div>
+
+        <!-- Simulation Switcher Buttons -->
+        <div class="bg-zinc-900 p-1 rounded-xl border border-zinc-800 flex items-center text-[11px] font-bold">
+          <button onclick="setAdminTimeMode('before')" id="btn-mode-before" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white transition">3:30 PM (Before 5:30 PM)</button>
+          <button onclick="setAdminTimeMode('after')" id="btn-mode-after" class="px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition">6:15 PM (After 5:30 PM)</button>
+          <button onclick="setAdminTimeMode('real')" id="btn-mode-real" class="px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition">Device Clock</button>
+        </div>
+
+        <a href="index.html" class="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-extrabold text-xs rounded-xl transition shadow">
+          ← Back to Store
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Top Summary Banner -->
+    <div class="bg-gradient-to-r from-amber-600 via-amber-700 to-zinc-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <span class="text-xs font-black uppercase tracking-widest text-amber-200 bg-black/20 px-3 py-1 rounded-full border border-white/10 inline-block mb-2">
+            10-Day Plan Operations Ledger
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-black font-heading">Food Subscription & Kitchen Dispatch System</h1>
+          <p class="text-xs sm:text-sm text-amber-100 mt-1 max-w-2xl leading-relaxed">
+            Manage customer 10-day food plans, pause/resume status, 5:30 PM daily preparation lock, and live meal cooking queue with 100% Zero Food Loss Guarantee.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2.5">
+          <button onclick="openNewSubModal()" class="px-5 py-3 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-extrabold text-xs rounded-2xl transition shadow-lg flex items-center gap-1.5 cursor-pointer">
+            <span>+ Add New Customer Subscription</span>
+          </button>
+          <button onclick="resetAllDemoSubscriptions()" class="px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-2xl transition border border-white/20 cursor-pointer">
+            🔄 Reset All Demo Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 KPI Overview Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      
+      <div class="bg-white rounded-3xl p-6 border border-zinc-200/80 shadow-sm">
+        <div class="flex items-center justify-between text-zinc-400 mb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Total Subscriptions</span>
+          <span class="text-xl">📋</span>
+        </div>
+        <div class="text-3xl font-black text-zinc-950 font-heading" id="kpi-total-subs">3</div>
+        <span class="text-[11px] text-zinc-500 mt-1 block">Registered 10-Day Plans</span>
+      </div>
+
+      <div class="bg-emerald-50 rounded-3xl p-6 border border-emerald-200 shadow-sm">
+        <div class="flex items-center justify-between text-emerald-700 mb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-800">Tomorrow's Kitchen Batch</span>
+          <span class="text-xl">👨‍🍳</span>
+        </div>
+        <div class="text-3xl font-black text-emerald-700 font-heading" id="kpi-active-tomorrow">2</div>
+        <span class="text-[11px] text-emerald-800 font-semibold mt-1 block">Active Meals to Cook Tomorrow</span>
+      </div>
+
+      <div class="bg-amber-50 rounded-3xl p-6 border border-amber-200 shadow-sm">
+        <div class="flex items-center justify-between text-amber-700 mb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Paused for Tomorrow</span>
+          <span class="text-xl">⏸️</span>
+        </div>
+        <div class="text-3xl font-black text-amber-700 font-heading" id="kpi-paused-tomorrow">1</div>
+        <span class="text-[11px] text-amber-800 font-semibold mt-1 block">Excluded from Prep (Zero Loss)</span>
+      </div>
+
+      <div class="bg-blue-50 rounded-3xl p-6 border border-blue-200 shadow-sm">
+        <div class="flex items-center justify-between text-blue-700 mb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-800">Completed Plans</span>
+          <span class="text-xl">🎉</span>
+        </div>
+        <div class="text-3xl font-black text-blue-700 font-heading" id="kpi-completed-subs">1</div>
+        <span class="text-[11px] text-blue-800 font-semibold mt-1 block">Full 10/10 Days Delivered</span>
+      </div>
+
+    </div>
+
+    <!-- ==================== SECTION 1: TOMORROW'S KITCHEN PREPARATION QUEUE ==================== -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200/80 shadow-sm space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-zinc-100">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-base">🔥</span>
+            <h2 class="text-xl font-black text-zinc-950 font-heading">Tomorrow's Kitchen Meal Prep & Dispatch Queue</h2>
+          </div>
+          <p class="text-xs text-zinc-500 mt-0.5">
+            Auto-filtered list of meals to prepare tomorrow. Subscriptions paused before 5:30 PM are automatically excluded so no meal is wasted.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-zinc-600 bg-zinc-100 px-3 py-1 rounded-lg" id="kitchen-prep-count-badge">
+            2 Meals Scheduled
+          </span>
+        </div>
+      </div>
+
+      <!-- Two-Column Kitchen Board -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Column 1: Cook & Dispatch Tomorrow (Active) -->
+        <div class="lg:col-span-8 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+              Meals to Prepare & Dispatch Tomorrow (12:30 PM Lunch Slot)
+            </span>
+          </div>
+
+          <div id="kitchen-active-list" class="space-y-3">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Column 2: Paused Subscriptions (DO NOT PREPARE) -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+              Paused (Do NOT Cook - Zero Loss)
+            </span>
+          </div>
+
+          <div id="kitchen-paused-list" class="space-y-3">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ==================== SECTION 2: MASTER SUBSCRIPTION LEDGER ==================== -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200/80 shadow-sm space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-zinc-100">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-base">📊</span>
+            <h2 class="text-xl font-black text-zinc-950 font-heading">10-Day Plan Customer Subscriptions Ledger</h2>
+          </div>
+          <p class="text-xs text-zinc-500 mt-0.5">
+            Track each customer's Consumed Days, Remaining Food Days, Paused Dates, and Next Delivery schedule.
+          </p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="filterAdminTable('all')" id="btn-filter-all" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-950 text-white">All Plans</button>
+          <button onclick="filterAdminTable('active')" id="btn-filter-active" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200">🟢 Active Only</button>
+          <button onclick="filterAdminTable('paused')" id="btn-filter-paused" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200">⏸️ Paused</button>
+          <button onclick="filterAdminTable('completed')" id="btn-filter-completed" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200">🎉 Completed</button>
+        </div>
+      </div>
+
+      <!-- Subscriptions Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="bg-zinc-50 border-b border-zinc-200/80 text-zinc-500 font-extrabold uppercase tracking-wider">
+              <th class="p-3.5">Customer & Contact</th>
+              <th class="p-3.5">Plan & Meal Type</th>
+              <th class="p-3.5">Consumed / Total Days</th>
+              <th class="p-3.5">Remaining Days</th>
+              <th class="p-3.5">Status</th>
+              <th class="p-3.5">Next Delivery</th>
+              <th class="p-3.5">Paused Dates</th>
+              <th class="p-3.5 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-subscriptions-tbody" class="divide-y divide-zinc-100">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== MODAL: ADD NEW SUBSCRIPTION ==================== -->
+  <div id="new-sub-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-zinc-100 relative">
+      <button onclick="closeNewSubModal()" class="absolute top-5 right-5 text-zinc-400 hover:text-zinc-700 font-bold text-lg">✕</button>
+      
+      <div class="mb-5">
+        <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-md uppercase tracking-wider">Admin Entry</span>
+        <h3 class="text-xl font-black text-zinc-950 mt-1">Register New 10-Day Subscription</h3>
+      </div>
+
+      <form id="new-sub-form" onsubmit="handleCreateNewSubscription(event)" class="space-y-4">
+        <div>
+          <label class="text-xs font-bold text-zinc-700 block mb-1">Customer Full Name</label>
+          <input type="text" id="new-sub-name" required placeholder="e.g. Vikram Rao" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Mobile Phone</label>
+            <input type="tel" id="new-sub-phone" required placeholder="+91 99887 66554" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Meal Preference</label>
+            <select id="new-sub-meal" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400">
+              <option value="Rayalaseema Deluxe Veg Full Meal">Deluxe Veg Meal</option>
+              <option value="Rayalaseema Chicken Curry & Biryani Meal">Chicken Biryani Meal</option>
+              <option value="Exotic Antioxidant Fruit Crunch Meal">Fruit Fitness Meal</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-zinc-700 block mb-1">Delivery Address (Office / Desk)</label>
+          <textarea id="new-sub-address" required rows="2" placeholder="Building 3, DLF Cyber City, Gachibowli, Hyderabad" class="w-full px-4 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Total Days Entitlement</label>
+            <input type="number" id="new-sub-total" value="10" readonly class="w-full px-4 py-2.5 bg-zinc-100 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-600" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-zinc-700 block mb-1">Initial Consumed Days</label>
+            <select id="new-sub-consumed" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400">
+              <option value="1">1 Day Consumed (Today)</option>
+              <option value="0">0 Days Consumed (Starts Tomorrow)</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
+          Create & Activate Subscription
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="admin-toast" class="hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold text-white transition-all transform duration-300"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script>
+    let adminFilter = 'all';
+    let subscriptions = [];
+
+    function loadAdminData() {
+      try {
+        const saved = localStorage.getItem('rck_subscriptions');
+        subscriptions = saved ? JSON.parse(saved) : (MENU_DATA.initialSubscriptions || []);
+        
+        // Also check if current user activeSubscription exists and sync
+        const userSaved = localStorage.getItem('rck_user');
+        if (userSaved) {
+          const u = JSON.parse(userSaved);
+          if (u.activeSubscription) {
+            const idx = subscriptions.findIndex(s => s.id === u.activeSubscription.id || s.customerName === u.name);
+            if (idx !== -1) {
+              subscriptions[idx] = { ...subscriptions[idx], ...u.activeSubscription };
+            } else {
+              subscriptions.unshift(u.activeSubscription);
+            }
+          }
+        }
+      } catch (e) {
+        subscriptions = MENU_DATA.initialSubscriptions || [];
+      }
+      renderAdminDashboard();
+    }
+
+    function saveAdminData() {
+      localStorage.setItem('rck_subscriptions', JSON.stringify(subscriptions));
+      
+      // If Rahul Kumar's subscription was updated, also update rck_user
+      const rahulSub = subscriptions.find(s => s.customerName === "Rahul Kumar" || s.id === "SUB-10D-89421");
+      if (rahulSub) {
+        const userSaved = localStorage.getItem('rck_user');
+        let u = userSaved ? JSON.parse(userSaved) : { name: "Rahul Kumar", phone: "+91 98765 43210" };
+        u.activeSubscription = rahulSub;
+        localStorage.setItem('rck_user', JSON.stringify(u));
+      }
+      renderAdminDashboard();
+    }
+
+    function getTimeMode() {
+      return localStorage.getItem('rck_time_mode') || 'before';
+    }
+
+    function setAdminTimeMode(mode) {
+      localStorage.setItem('rck_time_mode', mode);
+      showAdminToast(`Simulation Clock set to: ${mode === 'before' ? '3:30 PM (Before 5:30 PM)' : mode === 'after' ? '6:15 PM (After 5:30 PM)' : 'Real Device Clock'}`);
+      updateCutoffClockBadge();
+    }
+
+    function updateCutoffClockBadge() {
+      const mode = getTimeMode();
+      const badge = document.getElementById('admin-cutoff-badge');
+      const timeDisplay = document.getElementById('admin-time-display');
+      const btnBefore = document.getElementById('btn-mode-before');
+      const btnAfter = document.getElementById('btn-mode-after');
+      const btnReal = document.getElementById('btn-mode-real');
+
+      btnBefore.className = mode === 'before' ? 'px-2.5 py-1 rounded-lg bg-emerald-600 text-white transition' : 'px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition';
+      btnAfter.className = mode === 'after' ? 'px-2.5 py-1 rounded-lg bg-red-600 text-white transition' : 'px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition';
+      btnReal.className = mode === 'real' ? 'px-2.5 py-1 rounded-lg bg-zinc-800 text-white transition' : 'px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition';
+
+      if (mode === 'before') {
+        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40';
+        timeDisplay.textContent = '3:30 PM (Cutoff Open)';
+      } else if (mode === 'after') {
+        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-red-950/60 text-red-300 border-red-500/40';
+        timeDisplay.textContent = '6:15 PM (Cutoff Closed)';
+      } else {
+        const now = new Date();
+        const isBefore = (now.getHours() < 17 || (now.getHours() === 17 && now.getMinutes() < 30));
+        badge.className = isBefore 
+          ? 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
+          : 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-red-950/60 text-red-300 border-red-500/40';
+        timeDisplay.textContent = `${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (${isBefore ? 'Open' : 'Closed'})`;
+      }
+    }
+
+    function renderAdminDashboard() {
+      updateCutoffClockBadge();
+
+      const totalSubs = subscriptions.length;
+      const activeTomorrow = subscriptions.filter(s => s.status === 'Active' && !s.isPausedTomorrow && s.consumedDays < s.totalDays);
+      const pausedTomorrow = subscriptions.filter(s => s.isPausedTomorrow || s.status === 'Paused for Tomorrow');
+      const completedSubs = subscriptions.filter(s => s.status === 'Completed' || s.consumedDays >= s.totalDays);
+
+      document.getElementById('kpi-total-subs').textContent = totalSubs;
+      document.getElementById('kpi-active-tomorrow').textContent = activeTomorrow.length;
+      document.getElementById('kpi-paused-tomorrow').textContent = pausedTomorrow.length;
+      document.getElementById('kpi-completed-subs').textContent = completedSubs.length;
+      document.getElementById('kitchen-prep-count-badge').textContent = `${activeTomorrow.length} Meals Scheduled for Tomorrow`;
+
+      // Render Kitchen Active List
+      const kitchenActiveContainer = document.getElementById('kitchen-active-list');
+      if (activeTomorrow.length === 0) {
+        kitchenActiveContainer.innerHTML = `
+          <div class="p-6 bg-zinc-50 rounded-2xl border border-zinc-200 text-center text-xs text-zinc-500">
+            No meals scheduled for preparation tomorrow.
+          </div>
+        `;
+      } else {
+        kitchenActiveContainer.innerHTML = activeTomorrow.map(s => `
+          <div class="bg-emerald-50/50 rounded-2xl p-4 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-black text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-md">
+                  ${s.mealType || 'Rayalaseema Deluxe Full Meal'}
+                </span>
+                <span class="text-xs font-bold text-zinc-700">${s.customerName}</span>
+                <span class="text-xs text-zinc-400">(${s.customerPhone})</span>
+              </div>
+              <p class="text-xs text-zinc-600">📍 ${s.customerAddress}</p>
+              <div class="text-[11px] text-zinc-500">
+                Plan Progress: <strong>Day ${s.consumedDays + 1} of ${s.totalDays}</strong> • Remaining Balance: <strong>${s.remainingDays} days</strong>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="adminMarkConsumed('${s.id}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow cursor-pointer whitespace-nowrap">
+                ✓ Mark Delivered
+              </button>
+              <button onclick="adminTogglePause('${s.id}')" class="px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs rounded-xl transition cursor-pointer whitespace-nowrap">
+                ⏸️ Pause
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render Kitchen Paused List
+      const kitchenPausedContainer = document.getElementById('kitchen-paused-list');
+      if (pausedTomorrow.length === 0) {
+        kitchenPausedContainer.innerHTML = `
+          <div class="p-6 bg-zinc-50 rounded-2xl border border-zinc-200 text-center text-xs text-zinc-400">
+            No customers currently paused for tomorrow.
+          </div>
+        `;
+      } else {
+        kitchenPausedContainer.innerHTML = pausedTomorrow.map(s => `
+          <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-zinc-900">${s.customerName}</span>
+              <span class="text-[10px] font-black text-amber-800 bg-amber-200 px-2 py-0.5 rounded">PAUSED</span>
+            </div>
+            <p class="text-[11px] text-zinc-600">Paused before 5:30 PM. <strong>Zero meal prepared.</strong></p>
+            <div class="text-[10px] text-emerald-700 font-semibold">
+              ✓ Remaining: ${s.remainingDays} Days Preserved (Auto-resumes Day After)
+            </div>
+            <button onclick="adminTogglePause('${s.id}')" class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition cursor-pointer">
+              ▶️ Resume Tomorrow
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // Render Subscriptions Master Table
+      const tbody = document.getElementById('admin-subscriptions-tbody');
+      let filtered = subscriptions;
+      if (adminFilter === 'active') filtered = subscriptions.filter(s => s.status === 'Active' && !s.isPausedTomorrow && s.consumedDays < s.totalDays);
+      if (adminFilter === 'paused') filtered = subscriptions.filter(s => s.isPausedTomorrow || s.status === 'Paused for Tomorrow');
+      if (adminFilter === 'completed') filtered = subscriptions.filter(s => s.status === 'Completed' || s.consumedDays >= s.totalDays);
+
+      tbody.innerHTML = filtered.map(s => {
+        const isPaused = s.isPausedTomorrow || s.status === 'Paused for Tomorrow';
+        const isCompleted = s.status === 'Completed' || s.consumedDays >= s.totalDays;
+
+        return `
+          <tr class="hover:bg-zinc-50/80 transition">
+            <td class="p-3.5">
+              <div class="font-bold text-zinc-900">${s.customerName}</div>
+              <div class="text-[11px] text-zinc-500">${s.customerPhone}</div>
+              <div class="text-[11px] text-zinc-400 truncate max-w-xs">${s.customerAddress}</div>
+            </td>
+
+            <td class="p-3.5">
+              <span class="font-bold text-zinc-800 block">${s.planName || '10-Day Plan'}</span>
+              <span class="text-[11px] text-zinc-500">${s.mealType || 'Deluxe Veg Full Meal'}</span>
+            </td>
+
+            <td class="p-3.5">
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-zinc-900 text-sm">${s.consumedDays || 0} / ${s.totalDays || 10}</span>
+                <div class="w-16 h-2 bg-zinc-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-emerald-500 rounded-full" style="width: ${Math.min(100, Math.round(((s.consumedDays || 0)/(s.totalDays || 10))*100))}%"></div>
+                </div>
+              </div>
+              <span class="text-[10px] text-zinc-400">Consumed Days</span>
+            </td>
+
+            <td class="p-3.5">
+              <span class="text-sm font-black text-emerald-600">${s.remainingDays !== undefined ? s.remainingDays : (s.totalDays - s.consumedDays)} Days</span>
+              <span class="text-[10px] text-zinc-400 block">Zero Loss</span>
+            </td>
+
+            <td class="p-3.5">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider inline-block ${
+                isCompleted ? 'bg-blue-100 text-blue-800 border border-blue-300' :
+                isPaused ? 'bg-amber-100 text-amber-800 border border-amber-300' :
+                'bg-emerald-100 text-emerald-800 border border-emerald-300'
+              }">
+                ${isCompleted ? '🎉 Completed' : isPaused ? '⏸️ Paused' : '🟢 Active'}
+              </span>
+            </td>
+
+            <td class="p-3.5 font-semibold text-zinc-700">
+              ${isCompleted ? 'All Days Consumed' : isPaused ? 'Resumes Day After Tomorrow' : 'Tomorrow (12:30 PM)'}
+            </td>
+
+            <td class="p-3.5">
+              ${(s.pausedDates && s.pausedDates.length > 0) 
+                ? s.pausedDates.map(d => `<span class="inline-block bg-zinc-100 text-zinc-700 px-2 py-0.5 rounded text-[10px] mr-1 mb-1 font-medium">${d}</span>`).join('') 
+                : '<span class="text-zinc-400 text-[11px]">None</span>'}
+            </td>
+
+            <td class="p-3.5 text-right">
+              <div class="flex items-center justify-end gap-1.5">
+                ${!isCompleted ? `
+                  <button onclick="adminMarkConsumed('${s.id}')" title="Record 1 Day Consumed" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow cursor-pointer">
+                    +1 Consumed
+                  </button>
+                  <button onclick="adminTogglePause('${s.id}')" title="Toggle Pause for Tomorrow" class="px-2.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-amber-400 rounded-lg text-xs font-bold transition cursor-pointer">
+                    ${isPaused ? '▶️ Resume' : '⏸️ Pause'}
+                  </button>
+                ` : `
+                  <button onclick="adminResetPlan('${s.id}')" class="px-2.5 py-1.5 bg-zinc-200 hover:bg-zinc-300 text-zinc-800 rounded-lg text-xs font-bold transition cursor-pointer">
+                    🔄 Reset
+                  </button>
+                `}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterAdminTable(filter) {
+      adminFilter = filter;
+      ['all', 'active', 'paused', 'completed'].forEach(f => {
+        const btn = document.getElementById(`btn-filter-${f}`);
+        if (btn) {
+          btn.className = f === filter ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-950 text-white' : 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200';
+        }
+      });
+      renderAdminDashboard();
+    }
+
+    function adminMarkConsumed(subId) {
+      const sub = subscriptions.find(s => s.id === subId);
+      if (!sub) return;
+
+      if (sub.consumedDays >= sub.totalDays) {
+        showAdminToast("Subscription already completed all 10 days!", "info");
+        return;
+      }
+
+      sub.consumedDays += 1;
+      sub.remainingDays = Math.max(0, sub.totalDays - sub.consumedDays);
+      sub.isPausedTomorrow = false;
+
+      if (sub.consumedDays >= sub.totalDays) {
+        sub.status = "Completed";
+        sub.nextDeliveryDate = "All 10 Days Consumed";
+      } else {
+        sub.status = "Active";
+        sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
+      }
+
+      saveAdminData();
+      showAdminToast(`Recorded Day ${sub.consumedDays}/10 Consumed for ${sub.customerName}! ${sub.remainingDays} days remaining.`);
+    }
+
+    function adminTogglePause(subId) {
+      const sub = subscriptions.find(s => s.id === subId);
+      if (!sub) return;
+
+      const isCurrentlyPaused = sub.isPausedTomorrow || sub.status === 'Paused for Tomorrow';
+      if (isCurrentlyPaused) {
+        sub.isPausedTomorrow = false;
+        sub.status = "Active";
+        sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
+        sub.pausedDates = (sub.pausedDates || []).filter(d => !d.includes("Tomorrow") && !d.includes("20 Sep"));
+        saveAdminData();
+        showAdminToast(`▶️ Resumed subscription for ${sub.customerName} for tomorrow's dispatch.`);
+      } else {
+        sub.isPausedTomorrow = true;
+        sub.status = "Paused for Tomorrow";
+        sub.nextDeliveryDate = "Resumes Day After Tomorrow (12:30 PM)";
+        if (!sub.pausedDates) sub.pausedDates = [];
+        if (!sub.pausedDates.includes("20 Sep 2026")) sub.pausedDates.push("20 Sep 2026");
+        sub.remainingDays = sub.totalDays - sub.consumedDays;
+        saveAdminData();
+        showAdminToast(`⏸️ Paused subscription for ${sub.customerName}. Excluded from tomorrow's kitchen batch.`);
+      }
+    }
+
+    function adminResetPlan(subId) {
+      const sub = subscriptions.find(s => s.id === subId);
+      if (!sub) return;
+      sub.totalDays = 10;
+      sub.consumedDays = 1;
+      sub.remainingDays = 9;
+      sub.status = "Active";
+      sub.isPausedTomorrow = false;
+      sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
+      sub.pausedDates = [];
+      saveAdminData();
+      showAdminToast(`🔄 Reset ${sub.customerName}'s 10-day plan (1/10 consumed, 9 days remaining).`);
+    }
+
+    function resetAllDemoSubscriptions() {
+      subscriptions = JSON.parse(JSON.stringify(MENU_DATA.initialSubscriptions));
+      saveAdminData();
+      showAdminToast("🔄 All demo subscriptions have been reset.");
+    }
+
+    function openNewSubModal() {
+      document.getElementById('new-sub-modal').classList.remove('hidden');
+    }
+
+    function closeNewSubModal() {
+      document.getElementById('new-sub-modal').classList.add('hidden');
+    }
+
+    function handleCreateNewSubscription(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-sub-name').value.trim();
+      const phone = document.getElementById('new-sub-phone').value.trim();
+      const meal = document.getElementById('new-sub-meal').value;
+      const address = document.getElementById('new-sub-address').value.trim();
+      const consumed = parseInt(document.getElementById('new-sub-consumed').value) || 1;
+
+      const newSub = {
+        id: "SUB-10D-" + Math.floor(10000 + Math.random() * 90000),
+        customerName: name,
+        customerPhone: phone,
+        customerAddress: address,
+        planId: "plan-trial",
+        planName: "10-Day Food Subscription Plan",
+        mealType: meal,
+        totalDays: 10,
+        consumedDays: consumed,
+        remainingDays: 10 - consumed,
+        status: "Active",
+        isPausedTomorrow: false,
+        pauseCutoff: "5:30 PM",
+        nextDeliveryDate: "Tomorrow (12:30 PM)",
+        pausedDates: []
+      };
+
+      subscriptions.unshift(newSub);
+      saveAdminData();
+      closeNewSubModal();
+      showAdminToast(`✓ Created 10-Day Subscription for ${name}!`);
+    }
+
+    function showAdminToast(msg) {
+      const toast = document.getElementById('admin-toast');
+      toast.textContent = msg;
+      toast.className = 'fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold text-white transition-all transform duration-300 bg-zinc-950 border border-amber-400/50';
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminData();
+    });
+  </script>
+</body>
+</html>
