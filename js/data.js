@@ -305,24 +305,40 @@ const MENU_DATA = {
       calories: "670 kcal",
       protein: "41g Protein",
       description: "Fragrant basmati rice cooked with tender mutton and authentic biryani masala.",
-      image: "images/nonveg-meals.jpg",
+      image: "images/mutton-biryani.jpg",
       popular: true
     },
     {
       id: "bir-3",
-      name: "Kushka with Chicken Curry",
+      name: "Kushka with Paneer Curry",
       category: "biryani-specials",
       categoryName: "Biryani Special",
       price: 199,
       originalPrice: 239,
       rating: 4.8,
       reviewsCount: 175,
+      isVeg: true,
+      calories: "450 kcal",
+      protein: "16g Protein",
+      description: "Flavorful spiced kushka rice served with rich, delicious paneer curry.",
+      image: "images/kushka-paneer.jpg",
+      popular: false
+    },
+    {
+      id: "bir-4",
+      name: "Kushka with Chicken Curry",
+      category: "biryani-specials",
+      categoryName: "Biryani Special",
+      price: 199,
+      originalPrice: 239,
+      rating: 4.9,
+      reviewsCount: 198,
       isVeg: false,
       calories: "490 kcal",
       protein: "30g Protein",
-      description: "Flavorful spiced rice served with delicious Rayalaseema-style chicken curry.",
-      image: "images/nonveg-meals.jpg",
-      popular: false
+      description: "Flavorful spiced kushka rice served with authentic Rayalaseema-style chicken curry.",
+      image: "images/kushka-chicken.jpg",
+      popular: true
     },
 
     // 6. PANEER SPECIALS & CURRIES
@@ -339,7 +355,7 @@ const MENU_DATA = {
       calories: "410 kcal",
       protein: "19g Protein",
       description: "Soft paneer cubes in rich, creamy tomato butter gravy.",
-      image: "images/veg-meals.jpg",
+      image: "images/paneer-butter-masala.jpg",
       popular: true
     },
     {
@@ -355,7 +371,7 @@ const MENU_DATA = {
       calories: "360 kcal",
       protein: "18g Protein",
       description: "Cottage cheese cubes cooked in smooth spinach gravy.",
-      image: "images/veg-meals.jpg",
+      image: "images/palak-paneer.jpg",
       popular: false
     },
     {
@@ -371,7 +387,7 @@ const MENU_DATA = {
       calories: "460 kcal",
       protein: "21g Protein",
       description: "Paneer cooked in rich cashew and tomato based gravy.",
-      image: "images/veg-meals.jpg",
+      image: "images/kaju-paneer.jpg",
       popular: true
     },
     {
@@ -387,7 +403,7 @@ const MENU_DATA = {
       calories: "280 kcal",
       protein: "14g Protein",
       description: "Yellow lentils tempered with garlic, cumin and spices.",
-      image: "images/veg-meals.jpg",
+      image: "images/dal-tadka.jpg",
       popular: false
     },
 
@@ -405,7 +421,7 @@ const MENU_DATA = {
       calories: "310 kcal",
       protein: "6g Protein",
       description: "Fragrant basmati rice tossed with cumin and ghee.",
-      image: "images/veg-meals.jpg",
+      image: "images/jeera-rice.jpg",
       popular: false
     },
     {
@@ -421,7 +437,7 @@ const MENU_DATA = {
       calories: "320 kcal",
       protein: "7g Protein",
       description: "Flavorful tomato rice cooked with spices.",
-      image: "images/veg-meals.jpg",
+      image: "images/tamota-rice.jpg",
       popular: true
     },
     {
@@ -437,7 +453,7 @@ const MENU_DATA = {
       calories: "250 kcal",
       protein: "8g Protein",
       description: "Comforting curd rice with tempering and pomegranate.",
-      image: "images/veg-meals.jpg",
+      image: "images/curd-rice.jpg",
       popular: true
     }
   ],

@@ -345,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCategoriesGrid();
   renderServicesPage();
   renderSubscriptionPlans();
-  renderReviews();
   initEnquiryModal();
   app.updateCartUI();
   app.updateUserUI();
