@@ -2073,18 +2073,120 @@ function renderSubscriptionPlans() {
   `).join('');
 }
 
-// Render September 2026 Monthly Subscribers Afternoon Lunch Menu
+// Render September 2026 Monthly Subscribers Breakfast & Lunch Schedules
+let currentSubscriberMealType = 'breakfast';
 let currentSubscriberMenuWeek = 1;
 
-function renderMonthlySubscribersMenu(weekNum = 1) {
+function renderMonthlySubscribersMenu(mealType = currentSubscriberMealType, weekNum = currentSubscriberMenuWeek) {
+  currentSubscriberMealType = mealType;
   currentSubscriberMenuWeek = weekNum;
-  const container = document.getElementById('subscribers-menu-grid');
-  if (!container || !MENU_DATA.subscriberMonthlyMenu) return;
 
+  const container = document.getElementById('subscribers-menu-grid');
+  const lunchSelector = document.getElementById('lunch-week-selector');
+  const badgeEl = document.getElementById('monthly-menu-badge');
+  const subtitleEl = document.getElementById('monthly-menu-subtitle');
+  const commitmentEl = document.getElementById('menu-commitment-text');
+  const tabBreakfast = document.getElementById('tab-meal-breakfast');
+  const tabLunch = document.getElementById('tab-meal-lunch');
+
+  if (!container) return;
+
+  // Toggle main Meal Type tabs
+  if (tabBreakfast && tabLunch) {
+    if (mealType === 'breakfast') {
+      tabBreakfast.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tabLunch.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer";
+      if (lunchSelector) {
+        lunchSelector.classList.add('hidden');
+        lunchSelector.classList.remove('flex');
+      }
+      if (badgeEl) badgeEl.textContent = "September 2026 • Morning Breakfast Rotation (7:30 AM - 9:00 AM)";
+      if (subtitleEl) subtitleEl.textContent = "Authentic Rayalaseema breakfast delivered fresh every morning throughout September.";
+      if (commitmentEl) commitmentEl.textContent = '"This weekly breakfast menu will be followed throughout September with pure ghee and authentic Rayalaseema recipes. Your trust and continued support mean a great deal to us."';
+    } else {
+      tabLunch.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tabBreakfast.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer";
+      if (lunchSelector) {
+        lunchSelector.classList.remove('hidden');
+        lunchSelector.classList.add('flex');
+      }
+      if (badgeEl) badgeEl.textContent = `September 2026 • Afternoon Lunch (Week ${weekNum}: ${weekNum === 1 ? '1 - 7 Sep' : '8 - 15 Sep'})`;
+      if (subtitleEl) subtitleEl.textContent = "Published daily lunch rotation for all 10-Day and Monthly regular subscribers.";
+      if (commitmentEl) commitmentEl.textContent = '"From September onward, we will make every effort to follow the published menu exactly, without missing or replacing any listed item. Your trust and continued support mean a great deal to us."';
+    }
+  }
+
+  // If Breakfast
+  if (mealType === 'breakfast') {
+    const bData = MENU_DATA.subscriberBreakfastMenu;
+    if (!bData) return;
+
+    container.innerHTML = bData.days.map((d, index) => {
+      const isUggani = d.item.includes('Uggani');
+      const isPonganalu = d.item.includes('Ponganalu');
+      const isPongal = d.item.includes('Pongal');
+      
+      let cardBorder = (isUggani || isPonganalu) ? 'border-amber-400 shadow-md bg-gradient-to-b from-amber-50/70 to-white' : 'border-zinc-200/90 hover:border-amber-300 bg-white';
+      let badgeClass = (isUggani || isPonganalu) ? 'bg-amber-400 text-zinc-950 font-black' : (isPongal ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800');
+
+      return `
+        <div class="${(isUggani || isPonganalu) ? 'bg-gradient-to-b from-amber-50/70 to-white' : 'bg-white'} rounded-2xl p-4 sm:p-5 border ${cardBorder} shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="${index * 40}">
+          <div>
+            <!-- Day Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-zinc-100 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-xl sm:text-2xl">${d.icon}</span>
+                <div>
+                  <h4 class="text-base font-black text-zinc-950 leading-tight">${d.day}</h4>
+                  <span class="text-[11px] text-amber-700 font-bold">Breakfast Special</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full ${badgeClass}">
+                ${d.badge}
+              </span>
+            </div>
+
+            <!-- Main Dish Title -->
+            <div class="mb-3">
+              <h5 class="text-lg font-black text-zinc-950 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>${d.item}</span>
+              </h5>
+              <p class="text-zinc-500 text-xs mt-1 leading-relaxed">${d.description}</p>
+            </div>
+
+            <!-- Items In Breakfast Box -->
+            <div class="space-y-1.5 mb-4">
+              <span class="text-[10px] uppercase tracking-wider font-extrabold text-zinc-400 block mb-1">Served With:</span>
+              <div class="flex flex-wrap gap-1.5">
+                ${d.highlights.map(item => `
+                  <span class="inline-flex items-center text-xs px-2.5 py-1 rounded-lg border bg-zinc-50 text-zinc-800 border-zinc-200/80 font-semibold">
+                    ${item}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <!-- Breakfast Slot Footer -->
+          <div class="pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px]">
+            <span class="text-amber-800 font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> 7:30 - 9:00 AM Slot
+            </span>
+            <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Fresh Ghee</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+    return;
+  }
+
+  // If Lunch
   const menuInfo = MENU_DATA.subscriberMonthlyMenu;
+  if (!menuInfo) return;
   const weekData = menuInfo.weeks.find(w => w.weekNumber === weekNum) || menuInfo.weeks[0];
 
-  // Update tab buttons style
+  // Update lunch week tab buttons style
   const tab1 = document.getElementById('tab-week-1');
   const tab2 = document.getElementById('tab-week-2');
   if (tab1 && tab2) {
@@ -2167,8 +2269,12 @@ function renderMonthlySubscribersMenu(weekNum = 1) {
   }).join('');
 }
 
+window.switchSubscriberMealType = function(mealType) {
+  renderMonthlySubscribersMenu(mealType, currentSubscriberMenuWeek);
+};
+
 window.switchSubscriberMenuWeek = function(weekNum) {
-  renderMonthlySubscribersMenu(weekNum);
+  renderMonthlySubscribersMenu('lunch', weekNum);
 };
 
 window.handleAddPlanToCart = function(planId) {

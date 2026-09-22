@@ -557,23 +557,35 @@
             <div class="bg-gradient-to-b from-amber-50/60 via-white to-white rounded-3xl p-6 sm:p-10 border border-amber-200/70 shadow-xl">
               
               <!-- Header -->
-              <div class="text-center max-w-3xl mx-auto mb-8">
+              <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400 text-zinc-950 text-xs font-black uppercase tracking-wider mb-3 shadow-sm">
-                  <span>🍛 Official Lunch Schedule</span>
+                  <span>✨ Official Subscription Schedules</span>
                 </div>
                 <h3 class="text-2xl sm:text-4xl font-black text-zinc-950 font-heading">
-                  Monthly Subscribers's Menu
+                  Monthly Subscribers Menu
                 </h3>
-                <div class="inline-block bg-zinc-950 text-amber-300 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full mt-2">
-                  September 2026 • Afternoon Lunch (1 - 15 September)
+                <div id="monthly-menu-badge" class="inline-block bg-zinc-950 text-amber-300 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full mt-2">
+                  September 2026 • Breakfast & Lunch Rotation
                 </div>
-                <p class="text-zinc-500 text-xs sm:text-sm mt-2.5">
-                  Published daily lunch rotation for all 10-Day and Monthly regular subscribers.
+                <p id="monthly-menu-subtitle" class="text-zinc-500 text-xs sm:text-sm mt-2.5">
+                  Published daily meal rotation followed throughout September for all subscribers.
                 </p>
               </div>
 
-              <!-- Week Switcher Tabs -->
-              <div class="flex justify-center mb-6 sm:mb-8">
+              <!-- Main Mode Switcher: Breakfast vs Lunch -->
+              <div class="flex justify-center mb-6">
+                <div class="w-full sm:w-auto max-w-md grid grid-cols-2 p-1.5 bg-zinc-900 rounded-2xl shadow-lg border border-zinc-800">
+                  <button id="tab-meal-breakfast" onclick="switchSubscriberMealType('breakfast')" class="w-full text-center py-3 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
+                    🍳 Morning Breakfast
+                  </button>
+                  <button id="tab-meal-lunch" onclick="switchSubscriberMealType('lunch')" class="w-full text-center py-3 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer">
+                    🍛 Afternoon Lunch
+                  </button>
+                </div>
+              </div>
+
+              <!-- Sub-tabs for Lunch (Week 1 & Week 2) - Only visible when Lunch is selected -->
+              <div id="lunch-week-selector" class="hidden justify-center mb-6 sm:mb-8">
                 <div class="w-full sm:w-auto max-w-sm grid grid-cols-2 p-1 sm:p-1.5 bg-zinc-100 rounded-2xl border border-zinc-200 shadow-inner">
                   <button id="tab-week-1" onclick="switchSubscriberMenuWeek(1)" class="w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
                     📅 Week 1 <span class="hidden sm:inline">(1 - 7 Sep)</span>
@@ -595,14 +607,14 @@
                   ⭐
                 </div>
                 <div class="flex-1 text-center sm:text-left">
-                  <h4 class="text-sm font-extrabold text-amber-300 uppercase tracking-wide">Our Quality & Recipe Commitment</h4>
-                  <p class="text-zinc-300 text-xs leading-relaxed mt-1">
-                    "From September onward, we make every effort to follow the published menu exactly, without missing or replacing any listed item. Your trust and continued support mean a great deal to us."
+                  <h4 class="text-sm font-extrabold text-amber-300 uppercase tracking-wide">Our Authentic Tradition & Quality Assurance</h4>
+                  <p id="menu-commitment-text" class="text-zinc-300 text-xs leading-relaxed mt-1">
+                    "This weekly breakfast menu will be followed throughout September with pure ghee and authentic Rayalaseema recipes. Your trust and continued support mean a great deal to us."
                   </p>
-                  <span class="text-[11px] text-zinc-400 font-semibold block mt-1">The Rayalaseema Cloud Kitchen | Where Spice Meets Tradition</span>
+                  <span class="text-[11px] text-zinc-400 font-semibold block mt-1">The Rayalaseema Cloud Kitchen | Where Spice Meets Tradition.</span>
                 </div>
                 <button onclick="navigateTo('account'); switchAccountTab('plans');" class="px-5 py-3 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer whitespace-nowrap">
-                  Manage My Plan →
+                  Subscribe / Manage Plan →
                 </button>
               </div>
 

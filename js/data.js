@@ -142,6 +142,70 @@ const MENU_DATA = {
     },
     {
       id: "sig-5",
+      name: "Uggani with Hot Mirchi Bajji",
+      category: "signature-dishes",
+      categoryName: "Signature Breakfast",
+      price: 89,
+      originalPrice: 110,
+      rating: 5.0,
+      reviewsCount: 295,
+      isVeg: true,
+      calories: "320 kcal",
+      protein: "9g Protein",
+      description: "Authentic Rayalaseema seasoned puffed rice tossed with roasted gram powder, onions, and served with crispy Mirchi Bajji.",
+      image: "images/veg-meals.jpg",
+      popular: true
+    },
+    {
+      id: "sig-6",
+      name: "Gunta Ponganalu with Spicy Chutney",
+      category: "signature-dishes",
+      categoryName: "Signature Breakfast",
+      price: 89,
+      originalPrice: 110,
+      rating: 4.9,
+      reviewsCount: 215,
+      isVeg: true,
+      calories: "310 kcal",
+      protein: "8g Protein",
+      description: "Traditional golden crispy skillet puffed rice dumplings (6 pcs) served with spicy peanut chutney and ginger pachadi.",
+      image: "images/veg-meals.jpg",
+      popular: true
+    },
+    {
+      id: "sig-7",
+      name: "Ghee Ven Pongal with Cashews",
+      category: "signature-dishes",
+      categoryName: "Signature Breakfast",
+      price: 79,
+      originalPrice: 99,
+      rating: 4.8,
+      reviewsCount: 160,
+      isVeg: true,
+      calories: "380 kcal",
+      protein: "11g Protein",
+      description: "Traditional temple-style ghee pongal tempered with black pepper, cumin, ginger, and roasted whole cashews.",
+      image: "images/veg-meals.jpg",
+      popular: false
+    },
+    {
+      id: "sig-8",
+      name: "Rayalaseema Ghee Roast Dosa",
+      category: "signature-dishes",
+      categoryName: "Signature Breakfast",
+      price: 69,
+      originalPrice: 89,
+      rating: 4.9,
+      reviewsCount: 185,
+      isVeg: true,
+      calories: "280 kcal",
+      protein: "7g Protein",
+      description: "Crispy golden ghee roast dosa served with authentic peanut chutney and vegetable sambar.",
+      image: "images/veg-meals.jpg",
+      popular: false
+    },
+    {
+      id: "sig-9",
       name: "Rayalaseema Bhojanam (Non-Veg)",
       category: "signature-dishes",
       categoryName: "Signature Dish",
@@ -578,6 +642,24 @@ const MENU_DATA = {
 
   subscriptionPlans: [
     {
+      id: "plan-breakfast",
+      name: "Monthly Breakfast Subscription",
+      tag: "Morning 7:30 - 9:00 AM",
+      pricePerDay: 79,
+      totalPrice: 2054,
+      days: 26,
+      popular: false,
+      description: "Authentic Rayalaseema breakfast rotation (Dosa, Idli, Pongal, Uggani with Bajji, Ponganalu) delivered hot every morning.",
+      features: [
+        "26 Morning Deliveries (7:30 - 9:00 AM)",
+        "Daily Menu Rotation (Uggani, Ponganalu, Pongal, Dosa, Idli)",
+        "Pause Absences Before 5:30 PM",
+        "Piping Hot Sambar & Signature Chutneys",
+        "100% Ghee & Cold-Pressed Groundnut Oil"
+      ],
+      cta: "Get Breakfast Plan"
+    },
+    {
       id: "plan-trial",
       name: "10-Day Food Subscription Plan",
       tag: "10 Consumed Days Guaranteed",
@@ -967,6 +1049,81 @@ const MENU_DATA = {
             icon: "🍛"
           }
         ]
+      }
+    ]
+  },
+
+  // Monthly Breakfast Subscription Menu (September 2026)
+  subscriberBreakfastMenu: {
+    title: "THE RAYALASEEMA CLOUD KITCHEN",
+    month: "September 2026",
+    subtitle: "MONTHLY BREAKFAST SUBSCRIPTION MENU",
+    tagline: "Where Spice Meets Tradition.",
+    deliverySlot: "7:30 AM - 9:00 AM (Morning Slot)",
+    commitmentNote: "This weekly breakfast menu will be followed throughout September.",
+    days: [
+      {
+        day: "Monday",
+        item: "Dosa",
+        description: "Crispy golden roasted dosa served with traditional groundnut chutney and piping hot vegetable sambar.",
+        highlights: ["Crispy Ghee Dosa (2 pcs)", "Groundnut Chutney", "Hot Sambar"],
+        badge: "Pure Ghee Dosa",
+        isVeg: true,
+        icon: "🥞"
+      },
+      {
+        day: "Tuesday",
+        item: "Idli",
+        description: "Steamed fluffy soft rice idlis served with spicy podi, groundnut chutney and authentic sambar.",
+        highlights: ["Fluffy Steamed Idlis (3 pcs)", "Karam Podi", "Sambar", "Chutney"],
+        badge: "Steamed & Healthy",
+        isVeg: true,
+        icon: "⚪"
+      },
+      {
+        day: "Wednesday",
+        item: "Pongal",
+        description: "Rich Ghee Ven Pongal tempered with whole black pepper, cumin, fresh ginger, and crunchy cashews.",
+        highlights: ["Ghee Pongal", "Whole Cashews", "Coconut-Peanut Chutney", "Sambar"],
+        badge: "Ghee & Cashew",
+        isVeg: true,
+        icon: "🍲"
+      },
+      {
+        day: "Thursday",
+        item: "Dosa",
+        description: "Freshly made crispy golden dosa with traditional Rayalaseema chutney and seasoned sambar.",
+        highlights: ["Crispy Dosa (2 pcs)", "Rayalaseema Chutney", "Hot Sambar"],
+        badge: "Crispy Delight",
+        isVeg: true,
+        icon: "🥞"
+      },
+      {
+        day: "Friday",
+        item: "Uggani with Bajji",
+        description: "Authentic Rayalaseema seasoned puffed rice tossed with roasted gram powder, onions, and served with hot Mirchi Bajji.",
+        highlights: ["Authentic Uggani", "Hot Mirchi Bajji (2 pcs)", "Roasted Gram Blend"],
+        badge: "Pride of Seema ⭐",
+        isVeg: true,
+        icon: "🌶️"
+      },
+      {
+        day: "Saturday",
+        item: "Ponganalu",
+        description: "Golden crispy traditional skillet puffed dumplings (Gunta Ponganalu) served with spicy peanut chutney.",
+        highlights: ["Gunta Ponganalu (6 pcs)", "Spicy Peanut Chutney", "Allam Pachadi"],
+        badge: "Traditional Skillet ⭐",
+        isVeg: true,
+        icon: "🥟"
+      },
+      {
+        day: "Sunday",
+        item: "Idli",
+        description: "Sunday morning comfort with melt-in-mouth hot idlis, pure ghee, rich sambar, and fresh chutney.",
+        highlights: ["Melt-in-mouth Idlis (3 pcs)", "Fresh Ghee", "Sambar", "Chutney"],
+        badge: "Sunday Comfort",
+        isVeg: true,
+        icon: "⚪"
       }
     ]
   },
