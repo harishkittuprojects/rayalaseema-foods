@@ -819,5 +819,183 @@ const MENU_DATA = {
       landmark: "Opposite D-Mart",
       isDefault: false
     }
+  ],
+
+  // Monthly Subscribers's Menu - Afternoon Lunch (September 2026)
+  subscriberMonthlyMenu: {
+    title: "THE RAYALASEEMA CLOUD KITCHEN",
+    month: "September 2026",
+    subtitle: "MONTHLY SUBSCRIBERS'S MENU - AFTERNOON LUNCH",
+    period: "1 SEPTEMBER TO 15 SEPTEMBER",
+    tagline: "Where Spice Meets Tradition",
+    commitmentNote: "Thank you for your patience and support this month. From September onward, we will make every effort to follow the published menu exactly, without missing or replacing any listed item. Your trust and continued support mean a great deal to us.",
+    weeks: [
+      {
+        weekNumber: 1,
+        weekLabel: "Week 1 (1 - 7 Sep)",
+        days: [
+          {
+            day: "Monday",
+            dateNum: 1,
+            menu: "Aloo Fry, Pappu, Pappu Charu, White Rice, Curd, Papad",
+            highlights: ["Aloo Fry", "Pappu", "Pappu Charu", "White Rice", "Curd", "Papad"],
+            badge: "Homestyle Veg",
+            isVeg: true,
+            icon: "🥔"
+          },
+          {
+            day: "Tuesday",
+            dateNum: 2,
+            menu: "Tomato Egg Masala, Gongura Pappu, Majjiga Charu, White Rice, Curd, Papad",
+            highlights: ["Tomato Egg Masala", "Gongura Pappu", "Majjiga Charu", "White Rice", "Curd", "Papad"],
+            badge: "Egg Special",
+            isVeg: false,
+            icon: "🍳"
+          },
+          {
+            day: "Wednesday",
+            dateNum: 3,
+            menu: "Chicken Fry, Pachimirchi Pappu, Tomato Charu, White Rice, Banana, Perugu Pachadi",
+            highlights: ["Chicken Fry", "Pachimirchi Pappu", "Tomato Charu", "White Rice", "Banana", "Perugu Pachadi"],
+            badge: "Rayalaseema Non-Veg",
+            isVeg: false,
+            icon: "🍗"
+          },
+          {
+            day: "Thursday",
+            dateNum: 4,
+            menu: "Vankaya Curry, Chukkakura Pappu, Tomato Charu, White Rice, Curd, Papad",
+            highlights: ["Vankaya Curry", "Chukkakura Pappu", "Tomato Charu", "White Rice", "Curd", "Papad"],
+            badge: "Traditional Veg",
+            isVeg: true,
+            icon: "🍆"
+          },
+          {
+            day: "Friday",
+            dateNum: 5,
+            menu: "Vegetable Pulao, Aloo Kurma, Perugu Pachadi, Buttermilk, Banana",
+            highlights: ["Vegetable Pulao", "Aloo Kurma", "Perugu Pachadi", "Buttermilk", "Banana"],
+            badge: "Pulao Feast",
+            isVeg: true,
+            icon: "🍚"
+          },
+          {
+            day: "Saturday",
+            dateNum: 6,
+            menu: "Dondakaya Fry, Tomato Pappu, Kothimeera-Pudina Chutney, White Rice, Curd, Papad, Semiya Payasam",
+            highlights: ["Dondakaya Fry", "Tomato Pappu", "Kothimeera-Pudina Chutney", "White Rice", "Curd", "Papad", "Semiya Payasam"],
+            badge: "Special + Sweet",
+            isVeg: true,
+            icon: "🍨"
+          },
+          {
+            day: "Sunday",
+            dateNum: 7,
+            menu: "Bagara Rice, Chicken Curry, Perugu Pachadi, Banana",
+            highlights: ["Bagara Rice", "Chicken Curry", "Perugu Pachadi", "Banana"],
+            badge: "Sunday Non-Veg Feast",
+            isVeg: false,
+            icon: "🍛"
+          }
+        ]
+      },
+      {
+        weekNumber: 2,
+        weekLabel: "Week 2 (8 - 15 Sep)",
+        days: [
+          {
+            day: "Monday",
+            dateNum: 8,
+            menu: "Broad Beans Curry, Pappu, Pappu Charu, White Rice, Curd, Papad",
+            highlights: ["Broad Beans Curry", "Pappu", "Pappu Charu", "White Rice", "Curd", "Papad"],
+            badge: "Homestyle Veg",
+            isVeg: true,
+            icon: "🫘"
+          },
+          {
+            day: "Tuesday",
+            dateNum: 9,
+            menu: "Egg Bhurji, Gongura Pappu, Majjiga Charu, White Rice, Curd, Papad",
+            highlights: ["Egg Bhurji", "Gongura Pappu", "Majjiga Charu", "White Rice", "Curd", "Papad"],
+            badge: "Egg Special",
+            isVeg: false,
+            icon: "🍳"
+          },
+          {
+            day: "Wednesday",
+            dateNum: 10,
+            menu: "Chicken Fry, Pachimirchi Pappu, Tomato Charu, White Rice, Banana, Perugu Pachadi",
+            highlights: ["Chicken Fry", "Pachimirchi Pappu", "Tomato Charu", "White Rice", "Banana", "Perugu Pachadi"],
+            badge: "Rayalaseema Non-Veg",
+            isVeg: false,
+            icon: "🍗"
+          },
+          {
+            day: "Thursday",
+            dateNum: 11,
+            menu: "Beerakaya Curry, Chukkakura Pappu, Tomato Charu, White Rice, Curd, Papad",
+            highlights: ["Beerakaya Curry", "Chukkakura Pappu", "Tomato Charu", "White Rice", "Curd", "Papad"],
+            badge: "Traditional Veg",
+            isVeg: true,
+            icon: "🥒"
+          },
+          {
+            day: "Friday",
+            dateNum: 12,
+            menu: "Meal Maker Pulao, Aloo Kurma, Perugu Pachadi, Buttermilk, Banana",
+            highlights: ["Meal Maker Pulao", "Aloo Kurma", "Perugu Pachadi", "Buttermilk", "Banana"],
+            badge: "High-Protein Pulao",
+            isVeg: true,
+            icon: "🍲"
+          },
+          {
+            day: "Saturday",
+            dateNum: 13,
+            menu: "Bendakaya Fry, Tomato Pappu, Kothimeera-Pudina Chutney, White Rice, Curd, Papad, Gulab Jamun",
+            highlights: ["Bendakaya Fry", "Tomato Pappu", "Kothimeera-Pudina Chutney", "White Rice", "Curd", "Papad", "Gulab Jamun"],
+            badge: "Special + Sweet",
+            isVeg: true,
+            icon: "🧆"
+          },
+          {
+            day: "Sunday",
+            dateNum: 14,
+            menu: "Bagara Rice, Chicken Curry, Perugu Pachadi, Banana",
+            highlights: ["Bagara Rice", "Chicken Curry", "Perugu Pachadi", "Banana"],
+            badge: "Sunday Non-Veg Feast",
+            isVeg: false,
+            icon: "🍛"
+          }
+        ]
+      }
+    ]
+  },
+
+  // Customer Reviews and Ratings
+  reviews: [
+    {
+      id: "rev-1",
+      name: "Suresh Reddy",
+      role: "Senior Software Engineer @ Microsoft",
+      rating: 5,
+      comment: "The 10-day subscription is a lifesaver. Authentic Andhra taste, timely 12:30 PM delivery, and the flexibility to pause on leaves without losing days is incredible.",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
+    },
+    {
+      id: "rev-2",
+      name: "Swathi Anumolu",
+      role: "Product Manager @ Amazon",
+      rating: 5,
+      comment: "The Gongura Pappu, Chicken Fry, and Friday Pulao feasts feel 100% home-cooked. Zero heavy soda or excess oil. Clean and healthy food daily!",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80"
+    },
+    {
+      id: "rev-3",
+      name: "Kiran Varma",
+      role: "Operations Lead @ Infosys",
+      rating: 5,
+      comment: "We ordered corporate lunch for our 45-member team. The Bagara Rice with Rayalaseema Chicken Curry was hot, hygienic, and everybody loved it.",
+      avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80"
+    }
   ]
 };

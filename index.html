@@ -63,12 +63,13 @@
         </a>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-zinc-700">
+        <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-zinc-700">
           <a href="#home" onclick="navigateTo('home'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="home">Home</a>
           <a href="#about" onclick="navigateTo('about'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="about">About Us</a>
           <a href="#categories" onclick="navigateTo('categories'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="categories">Our Meals</a>
           <a href="#services" onclick="navigateTo('services'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="services">Our Services</a>
           <a href="#plans-section" onclick="navigateTo('plans-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Plans</a>
+          <a href="#monthly-menu-section" onclick="navigateTo('monthly-menu-section'); return false;" class="nav-link transition text-amber-700 hover:text-amber-800 font-bold py-1 cursor-pointer">📅 Monthly Menu</a>
           <a href="#catering-section" onclick="navigateTo('catering-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Catering</a>
         </nav>
 
@@ -548,6 +549,63 @@
 
           <div id="subscription-plans-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
             <!-- Dynamically populated -->
+          </div>
+
+          <!-- ==================== MONTHLY SUBSCRIBERS'S MENU (SEPTEMBER 2026) ==================== -->
+          <div id="monthly-menu-section" class="mt-16 pt-16 border-t border-zinc-100">
+            <div class="bg-gradient-to-b from-amber-50/60 via-white to-white rounded-3xl p-6 sm:p-10 border border-amber-200/70 shadow-xl">
+              
+              <!-- Header -->
+              <div class="text-center max-w-3xl mx-auto mb-8">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400 text-zinc-950 text-xs font-black uppercase tracking-wider mb-3 shadow-sm">
+                  <span>🍛 Official Lunch Schedule</span>
+                </div>
+                <h3 class="text-2xl sm:text-4xl font-black text-zinc-950 font-heading">
+                  Monthly Subscribers's Menu
+                </h3>
+                <div class="inline-block bg-zinc-950 text-amber-300 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full mt-2">
+                  September 2026 • Afternoon Lunch (1 - 15 September)
+                </div>
+                <p class="text-zinc-500 text-xs sm:text-sm mt-2.5">
+                  Published daily lunch rotation for all 10-Day and Monthly regular subscribers.
+                </p>
+              </div>
+
+              <!-- Week Switcher Tabs -->
+              <div class="flex justify-center mb-8">
+                <div class="inline-flex p-1.5 bg-zinc-100 rounded-2xl border border-zinc-200 shadow-inner">
+                  <button id="tab-week-1" onclick="switchSubscriberMenuWeek(1)" class="px-5 sm:px-8 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
+                    📅 Week 1 (1 - 7 Sep)
+                  </button>
+                  <button id="tab-week-2" onclick="switchSubscriberMenuWeek(2)" class="px-5 sm:px-8 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer">
+                    📅 Week 2 (8 - 15 Sep)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Menu Days Grid Container -->
+              <div id="subscribers-menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Dynamically populated by renderMonthlySubscribersMenu() -->
+              </div>
+
+              <!-- Commitment Assurance Card -->
+              <div class="mt-8 bg-zinc-950 text-white rounded-2xl p-5 sm:p-6 border border-zinc-800 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-amber-400 text-zinc-950 flex items-center justify-center text-2xl flex-shrink-0 font-black">
+                  ⭐
+                </div>
+                <div class="flex-1 text-center sm:text-left">
+                  <h4 class="text-sm font-extrabold text-amber-300 uppercase tracking-wide">Our Quality & Recipe Commitment</h4>
+                  <p class="text-zinc-300 text-xs leading-relaxed mt-1">
+                    "From September onward, we make every effort to follow the published menu exactly, without missing or replacing any listed item. Your trust and continued support mean a great deal to us."
+                  </p>
+                  <span class="text-[11px] text-zinc-400 font-semibold block mt-1">The Rayalaseema Cloud Kitchen | Where Spice Meets Tradition</span>
+                </div>
+                <button onclick="navigateTo('account'); switchAccountTab('plans');" class="px-5 py-3 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer whitespace-nowrap">
+                  Manage My Plan →
+                </button>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>

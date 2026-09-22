@@ -345,6 +345,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCategoriesGrid();
   renderServicesPage();
   renderSubscriptionPlans();
+  renderMonthlySubscribersMenu();
+  renderReviews();
   initEnquiryModal();
   app.updateCartUI();
   app.updateUserUI();
@@ -364,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Single Page Application Router
 function initRouter() {
   const mainViews = ['home', 'about', 'categories', 'services', 'cart', 'account'];
-  const homeSections = ['about-section', 'our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'catering-section', 'reviews-section'];
+  const homeSections = ['about-section', 'our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'monthly-menu-section', 'catering-section', 'reviews-section'];
 
   window.navigateTo = function(target, filterCategory = null) {
     if (filterCategory) {
@@ -2070,6 +2072,104 @@ function renderSubscriptionPlans() {
     </div>
   `).join('');
 }
+
+// Render September 2026 Monthly Subscribers Afternoon Lunch Menu
+let currentSubscriberMenuWeek = 1;
+
+function renderMonthlySubscribersMenu(weekNum = 1) {
+  currentSubscriberMenuWeek = weekNum;
+  const container = document.getElementById('subscribers-menu-grid');
+  if (!container || !MENU_DATA.subscriberMonthlyMenu) return;
+
+  const menuInfo = MENU_DATA.subscriberMonthlyMenu;
+  const weekData = menuInfo.weeks.find(w => w.weekNumber === weekNum) || menuInfo.weeks[0];
+
+  // Update tab buttons style
+  const tab1 = document.getElementById('tab-week-1');
+  const tab2 = document.getElementById('tab-week-2');
+  if (tab1 && tab2) {
+    if (weekNum === 1) {
+      tab1.className = "px-5 sm:px-8 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tab2.className = "px-5 sm:px-8 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
+    } else {
+      tab2.className = "px-5 sm:px-8 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tab1.className = "px-5 sm:px-8 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
+    }
+  }
+
+  container.innerHTML = weekData.days.map((d, index) => {
+    const isSunday = d.day === "Sunday";
+    const isSaturday = d.day === "Saturday";
+    
+    let cardBorder = d.isVeg ? 'border-zinc-200/90 hover:border-emerald-400' : 'border-amber-200/90 hover:border-amber-400';
+    let cardBg = 'bg-white';
+    if (isSunday) {
+      cardBorder = 'border-amber-400 hover:border-amber-500 shadow-md';
+      cardBg = 'bg-gradient-to-b from-amber-50/70 to-white';
+    }
+
+    let badgeClass = d.isVeg ? 'bg-emerald-100 text-emerald-800' : (d.day === 'Tuesday' ? 'bg-amber-100 text-amber-900' : 'bg-red-100 text-red-900');
+    if (isSaturday) badgeClass = 'bg-purple-100 text-purple-900';
+
+    return `
+      <div class="${cardBg} rounded-2xl p-4 sm:p-5 border ${cardBorder} shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="${index * 40}">
+        <div>
+          <!-- Day Header -->
+          <div class="flex items-center justify-between pb-3 border-b border-zinc-100 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl sm:text-2xl">${d.icon}</span>
+              <div>
+                <h4 class="text-base font-black text-zinc-950 leading-tight">${d.day}</h4>
+                <span class="text-[11px] text-zinc-500 font-semibold">${d.dateNum} Sep (Lunch)</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full ${badgeClass}">
+              ${d.badge}
+            </span>
+          </div>
+
+          <!-- Dishes Items List -->
+          <div class="space-y-1.5 mb-4">
+            <span class="text-[10px] uppercase tracking-wider font-extrabold text-zinc-400 block mb-1">Items in Box:</span>
+            <div class="flex flex-wrap gap-1.5">
+              ${d.highlights.map(item => {
+                const lower = item.toLowerCase();
+                let pillStyle = 'bg-zinc-50 text-zinc-800 border-zinc-200/80';
+                if (lower.includes('chicken') || lower.includes('mutton')) {
+                  pillStyle = 'bg-red-50 text-red-950 border-red-200 font-bold';
+                } else if (lower.includes('egg')) {
+                  pillStyle = 'bg-amber-50 text-amber-950 border-amber-200 font-bold';
+                } else if (lower.includes('payasam') || lower.includes('jamun')) {
+                  pillStyle = 'bg-purple-50 text-purple-950 border-purple-200 font-extrabold';
+                } else if (lower.includes('pappu') || lower.includes('curry') || lower.includes('kurma')) {
+                  pillStyle = 'bg-emerald-50/80 text-emerald-950 border-emerald-200 font-medium';
+                }
+
+                return `
+                  <span class="inline-flex items-center text-xs px-2.5 py-1 rounded-lg border ${pillStyle}">
+                    ${item}
+                  </span>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- Meal Delivery Slot Footer -->
+        <div class="pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px]">
+          <span class="text-emerald-700 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 12:30 PM Hot Lunch
+          </span>
+          <span class="text-zinc-500 font-semibold">Fresh Prep</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.switchSubscriberMenuWeek = function(weekNum) {
+  renderMonthlySubscribersMenu(weekNum);
+};
 
 window.handleAddPlanToCart = function(planId) {
   const plan = MENU_DATA.subscriptionPlans.find(p => p.id === planId);
