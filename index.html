@@ -125,11 +125,12 @@
       <a href="#categories" onclick="navigateTo('categories'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Our Meals</a>
       <a href="#services" onclick="navigateTo('services'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Our Services</a>
       <a href="#plans-section" onclick="navigateTo('plans-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Subscription Plans</a>
+      <a href="#monthly-menu-section" onclick="navigateTo('monthly-menu-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-amber-700 bg-amber-50 border border-amber-200">📅 Monthly Subscribers Menu (1-15 Sep)</a>
       <a href="#catering-section" onclick="navigateTo('catering-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Catering</a>
       <a href="#cart" onclick="navigateTo('cart'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Cart & Checkout</a>
       
       <div class="pt-2 border-t border-zinc-100 space-y-2">
-        <a href="#orders" onclick="navigateTo('account'); switchAccountTab('orders'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-zinc-900 bg-amber-50 border border-amber-200">📦 My Orders</a>
+        <a href="#orders" onclick="navigateTo('account'); switchAccountTab('orders'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-zinc-900 bg-zinc-100">📦 My Orders</a>
         <a href="#account" onclick="navigateTo('account'); switchAccountTab('plans'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-zinc-800 hover:bg-zinc-100">🥣 10-Day Subscription</a>
         <a href="#account" onclick="navigateTo('account'); switchAccountTab('profile'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-zinc-800 hover:bg-zinc-100">⚙️ Account Settings</a>
       </div>
@@ -137,7 +138,7 @@
   </header>
 
   <!-- ==================== MAIN APPLICATION VIEWS ==================== -->
-  <main class="flex-1">
+  <main class="flex-1 pb-20 md:pb-0">
 
     <!-- ==================== VIEW 1: HOME PAGE ==================== -->
     <section id="view-home" class="view-panel">
@@ -572,13 +573,13 @@
               </div>
 
               <!-- Week Switcher Tabs -->
-              <div class="flex justify-center mb-8">
-                <div class="inline-flex p-1.5 bg-zinc-100 rounded-2xl border border-zinc-200 shadow-inner">
-                  <button id="tab-week-1" onclick="switchSubscriberMenuWeek(1)" class="px-5 sm:px-8 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
-                    📅 Week 1 (1 - 7 Sep)
+              <div class="flex justify-center mb-6 sm:mb-8">
+                <div class="w-full sm:w-auto max-w-sm grid grid-cols-2 p-1 sm:p-1.5 bg-zinc-100 rounded-2xl border border-zinc-200 shadow-inner">
+                  <button id="tab-week-1" onclick="switchSubscriberMenuWeek(1)" class="w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
+                    📅 Week 1 <span class="hidden sm:inline">(1 - 7 Sep)</span>
                   </button>
-                  <button id="tab-week-2" onclick="switchSubscriberMenuWeek(2)" class="px-5 sm:px-8 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer">
-                    📅 Week 2 (8 - 15 Sep)
+                  <button id="tab-week-2" onclick="switchSubscriberMenuWeek(2)" class="w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer">
+                    📅 Week 2 <span class="hidden sm:inline">(8 - 15 Sep)</span>
                   </button>
                 </div>
               </div>

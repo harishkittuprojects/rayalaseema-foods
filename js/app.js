@@ -2089,11 +2089,11 @@ function renderMonthlySubscribersMenu(weekNum = 1) {
   const tab2 = document.getElementById('tab-week-2');
   if (tab1 && tab2) {
     if (weekNum === 1) {
-      tab1.className = "px-5 sm:px-8 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
-      tab2.className = "px-5 sm:px-8 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
+      tab1.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tab2.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
     } else {
-      tab2.className = "px-5 sm:px-8 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
-      tab1.className = "px-5 sm:px-8 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
+      tab2.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tab1.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
     }
   }
 
