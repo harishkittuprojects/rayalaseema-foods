@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Single Page Application Router
 function initRouter() {
   const mainViews = ['home', 'about', 'categories', 'services', 'cart', 'account'];
-  const homeSections = ['about-section', 'our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'monthly-menu-section', 'catering-section', 'reviews-section'];
+  const homeSections = ['about-section', 'our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'published-dinner-flyer-card', 'monthly-menu-section', 'catering-section', 'reviews-section'];
 
   window.navigateTo = function(target, filterCategory = null) {
     if (filterCategory) {
@@ -379,7 +379,7 @@ function initRouter() {
       setTimeout(() => {
         const el = document.getElementById(target);
         if (el) {
-          const headerOffset = 80;
+          const headerOffset = 64;
           const elementPosition = el.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
           window.scrollTo({
@@ -528,44 +528,44 @@ function createProductCardHtml(product) {
     `<span class="non-veg-indicator" title="Non-Vegetarian"><span class="non-veg-indicator-triangle"></span></span>`;
 
   return `
-    <div class="food-card bg-white rounded-3xl border border-zinc-200/80 overflow-hidden shadow-sm hover:border-amber-300 flex flex-col justify-between" data-aos="fade-up">
-      <div class="relative overflow-hidden group aspect-[16/10] sm:aspect-auto sm:h-52 bg-zinc-100">
+    <div class="food-card bg-white rounded-2xl sm:rounded-3xl border border-zinc-200/80 overflow-hidden shadow-sm hover:border-amber-300 flex flex-col justify-between" data-aos="fade-up">
+      <div class="relative overflow-hidden group aspect-[16/10] sm:aspect-auto sm:h-44 bg-zinc-100">
         <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" loading="lazy" />
         
-        <div class="absolute top-3 left-3 flex gap-2 items-center">
-          <span class="bg-white/95 backdrop-blur px-2.5 py-1 rounded-xl text-xs font-bold text-zinc-900 shadow-sm flex items-center gap-1.5">
+        <div class="absolute top-2.5 left-2.5 flex gap-1.5 items-center">
+          <span class="bg-white/95 backdrop-blur px-2 py-0.5 rounded-lg text-[11px] font-bold text-zinc-900 shadow-sm flex items-center gap-1">
             ${isVegIcon}
             ${product.categoryName}
           </span>
-          ${product.popular ? `<span class="bg-amber-400 text-zinc-950 font-extrabold text-xs px-2.5 py-1 rounded-xl shadow-sm">Popular</span>` : ''}
+          ${product.popular ? `<span class="bg-amber-400 text-zinc-950 font-extrabold text-[10px] px-2 py-0.5 rounded-lg shadow-sm">Popular</span>` : ''}
         </div>
 
-        <div class="absolute bottom-3 right-3 bg-zinc-950/80 backdrop-blur text-white text-xs font-semibold px-2.5 py-1 rounded-xl">
+        <div class="absolute bottom-2.5 right-2.5 bg-zinc-950/80 backdrop-blur text-white text-[11px] font-semibold px-2 py-0.5 rounded-lg">
           ${product.protein} • ${product.calories}
         </div>
       </div>
 
-      <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+      <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between space-y-2.5">
         <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <h3 class="text-base sm:text-lg font-black text-zinc-900 line-clamp-1">${product.name}</h3>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-sm sm:text-base font-black text-zinc-900 line-clamp-1">${product.name}</h3>
           </div>
-          <p class="text-zinc-500 text-xs leading-relaxed line-clamp-2">${product.description}</p>
+          <p class="text-zinc-500 text-[11px] leading-relaxed line-clamp-2">${product.description}</p>
         </div>
 
-        <div class="space-y-3 pt-3 border-t border-zinc-100">
+        <div class="space-y-2 pt-2 border-t border-zinc-100">
           <!-- Price & Quantity Selector -->
           <div class="flex items-center justify-between">
             <div>
               <div class="flex items-baseline gap-1.5">
-                <span class="text-xl font-black text-zinc-950">₹${product.price}</span>
-                ${product.originalPrice ? `<span class="text-xs text-zinc-400 line-through">₹${product.originalPrice}</span>` : ''}
+                <span class="text-lg font-black text-zinc-950">₹${product.price}</span>
+                ${product.originalPrice ? `<span class="text-[11px] text-zinc-400 line-through">₹${product.originalPrice}</span>` : ''}
               </div>
-              <span class="text-[11px] text-emerald-700 font-bold block">100% Fresh Morning Batch</span>
+              <span class="text-[10px] text-emerald-700 font-bold block">100% Fresh Morning Batch</span>
             </div>
 
             <!-- Quantity Controls -->
-            <div class="flex items-center gap-1 bg-zinc-100 p-1 rounded-xl border border-zinc-200/80">
+            <div class="flex items-center gap-1 bg-zinc-100 p-0.5 rounded-lg border border-zinc-200/80">
               <button type="button" onclick="handleCardQtyChange('${product.id}', -1)" class="qty-btn" aria-label="Decrease Quantity">-</button>
               <span class="qty-value card-qty-display-${product.id}">${qty}</span>
               <button type="button" onclick="handleCardQtyChange('${product.id}', 1)" class="qty-btn" aria-label="Increase Quantity">+</button>
@@ -573,13 +573,13 @@ function createProductCardHtml(product) {
           </div>
 
           <!-- Action Buttons: Buy Now & Add to Cart -->
-          <div class="grid grid-cols-2 gap-2 food-card-actions">
-            <button type="button" onclick="handleAddToCartFromCard('${product.id}')" class="w-full py-2.5 bg-amber-100 hover:bg-amber-200 active:scale-95 text-zinc-950 font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+          <div class="grid grid-cols-2 gap-1.5 food-card-actions">
+            <button type="button" onclick="handleAddToCartFromCard('${product.id}')" class="w-full py-2 bg-amber-100 hover:bg-amber-200 active:scale-95 text-zinc-950 font-extrabold rounded-xl text-xs transition flex items-center justify-center gap-1 cursor-pointer shadow-sm">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
               <span>Add to Cart</span>
             </button>
 
-            <button type="button" onclick="handleBuyNow('${product.id}')" class="btn-buy-now w-full py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow">
+            <button type="button" onclick="handleBuyNow('${product.id}')" class="btn-buy-now w-full py-2 rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer shadow">
               <span>Buy Now</span>
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
@@ -2027,31 +2027,33 @@ function renderSubscriptionPlans() {
   const container = document.getElementById('subscription-plans-container');
   if (!container) return;
 
-  container.innerHTML = MENU_DATA.subscriptionPlans.map(plan => `
-    <div class="relative bg-white rounded-3xl p-6 border-2 transition duration-300 flex flex-col justify-between ${
-      plan.popular ? 'border-amber-400 shadow-xl scale-[1.02]' : 'border-zinc-200/80 shadow-sm hover:border-zinc-400'
+  const plansToRender = MENU_DATA.subscriptionPlans.filter(p => p.id !== 'plan-trial');
+
+  container.innerHTML = plansToRender.map(plan => `
+    <div class="relative bg-white rounded-3xl p-4 sm:p-5 border-2 transition-all duration-300 flex flex-col justify-between hover:shadow-xl ${
+      plan.popular ? 'border-amber-400 shadow-xl ring-2 ring-amber-400/20 md:-translate-y-1 bg-gradient-to-b from-amber-50/30 to-white' : 'border-zinc-200/80 shadow-sm hover:border-amber-300'
     }">
       ${plan.popular ? `
         <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-amber-400 text-zinc-950 font-black text-xs px-4 py-1 rounded-full uppercase tracking-wider shadow">
-          ${plan.tag}
+          ${plan.tag || 'Most Popular'}
         </div>
       ` : ''}
 
       <div>
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-start justify-between mb-3 gap-2">
           <div>
-            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">${plan.tag}</span>
-            <h3 class="text-2xl font-black text-zinc-900 font-heading">${plan.name}</h3>
+            <span class="text-[11px] font-extrabold text-amber-700 uppercase tracking-wider block mb-0.5">${plan.tag}</span>
+            <h3 class="text-lg sm:text-xl font-black text-zinc-900 font-heading leading-tight">${plan.name}</h3>
           </div>
-          <div class="text-right">
-            <span class="text-3xl font-black text-zinc-950">₹${plan.pricePerDay}</span>
-            <span class="text-xs text-zinc-500 block">/ day</span>
+          <div class="text-right flex-shrink-0">
+            <span class="text-xl sm:text-2xl font-black text-zinc-950">₹${typeof plan.totalPrice === 'number' ? plan.totalPrice.toLocaleString('en-IN') : plan.totalPrice}</span>
+            <span class="text-[11px] text-zinc-500 font-bold block">/ ${plan.days === 10 ? '10 days' : 'month'}</span>
           </div>
         </div>
 
-        <p class="text-zinc-600 text-xs leading-relaxed mb-6">${plan.description}</p>
+        <p class="text-zinc-600 text-xs leading-relaxed mb-3">${plan.description}</p>
 
-        <div class="space-y-3 pt-4 border-t border-zinc-100 mb-8">
+        <div class="space-y-2 pt-2.5 border-t border-zinc-100 mb-3">
           ${plan.features.map(f => `
             <div class="flex items-center gap-2.5 text-xs text-zinc-700 font-medium">
               <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
@@ -2061,20 +2063,26 @@ function renderSubscriptionPlans() {
             </div>
           `).join('')}
         </div>
+
+        ${plan.id.includes('dinner') ? `
+          <button type="button" onclick="window.switchSubscriberMealType('dinner'); document.getElementById('monthly-menu-section')?.scrollIntoView({behavior: 'smooth'});" class="w-full text-center text-xs font-bold text-amber-800 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 py-1.5 px-2 rounded-xl mb-3 border border-amber-200/70 transition flex items-center justify-center gap-1 cursor-pointer">
+            <span>📜 View Published Dinner Menu</span>
+          </button>
+        ` : ''}
       </div>
 
-      <button onclick="handleAddPlanToCart('${plan.id}')" class="w-full py-3.5 rounded-2xl font-black text-sm transition duration-200 flex items-center justify-center gap-2 cursor-pointer ${
+      <button onclick="handleAddPlanToCart('${plan.id}')" class="w-full py-2.5 sm:py-3 rounded-2xl font-black text-sm transition duration-200 flex items-center justify-center gap-2 cursor-pointer ${
         plan.popular ? 'bg-amber-400 hover:bg-amber-500 text-zinc-950 shadow-md' : 'bg-zinc-900 hover:bg-zinc-800 text-white'
       }">
-        ${plan.cta}
+        ${plan.cta || 'Get Plan'}
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
       </button>
     </div>
   `).join('');
 }
 
-// Render September 2026 Monthly Subscribers Breakfast & Lunch Schedules
-let currentSubscriberMealType = 'breakfast';
+// Render September 2026 Monthly Subscribers Breakfast, Lunch & Dinner Schedules
+let currentSubscriberMealType = 'dinner';
 let currentSubscriberMenuWeek = 1;
 
 function renderMonthlySubscribersMenu(mealType = currentSubscriberMealType, weekNum = currentSubscriberMenuWeek) {
@@ -2083,37 +2091,58 @@ function renderMonthlySubscribersMenu(mealType = currentSubscriberMealType, week
 
   const container = document.getElementById('subscribers-menu-grid');
   const lunchSelector = document.getElementById('lunch-week-selector');
+  const dinnerSelector = document.getElementById('dinner-view-selector');
   const badgeEl = document.getElementById('monthly-menu-badge');
   const subtitleEl = document.getElementById('monthly-menu-subtitle');
   const commitmentEl = document.getElementById('menu-commitment-text');
   const tabBreakfast = document.getElementById('tab-meal-breakfast');
   const tabLunch = document.getElementById('tab-meal-lunch');
+  const tabDinner = document.getElementById('tab-meal-dinner');
 
   if (!container) return;
 
+  const activeTabClass = "w-full text-center py-2 px-2 sm:px-4 rounded-lg font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+  const inactiveTabClass = "w-full text-center py-2 px-2 sm:px-4 rounded-lg font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer";
+
   // Toggle main Meal Type tabs
-  if (tabBreakfast && tabLunch) {
-    if (mealType === 'breakfast') {
-      tabBreakfast.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
-      tabLunch.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer";
-      if (lunchSelector) {
-        lunchSelector.classList.add('hidden');
-        lunchSelector.classList.remove('flex');
-      }
-      if (badgeEl) badgeEl.textContent = "September 2026 • Morning Breakfast Rotation (7:30 AM - 9:00 AM)";
-      if (subtitleEl) subtitleEl.textContent = "Authentic Rayalaseema breakfast delivered fresh every morning throughout September.";
-      if (commitmentEl) commitmentEl.textContent = '"This weekly breakfast menu will be followed throughout September with pure ghee and authentic Rayalaseema recipes. Your trust and continued support mean a great deal to us."';
+  if (tabBreakfast) tabBreakfast.className = (mealType === 'breakfast') ? activeTabClass : inactiveTabClass;
+  if (tabLunch) tabLunch.className = (mealType === 'lunch') ? activeTabClass : inactiveTabClass;
+  if (tabDinner) tabDinner.className = (mealType === 'dinner') ? activeTabClass : inactiveTabClass;
+
+  // Toggle sub selectors
+  if (lunchSelector) {
+    if (mealType === 'lunch') {
+      lunchSelector.classList.remove('hidden');
+      lunchSelector.classList.add('flex');
     } else {
-      tabLunch.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
-      tabBreakfast.className = "w-full text-center py-3 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer";
-      if (lunchSelector) {
-        lunchSelector.classList.remove('hidden');
-        lunchSelector.classList.add('flex');
-      }
-      if (badgeEl) badgeEl.textContent = `September 2026 • Afternoon Lunch (Week ${weekNum}: ${weekNum === 1 ? '1 - 7 Sep' : '8 - 15 Sep'})`;
-      if (subtitleEl) subtitleEl.textContent = "Published daily lunch rotation for all 10-Day and Monthly regular subscribers.";
-      if (commitmentEl) commitmentEl.textContent = '"From September onward, we will make every effort to follow the published menu exactly, without missing or replacing any listed item. Your trust and continued support mean a great deal to us."';
+      lunchSelector.classList.add('hidden');
+      lunchSelector.classList.remove('flex');
     }
+  }
+
+  if (dinnerSelector) {
+    if (mealType === 'dinner') {
+      dinnerSelector.classList.remove('hidden');
+      dinnerSelector.classList.add('flex');
+    } else {
+      dinnerSelector.classList.add('hidden');
+      dinnerSelector.classList.remove('flex');
+    }
+  }
+
+  // Set headers and notes based on meal type
+  if (mealType === 'breakfast') {
+    if (badgeEl) badgeEl.textContent = "September 2026 • Morning Breakfast Rotation (7:30 AM - 9:00 AM)";
+    if (subtitleEl) subtitleEl.textContent = "Authentic Rayalaseema breakfast delivered fresh every morning throughout September.";
+    if (commitmentEl) commitmentEl.textContent = '"This weekly breakfast menu will be followed throughout September with pure ghee and authentic Rayalaseema recipes. Your trust and continued support mean a great deal to us."';
+  } else if (mealType === 'lunch') {
+    if (badgeEl) badgeEl.textContent = `September 2026 • Afternoon Lunch (Week ${weekNum}: ${weekNum === 1 ? '1 - 7 Sep' : '8 - 15 Sep'})`;
+    if (subtitleEl) subtitleEl.textContent = "Published daily lunch rotation for all 10-Day and Monthly regular subscribers.";
+    if (commitmentEl) commitmentEl.textContent = '"From September onward, we will make every effort to follow the published menu exactly, without missing or replacing any listed item. Your trust and continued support mean a great deal to us."';
+  } else if (mealType === 'dinner') {
+    if (badgeEl) badgeEl.textContent = "September 2026 • Night Dinner Monthly Subscription Menu (7:30 PM - 9:00 PM)";
+    if (subtitleEl) subtitleEl.textContent = "15-Day published dinner rotation with choice of Chapati or Regular Roti (Repeats Sep 16 - 30).";
+    if (commitmentEl) commitmentEl.textContent = '"Every dinner meal is served fresh with your choice of soft Chapati or Regular Roti alongside daily authentic curries. The 15-day rotation repeats seamlessly from September 16 to 30 with Zero Food Loss pause guarantee before 5:30 PM."';
   }
 
   // If Breakfast
@@ -2181,6 +2210,65 @@ function renderMonthlySubscribersMenu(mealType = currentSubscriberMealType, week
     return;
   }
 
+  // If Night Dinner
+  if (mealType === 'dinner') {
+    const dData = MENU_DATA.subscriberDinnerMenu;
+    if (!dData) return;
+
+    container.innerHTML = dData.days.map((d, index) => {
+      return `
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-zinc-200/90 hover:border-amber-400 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="${index * 30}">
+          <div>
+            <!-- Day Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-zinc-100 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-xl sm:text-2xl">${d.icon}</span>
+                <div>
+                  <h4 class="text-base font-black text-zinc-950 leading-tight">${d.label}</h4>
+                  <span class="text-[11px] text-amber-700 font-bold">Night Dinner Special</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-900">
+                ${d.badge}
+              </span>
+            </div>
+
+            <!-- Curry Title -->
+            <div class="mb-3">
+              <span class="text-[10px] uppercase tracking-wider font-extrabold text-amber-700 block mb-0.5">Daily Curry:</span>
+              <h5 class="text-base sm:text-lg font-black text-zinc-950 flex items-center gap-1.5 leading-snug">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
+                <span>${d.curry}</span>
+              </h5>
+            </div>
+
+            <!-- Bread Choice -->
+            <div class="space-y-1.5 mb-4">
+              <span class="text-[10px] uppercase tracking-wider font-extrabold text-zinc-400 block mb-1">Served With Choice Of:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="inline-flex items-center text-xs px-2.5 py-1 rounded-lg border bg-amber-50 text-amber-950 border-amber-200/90 font-bold">
+                  🫓 Chapati (3 pcs)
+                </span>
+                <span class="inline-flex items-center text-xs px-2.5 py-1 rounded-lg border bg-zinc-50 text-zinc-800 border-zinc-200/80 font-medium">
+                  or Regular Roti
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dinner Slot Footer -->
+          <div class="pt-3 border-t border-zinc-100 flex items-center justify-between text-[11px]">
+            <span class="text-amber-800 font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> 7:30 - 9:00 PM Slot
+            </span>
+            <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Fresh Prep</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+    return;
+  }
+
   // If Lunch
   const menuInfo = MENU_DATA.subscriberMonthlyMenu;
   if (!menuInfo) return;
@@ -2191,11 +2279,11 @@ function renderMonthlySubscribersMenu(mealType = currentSubscriberMealType, week
   const tab2 = document.getElementById('tab-week-2');
   if (tab1 && tab2) {
     if (weekNum === 1) {
-      tab1.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
-      tab2.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
+      tab1.className = "w-full text-center py-2 px-3 sm:px-5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tab2.className = "w-full text-center py-2 px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
     } else {
-      tab2.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
-      tab1.className = "w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
+      tab2.className = "w-full text-center py-2 px-3 sm:px-5 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer";
+      tab1.className = "w-full text-center py-2 px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer";
     }
   }
 
@@ -2277,6 +2365,56 @@ window.switchSubscriberMenuWeek = function(weekNum) {
   renderMonthlySubscribersMenu('lunch', weekNum);
 };
 
+window.openDinnerPosterModal = function() {
+  const modal = document.getElementById('dinner-poster-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closeDinnerPosterModal = function(e) {
+  const modal = document.getElementById('dinner-poster-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+};
+
+window.scrollToDinnerMenu = function(e) {
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
+  const homeView = document.getElementById('view-home');
+  if (homeView) {
+    document.querySelectorAll('.view-panel').forEach(function(panel) {
+      panel.classList.add('hidden');
+      panel.classList.remove('active-view');
+    });
+    homeView.classList.remove('hidden');
+    homeView.classList.add('active-view');
+  }
+  if (typeof window.switchSubscriberMealType === 'function') {
+    window.switchSubscriberMealType('dinner');
+  }
+  const target = document.getElementById('published-dinner-flyer-card') || document.getElementById('plans-section');
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  try {
+    window.history.replaceState(null, null, '#published-dinner-flyer-card');
+  } catch (err) {}
+  return false;
+};
+
+// Listen for Escape key to close modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    window.closeDinnerPosterModal();
+  }
+});
+
 window.handleAddPlanToCart = function(planId) {
   const plan = MENU_DATA.subscriptionPlans.find(p => p.id === planId);
   if (!plan) return;
@@ -2284,9 +2422,10 @@ window.handleAddPlanToCart = function(planId) {
   if (plan.totalPrice === 'Custom') {
     window.openEnquiryModal('Corporate Custom Subscription Plan');
   } else {
+    const deliveryLabel = plan.id === 'plan-10day-3meals' ? '10-Day (3 Meals/Day)' : (plan.days === 10 ? '10-Day Workday Trial' : 'Monthly Meal Plan');
     app.addToCart({
       id: plan.id,
-      name: `${plan.name} (${plan.days} Workday Deliveries)`,
+      name: `${plan.name} (${deliveryLabel})`,
       price: plan.totalPrice,
       categoryName: "Subscription Plan",
       image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80",

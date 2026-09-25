@@ -46,7 +46,7 @@ const MENU_DATA = {
       id: "biryani-specials",
       name: "Biryani Specials",
       tagline: "Aromatic basmati rice layered with succulent meats.",
-      description: "Authentic Chicken Biryani, rich Mutton Biryani, and flavorful Kushka with Rayalaseema chicken curry.",
+      description: "Authentic Chicken Biryani and flavorful Kushka with Rayalaseema curries.",
       pricePerDay: 199,
       image: "images/nonveg-meals.jpg",
       badge: "Biryani Special",
@@ -357,22 +357,6 @@ const MENU_DATA = {
       popular: true
     },
     {
-      id: "bir-2",
-      name: "Mutton Biryani",
-      category: "biryani-specials",
-      categoryName: "Biryani Special",
-      price: 349,
-      originalPrice: 399,
-      rating: 5.0,
-      reviewsCount: 310,
-      isVeg: false,
-      calories: "670 kcal",
-      protein: "41g Protein",
-      description: "Fragrant basmati rice cooked with tender mutton and authentic biryani masala.",
-      image: "images/mutton-biryani.jpg",
-      popular: true
-    },
-    {
       id: "bir-3",
       name: "Kushka with Paneer Curry",
       category: "biryani-specials",
@@ -643,26 +627,135 @@ const MENU_DATA = {
   subscriptionPlans: [
     {
       id: "plan-breakfast",
-      name: "Monthly Breakfast Subscription",
-      tag: "Morning 7:30 - 9:00 AM",
-      pricePerDay: 79,
-      totalPrice: 2054,
-      days: 26,
+      name: "Only Breakfast",
+      tag: "Morning (7:30 - 9:00 AM)",
+      pricePerDay: 63,
+      totalPrice: 1900,
+      days: 30,
       popular: false,
-      description: "Authentic Rayalaseema breakfast rotation (Dosa, Idli, Pongal, Uggani with Bajji, Ponganalu) delivered hot every morning.",
+      description: "Authentic Rayalaseema morning rotation (Dosa, Idli, Pongal, Uggani with Bajji, Ponganalu) delivered piping hot every morning.",
       features: [
-        "26 Morning Deliveries (7:30 - 9:00 AM)",
+        "30 Morning Deliveries (7:30 - 9:00 AM)",
         "Daily Menu Rotation (Uggani, Ponganalu, Pongal, Dosa, Idli)",
-        "Pause Absences Before 5:30 PM",
+        "Pause Absences Before 5:30 PM Cutoff",
         "Piping Hot Sambar & Signature Chutneys",
         "100% Ghee & Cold-Pressed Groundnut Oil"
       ],
       cta: "Get Breakfast Plan"
     },
     {
+      id: "plan-breakfast-lunch",
+      name: "Breakfast + Lunch",
+      tag: "Daytime Work Combo",
+      pricePerDay: 153,
+      totalPrice: 4600,
+      days: 30,
+      popular: false,
+      description: "Full workday nutrition: Rayalaseema breakfast in the morning and hearty full lunch meal at noon.",
+      features: [
+        "2 Meals Daily: Morning Breakfast + Noon Lunch",
+        "60 Total Deliveries to Home or IT Park Desk",
+        "Authentic Ghee Breakfasts & Rich Lunch Platters",
+        "Pause or Skip Days Before 5:30 PM",
+        "Priority Express Delivery Slot"
+      ],
+      cta: "Get Breakfast + Lunch"
+    },
+    {
+      id: "plan-lunch",
+      name: "Only Lunch",
+      tag: "Afternoon (12:00 - 1:30 PM)",
+      pricePerDay: 100,
+      totalPrice: 3000,
+      days: 30,
+      popular: false,
+      description: "Wholesome full Andhra & Rayalaseema lunch meals packed fresh and delivered to your office desk or home.",
+      features: [
+        "30 Afternoon Lunch Deliveries (12:00 - 1:30 PM)",
+        "Full Meal: Rice, Flavored Pappu, Curries, Sambar & Curd",
+        "Weekly Special Rayalaseema Delicacies",
+        "Pause Absences Before 5:30 PM Cutoff",
+        "Punctual Doorstep & Desk Delivery"
+      ],
+      cta: "Get Lunch Plan"
+    },
+    {
+      id: "plan-lunch-dinner",
+      name: "Lunch + Dinner",
+      tag: "Most Popular Combo",
+      pricePerDay: 153,
+      totalPrice: 4600,
+      days: 30,
+      popular: true,
+      description: "The ultimate daily lunch and dinner combo for working professionals and families. Zero cooking hassle.",
+      features: [
+        "2 Full Meals Daily: Hot Lunch + Fresh Dinner",
+        "60 Total Deliveries per Month (12:30 PM & 8:00 PM)",
+        "Complete Traditional Andhra & Rayalaseema Menu",
+        "Maximum Monthly Savings on Double Meals",
+        "Flexible Absence Pause Without Day Loss"
+      ],
+      cta: "Get Lunch + Dinner"
+    },
+    {
+      id: "plan-dinner",
+      name: "Only Dinner",
+      tag: "Night (7:30 - 9:00 PM)",
+      pricePerDay: 63,
+      totalPrice: 1900,
+      days: 30,
+      popular: false,
+      description: "Light, nutritious, and delicious dinners including soft phulkas/rotis, flavorful curries, and comforting meals.",
+      features: [
+        "30 Night Deliveries (7:30 - 9:00 PM)",
+        "Soft Phulkas / Rotis with Wholesome Curries",
+        "Light & Digestible Healthy Dinner Spread",
+        "Flexible Pause & Resume on Travel Days",
+        "Fresh Prep Right Before Dispatch"
+      ],
+      cta: "Get Dinner Plan"
+    },
+    {
+      id: "plan-breakfast-dinner",
+      name: "Breakfast + Dinner",
+      tag: "Morning & Night Combo",
+      pricePerDay: 120,
+      totalPrice: 3600,
+      days: 30,
+      popular: false,
+      description: "Complete dual-meal combo: start your day with energetic breakfast and end it with a comforting warm dinner.",
+      features: [
+        "2 Meals Daily: Hot Breakfast + Night Dinner",
+        "60 Total Deliveries per Month",
+        "Signature Morning Specials & Wholesome Dinners",
+        "Save ₹200 with Monthly Combo Rate",
+        "Dedicated Kitchen & WhatsApp Support"
+      ],
+      cta: "Get Breakfast + Dinner"
+    },
+    {
+      id: "plan-10day-3meals",
+      name: "10-Day Plan (3 Times A Day)",
+      tag: "Breakfast + Lunch + Dinner (10 Days)",
+      pricePerDay: 250,
+      totalPrice: 2500,
+      days: 10,
+      popular: true,
+      description: "Full daily nutrition for 10 days: 3 wholesome meals delivered fresh daily — Morning Breakfast, Noon Lunch, and Night Dinner (30 meals total).",
+      features: [
+        "10 Days • 3 Times A Day (30 Total Meals)",
+        "Morning Breakfast (7:30 - 9:00 AM)",
+        "Afternoon Full Lunch (12:00 - 1:30 PM)",
+        "Night Dinner with Rotis/Chapatis (7:30 - 9:00 PM)",
+        "Pause Absences Before 5:30 PM (Zero Day Loss)",
+        "100% Ghee & Pure Rayalaseema Spices"
+      ],
+      cta: "Get 10-Day Plan (₹2,500)"
+    },
+    {
       id: "plan-trial",
-      name: "10-Day Food Subscription Plan",
-      tag: "10 Consumed Days Guaranteed",
+      name: "10-Day Workday Trial",
+      tag: "10 Days Guaranteed",
       pricePerDay: 150,
       totalPrice: 1500,
       days: 10,
@@ -675,43 +768,7 @@ const MENU_DATA = {
         "Zero Food Loss Policy",
         "Punctual 12:30 PM Office Delivery"
       ],
-      cta: "Start 10-Day Plan"
-    },
-    {
-      id: "plan-monthly",
-      name: "Monthly Regular Plan",
-      tag: "Most Popular",
-      pricePerDay: 140,
-      totalPrice: 3640,
-      days: 26,
-      popular: true,
-      description: "Full workday nutrition plan designed for working professionals. Maximum savings and flexible pause/resume.",
-      features: [
-        "26 Workday Deliveries",
-        "Pause Before 5:30 PM Cutoff",
-        "Complimentary Weekend Fruit Meal",
-        "Priority 12:30 PM Lunch Slot",
-        "WhatsApp Kitchen Support"
-      ],
-      cta: "Get Monthly Plan"
-    },
-    {
-      id: "plan-custom",
-      name: "Custom Corporate Plan",
-      tag: "For Companies / Bulk",
-      pricePerDay: 119,
-      totalPrice: "Custom",
-      days: "Flexible",
-      popular: false,
-      description: "Tailored meal plans for team lunches, office cafeterias, and bulk workforce wellness programs.",
-      features: [
-        "Custom Calorie & Diet Split",
-        "Consolidated GST Monthly Invoice",
-        "Dedicated Delivery Van",
-        "Tasting Session at Office",
-        "Dedicated Account Lead"
-      ],
-      cta: "Get In Touch"
+      cta: "Start 10-Day Trial"
     }
   ],
 
@@ -1124,6 +1181,171 @@ const MENU_DATA = {
         badge: "Sunday Comfort",
         isVeg: true,
         icon: "⚪"
+      }
+    ]
+  },
+
+  // Monthly Dinner Subscription Menu (September 2026)
+  subscriberDinnerMenu: {
+    title: "THE RAYALASEEMA CLOUD KITCHEN",
+    month: "September 2026",
+    subtitle: "SEPTEMBER 2026 - NIGHT DINNER MONTHLY SUBSCRIPTION MENU",
+    breadChoice: "Chapati or Regular Roti - As Per Customer Choice",
+    tagline: "Where Spice Meets Tradition.",
+    posterImage: "images/dinner-menu-september.png",
+    repeatNote: "The same 15-day menu will be repeated from September 16 to September 30.",
+    deliverySlot: "7:30 PM - 9:00 PM (Night Dinner Slot)",
+    commitmentNote: "Every dinner meal is served fresh with your choice of soft Chapati or Regular Roti alongside daily authentic curries. The 15-day rotation repeats seamlessly from September 16 to 30.",
+    days: [
+      {
+        dayNum: 1,
+        date: "September 1",
+        label: "Day 1 - September 1",
+        curry: "Leafy Vegetable Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Fresh Greens",
+        icon: "🥬",
+        isVeg: true
+      },
+      {
+        dayNum: 2,
+        date: "September 2",
+        label: "Day 2 - September 2",
+        curry: "Vankaya Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Brinjal Classic",
+        icon: "🍆",
+        isVeg: true
+      },
+      {
+        dayNum: 3,
+        date: "September 3",
+        label: "Day 3 - September 3",
+        curry: "Aloo Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Homestyle Aloo",
+        icon: "🥔",
+        isVeg: true
+      },
+      {
+        dayNum: 4,
+        date: "September 4",
+        label: "Day 4 - September 4",
+        curry: "Beans Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Fresh Green Beans",
+        icon: "🫘",
+        isVeg: true
+      },
+      {
+        dayNum: 5,
+        date: "September 5",
+        label: "Day 5 - September 5",
+        curry: "Carrot Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Nutritious & Sweet",
+        icon: "🥕",
+        isVeg: true
+      },
+      {
+        dayNum: 6,
+        date: "September 6",
+        label: "Day 6 - September 6",
+        curry: "Bendakaya Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Crisp Okra",
+        icon: "🥒",
+        isVeg: true
+      },
+      {
+        dayNum: 7,
+        date: "September 7",
+        label: "Day 7 - September 7",
+        curry: "Cabbage Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Light & Wholesome",
+        icon: "🥗",
+        isVeg: true
+      },
+      {
+        dayNum: 8,
+        date: "September 8",
+        label: "Day 8 - September 8",
+        curry: "Different Leafy Vegetable Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Seasonal Keerai",
+        icon: "🥬",
+        isVeg: true
+      },
+      {
+        dayNum: 9,
+        date: "September 9",
+        label: "Day 9 - September 9",
+        curry: "Beerakaya Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Ridge Gourd Curry",
+        icon: "🥒",
+        isVeg: true
+      },
+      {
+        dayNum: 10,
+        date: "September 10",
+        label: "Day 10 - September 10",
+        curry: "Aloo Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Spiced Potato",
+        icon: "🥔",
+        isVeg: true
+      },
+      {
+        dayNum: 11,
+        date: "September 11",
+        label: "Day 11 - September 11",
+        curry: "Cluster Beans or Broad Beans Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Country Beans",
+        icon: "🫘",
+        isVeg: true
+      },
+      {
+        dayNum: 12,
+        date: "September 12",
+        label: "Day 12 - September 12",
+        curry: "Beetroot Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Rich & Earthy",
+        icon: "🟣",
+        isVeg: true
+      },
+      {
+        dayNum: 13,
+        date: "September 13",
+        label: "Day 13 - September 13",
+        curry: "Dondakaya Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Tindora Special",
+        icon: "🥒",
+        isVeg: true
+      },
+      {
+        dayNum: 14,
+        date: "September 14",
+        label: "Day 14 - September 14",
+        curry: "Cauliflower Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Fresh Gobi",
+        icon: "🥦",
+        isVeg: true
+      },
+      {
+        dayNum: 15,
+        date: "September 15",
+        label: "Day 15 - September 15",
+        curry: "Leafy Vegetable Curry",
+        bread: "Chapati or Regular Roti",
+        badge: "Pure Greens",
+        icon: "🥬",
+        isVeg: true
       }
     ]
   },

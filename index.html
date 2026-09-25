@@ -42,20 +42,52 @@
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/style.css" />
+
+  <script>
+    window.scrollToDinnerMenu = function(e) {
+      if (e) {
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+      }
+      // Ensure home view is active
+      var homeView = document.getElementById('view-home');
+      if (homeView) {
+        document.querySelectorAll('.view-panel').forEach(function(panel) {
+          panel.classList.add('hidden');
+          panel.classList.remove('active-view');
+        });
+        homeView.classList.remove('hidden');
+        homeView.classList.add('active-view');
+      }
+      // Activate dinner tab in monthly subscribers menu
+      if (typeof window.switchSubscriberMealType === 'function') {
+        window.switchSubscriberMealType('dinner');
+      }
+      // Scroll smoothly to the dinner flyer card
+      var target = document.getElementById('published-dinner-flyer-card') || document.getElementById('plans-section');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      try {
+        window.history.replaceState(null, null, '#published-dinner-flyer-card');
+      } catch (err) {}
+      return false;
+    };
+  </script>
 </head>
 <body class="bg-[#FAFAFA] text-zinc-800 antialiased selection:bg-amber-300 selection:text-zinc-950 flex flex-col min-h-screen">
 
   <!-- ==================== HEADER / NAVBAR ==================== -->
   <header id="main-header" class="sticky top-0 z-50 glass-nav border-b border-zinc-100 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-16">
         
         <!-- Brand Logo -->
         <a href="#home" onclick="navigateTo('home'); return false;" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer">
-          <img src="image.png" alt="The Rayalaseema Cloud Kitchen" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-contain p-0.5 shadow-md border-2 border-amber-400 group-hover:scale-105 transition-transform duration-300 bg-white" />
+          <img src="image.png" alt="The Rayalaseema Cloud Kitchen" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-contain p-0.5 shadow-md border-2 border-amber-400 group-hover:scale-105 transition-transform duration-300 bg-white" />
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="text-lg sm:text-xl font-black tracking-tight text-zinc-950 font-heading">Rayalaseema</span>
+              <span class="text-base sm:text-lg font-black tracking-tight text-zinc-950 font-heading">Rayalaseema</span>
               <span class="text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded bg-amber-400 text-zinc-950 uppercase">Kitchen</span>
             </div>
             <span class="text-[9px] sm:text-[10px] tracking-widest text-emerald-800 font-bold uppercase block -mt-0.5">FOODS & MEALS</span>
@@ -63,12 +95,15 @@
         </a>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-zinc-700">
+        <nav class="hidden md:flex items-center gap-5 text-sm font-semibold text-zinc-700">
           <a href="#home" onclick="navigateTo('home'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="home">Home</a>
           <a href="#about" onclick="navigateTo('about'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="about">About Us</a>
           <a href="#categories" onclick="navigateTo('categories'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="categories">Our Meals</a>
           <a href="#services" onclick="navigateTo('services'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer" data-route="services">Our Services</a>
           <a href="#plans-section" onclick="navigateTo('plans-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Plans</a>
+          <button type="button" onclick="scrollToDinnerMenu(event)" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-black text-xs rounded-full shadow-md transition cursor-pointer">
+            <span>🌙 Dinner Menu</span>
+          </button>
           <a href="#monthly-menu-section" onclick="navigateTo('monthly-menu-section'); return false;" class="nav-link transition text-amber-700 hover:text-amber-800 font-bold py-1 cursor-pointer">📅 Monthly Menu</a>
           <a href="#catering-section" onclick="navigateTo('catering-section'); return false;" class="nav-link transition hover:text-zinc-950 py-1 cursor-pointer">Catering</a>
         </nav>
@@ -77,21 +112,21 @@
         <div class="flex items-center gap-2 sm:gap-4">
           
           <!-- Direct Phone Call trigger (Mobile friendly) -->
-          <a href="tel:9063424694" class="p-2.5 rounded-full bg-amber-100 hover:bg-amber-200 text-zinc-950 transition flex items-center justify-center shadow-sm cursor-pointer" title="Call Rayalaseema Kitchen (+91 90634 24694)">
+          <a href="tel:9063424694" class="p-2 rounded-full bg-amber-100 hover:bg-amber-200 text-zinc-950 transition flex items-center justify-center shadow-sm cursor-pointer" title="Call Rayalaseema Kitchen (+91 90634 24694)">
             <svg class="w-4 h-4 text-amber-900" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 4V3z"></path>
             </svg>
           </a>
 
           <!-- Search trigger to Categories -->
-          <a href="#categories" onclick="navigateTo('categories'); return false;" class="p-2.5 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" title="Search Meals">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <a href="#categories" onclick="navigateTo('categories'); return false;" class="p-2 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-zinc-950 transition cursor-pointer" title="Search Meals">
+            <svg class="w-4 h-4 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </a>
 
           <!-- Cart Button with Dynamic Badge -->
-          <a href="#cart" onclick="navigateTo('cart'); return false;" class="relative p-2.5 rounded-full hover:bg-amber-50 text-zinc-800 transition flex items-center gap-2 group cursor-pointer" title="View Cart">
+          <a href="#cart" onclick="navigateTo('cart'); return false;" class="relative p-2 rounded-full hover:bg-amber-50 text-zinc-800 transition flex items-center gap-2 group cursor-pointer" title="View Cart">
             <div class="relative">
-              <svg class="w-6 h-6 group-hover:scale-110 transition text-zinc-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 group-hover:scale-110 transition text-zinc-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
               </svg>
               <span class="cart-badge-count hidden absolute -top-1.5 -right-2 bg-amber-500 text-zinc-950 text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
@@ -103,15 +138,15 @@
 
           <!-- User Account / My Orders Button -->
           <div class="relative hidden sm:block">
-            <a href="#account" onclick="navigateTo('account'); return false;" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs transition shadow-sm hover:shadow cursor-pointer">
-              <span id="nav-user-avatar" class="w-5 h-5 rounded-full bg-amber-400 text-zinc-950 flex items-center justify-center text-[10px] font-black">RK</span>
+            <a href="#account" onclick="navigateTo('account'); return false;" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs transition shadow-sm hover:shadow cursor-pointer">
+              <span id="nav-user-avatar" class="w-4 h-4 rounded-full bg-amber-400 text-zinc-950 flex items-center justify-center text-[9px] font-black">RK</span>
               <span id="nav-user-label">My Account</span>
             </a>
           </div>
 
           <!-- Mobile Hamburger Menu Button -->
           <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-zinc-700 hover:bg-zinc-100 focus:outline-none" aria-label="Toggle Menu">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
           </button>
 
         </div>
@@ -120,12 +155,16 @@
 
     <!-- Mobile Drawer Menu -->
     <div id="mobile-menu" class="hidden md:hidden border-t border-zinc-100 bg-white px-4 pt-3 pb-6 space-y-2.5 shadow-lg">
+      <button type="button" onclick="scrollToDinnerMenu(event); document.getElementById('mobile-menu').classList.add('hidden');" class="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-black text-zinc-950 bg-amber-400 shadow-md flex items-center justify-between cursor-pointer">
+        <span>🌙 September Night Dinner Menu Poster</span>
+        <span>→</span>
+      </button>
       <a href="#home" onclick="navigateTo('home'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Home</a>
       <a href="#about" onclick="navigateTo('about'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">About Us</a>
       <a href="#categories" onclick="navigateTo('categories'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Our Meals</a>
       <a href="#services" onclick="navigateTo('services'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Our Services</a>
       <a href="#plans-section" onclick="navigateTo('plans-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Subscription Plans</a>
-      <a href="#monthly-menu-section" onclick="navigateTo('monthly-menu-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-amber-700 bg-amber-50 border border-amber-200">📅 Monthly Subscribers Menu (1-15 Sep)</a>
+      <a href="#monthly-menu-section" onclick="navigateTo('monthly-menu-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-bold text-amber-700 bg-amber-50 border border-amber-200">📅 Monthly Subscribers Menu</a>
       <a href="#catering-section" onclick="navigateTo('catering-section'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Catering</a>
       <a href="#cart" onclick="navigateTo('cart'); document.getElementById('mobile-menu').classList.add('hidden'); return false;" class="block px-3 py-2 rounded-lg text-sm font-semibold text-zinc-800 hover:bg-amber-50">Cart & Checkout</a>
       
@@ -144,72 +183,76 @@
     <section id="view-home" class="view-panel">
       
       <!-- HERO SECTION -->
-      <section class="relative pt-8 pb-16 md:py-20 overflow-hidden bg-gradient-to-b from-amber-50/40 via-white to-white">
+      <section class="relative pt-2 pb-5 md:py-6 overflow-hidden bg-gradient-to-b from-amber-50/40 via-white to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
             
             <!-- Left Hero Content -->
-            <div class="lg:col-span-6 space-y-6" data-aos="fade-up">
-              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+            <div class="lg:col-span-6 space-y-3" data-aos="fade-up">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
                 <span>Fresh Morning Batch • Pure Rayalaseema Spices</span>
               </div>
 
-              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-950 font-heading leading-none">
+              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-zinc-950 font-heading leading-tight">
                 Healthy Food Meals, <br />
                 <span class="text-amber-500">Delivered Fresh</span> Daily.
               </h1>
 
-              <p class="text-zinc-600 text-base sm:text-lg leading-relaxed max-w-xl">
+              <p class="text-zinc-600 text-xs sm:text-sm leading-relaxed max-w-xl">
                 Wholesome South Indian meals crafted for busy workdays. Choose individual meal delivery, flexible office lunch subscriptions, or authentic corporate catering.
               </p>
 
               <!-- Hero CTAs -->
-              <div class="flex flex-wrap gap-4 pt-2">
-                <a href="#categories" onclick="navigateTo('categories'); return false;" class="px-7 py-4 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-extrabold rounded-2xl text-sm transition-all shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer">
+              <div class="flex flex-wrap gap-2.5 pt-0.5">
+                <a href="#categories" onclick="navigateTo('categories'); return false;" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-extrabold rounded-xl text-xs sm:text-sm transition-all shadow-md hover:shadow-lg flex items-center gap-2 cursor-pointer">
                   <span>Explore All Meals</span>
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
                 
-                <a href="#trial-banner" onclick="navigateTo('trial-banner'); return false;" class="px-7 py-4 bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white font-bold rounded-2xl text-sm transition shadow flex items-center gap-2 cursor-pointer">
+                <button type="button" onclick="scrollToDinnerMenu(event)" class="px-4 py-2.5 bg-zinc-950 hover:bg-zinc-800 active:scale-95 text-amber-400 border border-amber-400/40 font-black rounded-xl text-xs sm:text-sm transition shadow flex items-center gap-1.5 cursor-pointer">
+                  <span>📜 September Dinner Flyer</span>
+                </button>
+
+                <a href="#trial-banner" onclick="navigateTo('trial-banner'); return false;" class="px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 active:scale-95 text-zinc-800 font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-1.5 cursor-pointer">
                   <span>10-Day Trial Plan</span>
                 </a>
               </div>
 
               <!-- Key Value Metrics -->
-              <div class="grid grid-cols-3 gap-4 pt-6 border-t border-zinc-100">
+              <div class="grid grid-cols-3 gap-3 pt-2.5 border-t border-zinc-100">
                 <div>
-                  <div class="text-2xl font-black text-zinc-950">100%</div>
-                  <div class="text-xs text-zinc-500 font-medium">Fresh Morning Prep</div>
+                  <div class="text-lg sm:text-xl font-black text-zinc-950">100%</div>
+                  <div class="text-[10px] sm:text-[11px] text-zinc-500 font-medium">Fresh Morning Prep</div>
                 </div>
                 <div>
-                  <div class="text-2xl font-black text-zinc-950">₹120</div>
-                  <div class="text-xs text-zinc-500 font-medium">Meals Starting At</div>
+                  <div class="text-lg sm:text-xl font-black text-zinc-950">₹120</div>
+                  <div class="text-[10px] sm:text-[11px] text-zinc-500 font-medium">Meals Starting At</div>
                 </div>
                 <div>
-                  <div class="text-2xl font-black text-zinc-950">Zero</div>
-                  <div class="text-xs text-zinc-500 font-medium">Preservatives / Palm Oil</div>
+                  <div class="text-lg sm:text-xl font-black text-zinc-950">Zero</div>
+                  <div class="text-[10px] sm:text-[11px] text-zinc-500 font-medium">Preservatives / Palm Oil</div>
                 </div>
               </div>
             </div>
 
             <!-- Right Hero Visual Grid -->
-            <div class="lg:col-span-6 relative mt-6 lg:mt-0" data-aos="fade-left">
+            <div class="lg:col-span-6 relative mt-2 lg:mt-0" data-aos="fade-left">
               <div class="relative mx-auto max-w-md lg:max-w-none">
                 
                 <!-- Main Showcase Card -->
-                <div class="relative z-10 bg-white rounded-3xl p-3 sm:p-4 shadow-2xl border border-zinc-100 overflow-hidden">
-                  <div class="w-full aspect-[4/3] sm:h-72 lg:h-80 rounded-2xl overflow-hidden bg-zinc-100">
+                <div class="relative z-10 bg-white rounded-3xl p-3 shadow-xl border border-zinc-100 overflow-hidden">
+                  <div class="w-full aspect-[4/3] sm:h-56 lg:h-64 rounded-2xl overflow-hidden bg-zinc-100">
                     <img src="images/nonveg-meals.jpg" alt="Rayalaseema Spicy Chicken Non-Veg Meal" class="w-full h-full object-cover object-center rounded-2xl shadow-sm" />
                   </div>
                   
-                  <div class="pt-3 pb-1 px-1 sm:pt-4 sm:pb-2 sm:px-2 flex items-center justify-between">
+                  <div class="pt-2.5 pb-1 px-1 sm:pt-3 sm:pb-1 sm:px-1.5 flex items-center justify-between">
                     <div>
-                      <div class="flex items-center gap-2">
+                      <div class="flex items-center gap-1.5">
                         <span class="non-veg-indicator"><span class="non-veg-indicator-triangle"></span></span>
                         <h3 class="font-bold text-zinc-950 text-sm sm:text-base">Rayalaseema Non-Veg Meal</h3>
                       </div>
-                      <p class="text-[11px] sm:text-xs text-zinc-500 mt-0.5">Spicy Chicken Curry • Biryani Rice • Boiled Egg</p>
+                      <p class="text-[10px] sm:text-xs text-zinc-500 mt-0.5">Spicy Chicken Curry • Biryani Rice • Boiled Egg</p>
                     </div>
                     <div class="text-right">
                       <span class="text-xs text-zinc-400 line-through block">₹249</span>
@@ -219,23 +262,23 @@
                 </div>
 
                 <!-- Floating Badge 1: Next Delivery -->
-                <div class="mt-3 sm:mt-0 sm:absolute sm:-bottom-6 sm:-left-6 z-20 bg-white/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-zinc-100 flex items-center gap-3 animate-float">
-                  <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-amber-400 flex items-center justify-center text-zinc-950 font-black text-lg flex-shrink-0">
+                <div class="mt-2.5 sm:mt-0 sm:absolute sm:-bottom-4 sm:-left-4 z-20 bg-white/95 backdrop-blur-md p-2 sm:p-3 rounded-2xl shadow-xl border border-zinc-100 flex items-center gap-2 animate-float">
+                  <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-400 flex items-center justify-center text-zinc-950 font-black text-sm sm:text-base flex-shrink-0">
                     🥣
                   </div>
                   <div>
                     <div class="text-xs font-bold text-zinc-900">Guaranteed Fresh Lunch</div>
-                    <div class="text-[11px] text-emerald-700 font-semibold">12:30 PM - 1:15 PM Daily Slot</div>
+                    <div class="text-[10px] text-emerald-700 font-semibold">12:30 PM - 1:15 PM Daily Slot</div>
                   </div>
                 </div>
 
                 <!-- Floating Badge 2: Flexibility -->
-                <div class="hidden sm:flex absolute -top-4 -right-4 z-20 bg-zinc-900 text-white p-3.5 rounded-2xl shadow-xl items-center gap-2.5">
-                  <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                <div class="hidden sm:flex absolute -top-2.5 -right-2.5 z-20 bg-zinc-900 text-white p-2.5 rounded-2xl shadow-xl items-center gap-2">
+                  <div class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
                     ✓
                   </div>
                   <div class="text-xs">
-                    <span class="font-bold block">Flexible Leaves</span>
+                    <span class="font-bold block leading-tight">Flexible Leaves</span>
                     <span class="text-zinc-400 text-[10px]">Pause Subscription Anytime</span>
                   </div>
                 </div>
@@ -248,41 +291,41 @@
       </section>
 
       <!-- ABOUT US & HERITAGE SPOTLIGHT SECTION ON HOME -->
-      <section id="about-section" class="py-16 bg-white border-b border-zinc-100">
+      <section id="about-section" class="py-5 sm:py-6 bg-white border-b border-zinc-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
             
             <!-- Left: Heritage Image & Emblem Showcase -->
             <div class="lg:col-span-5" data-aos="fade-right">
-              <div class="relative bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-3xl p-6 sm:p-8 border border-amber-200 shadow-xl overflow-hidden text-center">
-                <div class="w-32 h-32 sm:w-40 sm:h-40 mx-auto rounded-full bg-white p-2 border-2 border-amber-400 mb-6 shadow-md flex items-center justify-center">
+              <div class="relative bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-3xl p-4 sm:p-5 border border-amber-200 shadow-md overflow-hidden text-center">
+                <div class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-full bg-white p-1.5 border-2 border-amber-400 mb-3 shadow-md flex items-center justify-center">
                   <img src="images/logo.png" alt="Rayalaseema Cloud Kitchen Logo" class="w-full h-full object-contain rounded-full" />
                 </div>
-                <h3 class="text-2xl font-black font-heading text-zinc-950">The Rayalaseema Kitchen</h3>
-                <span class="text-xs font-black text-amber-600 uppercase tracking-widest block mt-1">"Where Spice Meets Tradition"</span>
+                <h3 class="text-xl sm:text-2xl font-black font-heading text-zinc-950">The Rayalaseema Kitchen</h3>
+                <span class="text-[11px] font-black text-amber-600 uppercase tracking-widest block mt-0.5">"Where Spice Meets Tradition"</span>
                 
-                <div class="mt-6 pt-6 border-t border-amber-200/80 grid grid-cols-2 gap-3 text-left">
-                  <div class="bg-white/80 p-3 rounded-xl border border-amber-100">
-                    <span class="text-[10px] uppercase font-black text-amber-700 block">Heritage Root</span>
+                <div class="mt-4 pt-4 border-t border-amber-200/80 grid grid-cols-2 gap-2.5 text-left">
+                  <div class="bg-white/80 p-2.5 rounded-xl border border-amber-100">
+                    <span class="text-[9px] uppercase font-black text-amber-700 block">Heritage Root</span>
                     <span class="text-xs font-bold text-zinc-900">Kurnool & Kadapa</span>
                   </div>
-                  <div class="bg-white/80 p-3 rounded-xl border border-amber-100">
-                    <span class="text-[10px] uppercase font-black text-amber-700 block">Morning Prep</span>
+                  <div class="bg-white/80 p-2.5 rounded-xl border border-amber-100">
+                    <span class="text-[9px] uppercase font-black text-amber-700 block">Morning Prep</span>
                     <span class="text-xs font-bold text-zinc-900">5:00 AM Fresh</span>
                   </div>
-                  <div class="bg-white/80 p-3 rounded-xl border border-amber-100">
-                    <span class="text-[10px] uppercase font-black text-amber-700 block">Pure Cooking</span>
+                  <div class="bg-white/80 p-2.5 rounded-xl border border-amber-100">
+                    <span class="text-[9px] uppercase font-black text-amber-700 block">Pure Cooking</span>
                     <span class="text-xs font-bold text-zinc-900">Ghee & Cold-Pressed</span>
                   </div>
-                  <div class="bg-white/80 p-3 rounded-xl border border-amber-100">
-                    <span class="text-[10px] uppercase font-black text-amber-700 block">Hygiene</span>
+                  <div class="bg-white/80 p-2.5 rounded-xl border border-amber-100">
+                    <span class="text-[9px] uppercase font-black text-amber-700 block">Hygiene</span>
                     <span class="text-xs font-bold text-zinc-900">FSSAI Certified</span>
                   </div>
                 </div>
 
-                <div class="mt-6">
-                  <button onclick="navigateTo('about')" class="w-full py-3 bg-zinc-950 hover:bg-zinc-800 text-white font-black rounded-xl text-xs transition shadow cursor-pointer">
+                <div class="mt-4">
+                  <button onclick="navigateTo('about')" class="w-full py-2.5 bg-zinc-950 hover:bg-zinc-800 text-white font-black rounded-xl text-xs transition shadow cursor-pointer">
                     Read Our Complete Story & Standards →
                   </button>
                 </div>
@@ -290,64 +333,64 @@
             </div>
 
             <!-- Right: Story Narrative & Signature Dishes -->
-            <div class="lg:col-span-7 space-y-6" data-aos="fade-left">
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-black uppercase tracking-wider">
+            <div class="lg:col-span-7 space-y-3.5" data-aos="fade-left">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-black uppercase tracking-wider">
                 <span>🏰</span>
                 <span>About Our Cloud Kitchen</span>
               </div>
               
-              <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading leading-tight">
+              <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading leading-tight">
                 Authentic South Indian Flavors, Stone-Ground Spices & Zero Preservatives.
               </h2>
               
-              <p class="text-zinc-600 text-sm leading-relaxed">
+              <p class="text-zinc-600 text-xs sm:text-sm leading-relaxed">
                 Welcome to <span class="font-bold text-zinc-950">The Rayalaseema Cloud Kitchen</span>. Inspired by the legendary strength of the Kondareddy Fort and centuries of ancestral Andhra culinary tradition, we prepare wholesome, authentic South Indian meals every morning for hardworking professionals, families, and institutions.
               </p>
 
-              <p class="text-zinc-600 text-sm leading-relaxed">
+              <p class="text-zinc-600 text-xs sm:text-sm leading-relaxed">
                 Unlike mass-commercial caterers, we never reuse cooking oil, never add MSG or artificial colors, and never compromise on hygiene. From fiery <span class="font-semibold text-zinc-900">Natu Kodi Chicken Curry</span> and <span class="font-semibold text-zinc-900">Rayalaseema Pepper Chicken Fry</span> to comforting <span class="font-semibold text-zinc-900">Gongura Dal & Pure Ghee Steamed Rice</span>, every meal is prepared with love and delivered piping hot.
               </p>
 
               <!-- Highlights Grid -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200/80">
-                  <span class="text-2xl">🪔</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div class="flex items-start gap-2.5 p-3 rounded-2xl bg-zinc-50 border border-zinc-200/80">
+                  <span class="text-xl">🪔</span>
                   <div>
                     <h4 class="font-bold text-xs text-zinc-900">100% Cold-Pressed Oils</h4>
-                    <p class="text-[11px] text-zinc-500 mt-0.5">Pure groundnut & sesame oils paired with farm cow ghee.</p>
+                    <p class="text-[10px] sm:text-[11px] text-zinc-500 mt-0.5">Pure groundnut & sesame oils paired with farm cow ghee.</p>
                   </div>
                 </div>
 
-                <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200/80">
-                  <span class="text-2xl">🌶️</span>
+                <div class="flex items-start gap-2.5 p-3 rounded-2xl bg-zinc-50 border border-zinc-200/80">
+                  <span class="text-xl">🌶️</span>
                   <div>
                     <h4 class="font-bold text-xs text-zinc-900">Stone-Ground Spices</h4>
-                    <p class="text-[11px] text-zinc-500 mt-0.5">Authentic Guntur chillies & fresh Kandi Podi crushed daily.</p>
+                    <p class="text-[10px] sm:text-[11px] text-zinc-500 mt-0.5">Authentic Guntur chillies & fresh Kandi Podi crushed daily.</p>
                   </div>
                 </div>
 
-                <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200/80">
-                  <span class="text-2xl">🍲</span>
+                <div class="flex items-start gap-2.5 p-3 rounded-2xl bg-zinc-50 border border-zinc-200/80">
+                  <span class="text-xl">🍲</span>
                   <div>
                     <h4 class="font-bold text-xs text-zinc-900">Daily Morning Cooking</h4>
-                    <p class="text-[11px] text-zinc-500 mt-0.5">Never frozen or pre-stored. Cooked fresh starting 5:00 AM.</p>
+                    <p class="text-[10px] sm:text-[11px] text-zinc-500 mt-0.5">Never frozen or pre-stored. Cooked fresh starting 5:00 AM.</p>
                   </div>
                 </div>
 
-                <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200/80">
-                  <span class="text-2xl">🛵</span>
+                <div class="flex items-start gap-2.5 p-3 rounded-2xl bg-zinc-50 border border-zinc-200/80">
+                  <span class="text-xl">🛵</span>
                   <div>
                     <h4 class="font-bold text-xs text-zinc-900">Hot Desk Delivery</h4>
-                    <p class="text-[11px] text-zinc-500 mt-0.5">Delivered hot across Hitec City, Madhapur & Gachibowli.</p>
+                    <p class="text-[10px] sm:text-[11px] text-zinc-500 mt-0.5">Delivered hot across Hitec City, Madhapur & Gachibowli.</p>
                   </div>
                 </div>
               </div>
 
-              <div class="flex flex-wrap gap-3 pt-2">
-                <button onclick="navigateTo('categories')" class="px-6 py-3 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
+              <div class="flex flex-wrap gap-2.5 pt-1">
+                <button onclick="navigateTo('categories')" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
                   Order Today's Meals
                 </button>
-                <button onclick="navigateTo('about')" class="px-6 py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-bold rounded-xl text-xs transition border border-zinc-300 cursor-pointer">
+                <button onclick="navigateTo('about')" class="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-bold rounded-xl text-xs transition border border-zinc-300 cursor-pointer">
                   Explore Full About Us Page →
                 </button>
               </div>
@@ -359,94 +402,94 @@
       </section>
 
       <!-- 3 CATEGORIES CARDS SECTION -->
-      <section id="our-bowls-section" class="py-16 bg-white border-y border-zinc-100">
+      <section id="our-bowls-section" class="py-5 sm:py-6 bg-white border-y border-zinc-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+          <div class="flex flex-col md:flex-row md:items-end justify-between mb-4 sm:mb-5">
             <div>
-              <div class="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-600 uppercase tracking-widest mb-2">
+              <div class="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-600 uppercase tracking-widest mb-1">
                 <span>🥗</span>
                 <span>Signature Menu Categories</span>
               </div>
-              <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">Our Food Meals</h2>
-              <p class="text-zinc-500 text-sm mt-1">Select from our daily freshly prepared nutritious meal categories</p>
+              <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">Our Food Meals</h2>
+              <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Select from our daily freshly prepared nutritious meal categories</p>
             </div>
-            <button onclick="navigateTo('categories')" class="mt-4 md:mt-0 inline-flex items-center gap-2 text-sm font-bold text-zinc-900 hover:text-amber-600 transition cursor-pointer">
+            <button onclick="navigateTo('categories')" class="mt-2.5 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-zinc-900 hover:text-amber-600 transition cursor-pointer">
               <span>View Full Menu & Pricing</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
           </div>
 
           <!-- 3 Main Category Showcase Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
             
             <!-- Category 1: Signature Dishes -->
-            <div class="group bg-zinc-50 rounded-3xl p-6 border border-zinc-200/70 hover:border-amber-300 transition duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="0">
+            <div class="group bg-zinc-50 rounded-2xl p-4 sm:p-5 border border-zinc-200/70 hover:border-amber-300 transition duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="0">
               <div>
-                <div class="relative aspect-[16/10] sm:aspect-auto sm:h-48 rounded-2xl overflow-hidden mb-5 bg-zinc-100">
+                <div class="relative aspect-[16/10] sm:aspect-auto sm:h-38 rounded-xl overflow-hidden mb-3 bg-zinc-100">
                   <img src="images/veg-meals.jpg" alt="Signature Dishes - The Pride of Seema" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" />
-                  <span class="absolute top-3 left-3 bg-amber-500 text-zinc-950 font-extrabold text-xs px-3 py-1 rounded-full shadow">The Pride of Seema</span>
+                  <span class="absolute top-2.5 left-2.5 bg-amber-500 text-zinc-950 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full shadow">The Pride of Seema</span>
                 </div>
-                <h3 class="text-2xl font-black text-zinc-900">Signature Dishes</h3>
-                <p class="text-zinc-600 text-xs mt-1.5 leading-relaxed">
+                <h3 class="text-lg sm:text-xl font-black text-zinc-900">Signature Dishes</h3>
+                <p class="text-zinc-600 text-xs mt-1 leading-relaxed">
                   Authentic Ragi Idli with groundnut chutney, Korra Pongali, traditional Ragi Sangati with spicy Kodi Pulusu, and full Rayalaseema Bhojanam.
                 </p>
               </div>
 
-              <div class="pt-6 mt-6 border-t border-zinc-200/60 flex items-center justify-between">
+              <div class="pt-3 mt-3 border-t border-zinc-200/60 flex items-center justify-between">
                 <div>
-                  <span class="text-xs text-zinc-400 block">Starting From</span>
-                  <span class="text-lg font-black text-zinc-950">₹59 <span class="text-xs font-normal text-zinc-500">only</span></span>
+                  <span class="text-[10px] text-zinc-400 block">Starting From</span>
+                  <span class="text-base font-black text-zinc-950">₹59 <span class="text-xs font-normal text-zinc-500">only</span></span>
                 </div>
-                <button onclick="navigateTo('categories', 'signature-dishes')" class="px-4 py-2.5 bg-zinc-950 group-hover:bg-amber-400 group-hover:text-zinc-950 text-white font-bold text-xs rounded-xl transition cursor-pointer">
+                <button onclick="navigateTo('categories', 'signature-dishes')" class="px-3.5 py-1.5 bg-zinc-950 group-hover:bg-amber-400 group-hover:text-zinc-950 text-white font-bold text-xs rounded-xl transition cursor-pointer">
                   Explore Signatures →
                 </button>
               </div>
             </div>
 
             <!-- Category 2: Bagara Rice & Biryanis -->
-            <div class="group bg-zinc-50 rounded-3xl p-6 border border-zinc-200/70 hover:border-amber-300 transition duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="100">
+            <div class="group bg-zinc-50 rounded-2xl p-4 sm:p-5 border border-zinc-200/70 hover:border-amber-300 transition duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="100">
               <div>
-                <div class="relative aspect-[16/10] sm:aspect-auto sm:h-48 rounded-2xl overflow-hidden mb-5 bg-zinc-100">
+                <div class="relative aspect-[16/10] sm:aspect-auto sm:h-38 rounded-xl overflow-hidden mb-3 bg-zinc-100">
                   <img src="images/nonveg-meals.jpg" alt="Bagara Rice & Biryani Specials" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" />
-                  <span class="absolute top-3 left-3 bg-red-600 text-white font-extrabold text-xs px-3 py-1 rounded-full shadow">Rich & Spiced</span>
+                  <span class="absolute top-2.5 left-2.5 bg-red-600 text-white font-extrabold text-[11px] px-2.5 py-0.5 rounded-full shadow">Rich & Spiced</span>
                 </div>
-                <h3 class="text-2xl font-black text-zinc-900">Bagara Rice & Biryani</h3>
-                <p class="text-zinc-600 text-xs mt-1.5 leading-relaxed">
-                  Fragrant Hyderabad-style Bagara Rice with Chicken / Mutton Gravy, aromatic basmati Chicken Biryani, and flavorful Kushka with curry.
+                <h3 class="text-lg sm:text-xl font-black text-zinc-900">Bagara Rice & Biryani</h3>
+                <p class="text-zinc-600 text-xs mt-1 leading-relaxed">
+                  Fragrant Hyderabad-style Bagara Rice with Chicken Gravy, aromatic basmati Chicken Biryani, and flavorful Kushka with curry.
                 </p>
               </div>
 
-              <div class="pt-6 mt-6 border-t border-zinc-200/60 flex items-center justify-between">
+              <div class="pt-3 mt-3 border-t border-zinc-200/60 flex items-center justify-between">
                 <div>
-                  <span class="text-xs text-zinc-400 block">Starting From</span>
-                  <span class="text-lg font-black text-zinc-950">₹199 <span class="text-xs font-normal text-zinc-500">only</span></span>
+                  <span class="text-[10px] text-zinc-400 block">Starting From</span>
+                  <span class="text-base font-black text-zinc-950">₹199 <span class="text-xs font-normal text-zinc-500">only</span></span>
                 </div>
-                <button onclick="navigateTo('categories', 'bagara-rice')" class="px-4 py-2.5 bg-zinc-950 group-hover:bg-amber-500 group-hover:text-zinc-950 text-white font-bold text-xs rounded-xl transition cursor-pointer">
+                <button onclick="navigateTo('categories', 'bagara-rice')" class="px-3.5 py-1.5 bg-zinc-950 group-hover:bg-amber-500 group-hover:text-zinc-950 text-white font-bold text-xs rounded-xl transition cursor-pointer">
                   Explore Bagara Rice →
                 </button>
               </div>
             </div>
 
             <!-- Category 3: Special Curries, Roti & Paneer -->
-            <div class="group bg-zinc-50 rounded-3xl p-6 border border-zinc-200/70 hover:border-emerald-300 transition duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="200">
+            <div class="group bg-zinc-50 rounded-2xl p-4 sm:p-5 border border-zinc-200/70 hover:border-emerald-300 transition duration-300 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="200">
               <div>
-                <div class="relative aspect-[16/10] sm:aspect-auto sm:h-48 rounded-2xl overflow-hidden mb-5 bg-zinc-100">
+                <div class="relative aspect-[16/10] sm:aspect-auto sm:h-38 rounded-xl overflow-hidden mb-3 bg-zinc-100">
                   <img src="images/veg-meals.jpg" alt="Special Curries, Jonna Roti & Paneer" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" />
-                  <span class="absolute top-3 left-3 bg-emerald-600 text-white font-extrabold text-xs px-3 py-1 rounded-full shadow">Authentic Flavors</span>
+                  <span class="absolute top-2.5 left-2.5 bg-emerald-600 text-white font-extrabold text-[11px] px-2.5 py-0.5 rounded-full shadow">Authentic Flavors</span>
                 </div>
-                <h3 class="text-2xl font-black text-zinc-900">Curries, Roti & Paneer</h3>
-                <p class="text-zinc-600 text-xs mt-1.5 leading-relaxed">
+                <h3 class="text-lg sm:text-xl font-black text-zinc-900">Curries, Roti & Paneer</h3>
+                <p class="text-zinc-600 text-xs mt-1 leading-relaxed">
                   Gongura Chicken/Mutton, Jonna Roti with hearty gravies, Paneer Butter Masala, Kaju Paneer, and comforting tempered Dal & Rice.
                 </p>
               </div>
 
-              <div class="pt-6 mt-6 border-t border-zinc-200/60 flex items-center justify-between">
+              <div class="pt-3 mt-3 border-t border-zinc-200/60 flex items-center justify-between">
                 <div>
-                  <span class="text-xs text-zinc-400 block">Starting From</span>
-                  <span class="text-lg font-black text-zinc-950">₹119 <span class="text-xs font-normal text-zinc-500">only</span></span>
+                  <span class="text-[10px] text-zinc-400 block">Starting From</span>
+                  <span class="text-base font-black text-zinc-950">₹119 <span class="text-xs font-normal text-zinc-500">only</span></span>
                 </div>
-                <button onclick="navigateTo('categories', 'special-curries')" class="px-4 py-2.5 bg-zinc-950 group-hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition cursor-pointer">
+                <button onclick="navigateTo('categories', 'special-curries')" class="px-3.5 py-1.5 bg-zinc-950 group-hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition cursor-pointer">
                   Explore Curries & Rotis →
                 </button>
               </div>
@@ -457,41 +500,44 @@
       </section>
 
       <!-- SECTION: FEATURED MEALS WITH BUY NOW & ADD TO CART -->
-      <section class="py-16 bg-[#FAFAFA]">
+      <section class="py-5 sm:py-6 bg-[#FAFAFA]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center max-w-2xl mx-auto mb-12">
-            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-2">Chef Recommended</span>
-            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">Popular Workday Meals</h2>
-            <p class="text-zinc-500 text-sm mt-2">Prepared fresh every morning with pure ghee and cold-pressed oils</p>
+          <div class="text-center max-w-2xl mx-auto mb-4 sm:mb-5">
+            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-0.5">Chef Recommended</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">Popular Workday Meals</h2>
+            <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Prepared fresh every morning with pure ghee and cold-pressed oils</p>
           </div>
 
           <!-- Featured Grid -->
-          <div id="featured-products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div id="featured-products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
             <!-- Dynamically populated -->
           </div>
         </div>
       </section>
 
       <!-- 10-DAY TRIAL PLAN BANNER -->
-      <section id="trial-banner" class="py-16 bg-white border-y border-zinc-100">
+      <section id="trial-banner" class="py-5 sm:py-6 bg-white border-y border-zinc-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="bg-gradient-to-r from-zinc-950 via-zinc-900 to-amber-950 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-xl" data-aos="zoom-in">
-            <div class="relative z-10 max-w-2xl space-y-5">
-              <span class="bg-amber-400 text-zinc-950 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider">
+          <div class="bg-gradient-to-r from-zinc-950 via-zinc-900 to-amber-950 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-white relative overflow-hidden shadow-xl" data-aos="zoom-in">
+            <div class="relative z-10 max-w-2xl space-y-3">
+              <span class="bg-amber-400 text-zinc-950 font-black text-[11px] px-3 py-0.5 rounded-full uppercase tracking-wider inline-block">
                 10-Day Workday Trial
               </span>
-              <h3 class="text-3xl sm:text-4xl font-black font-heading leading-tight">
+              <h3 class="text-2xl sm:text-3xl font-black font-heading leading-tight">
                 Try 10 Days Before You Subscribe.
               </h3>
-              <p class="text-zinc-300 text-sm sm:text-base leading-relaxed">
-                Test our taste, hygiene, and punctual 12:30 PM desk delivery for 10 workdays. If you are absent on any day, pause it with a single tap and carry your balance forward.
+              <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed">
+                Choose complete 3-times-a-day nutrition (Breakfast, Lunch & Dinner for 10 days at ₹2,500) or test our workday lunch trial (₹1,500). Pause anytime with our Zero Food Loss Guarantee.
               </p>
-              <div class="pt-2 flex flex-wrap items-center gap-4">
-                <button onclick="handleAddPlanToCart('plan-trial')" class="px-8 py-4 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-black rounded-2xl text-sm transition shadow-lg cursor-pointer">
-                  Start 10-Day Trial (₹1,500)
+              <div class="pt-0.5 flex flex-wrap items-center gap-2.5">
+                <button onclick="handleAddPlanToCart('plan-10day-3meals')" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg cursor-pointer">
+                  10 Days (3 Times A Day) — ₹2,500
+                </button>
+                <button onclick="handleAddPlanToCart('plan-trial')" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 active:scale-95 text-white font-bold rounded-xl text-xs sm:text-sm transition border border-white/20 cursor-pointer">
+                  10-Day Lunch Only — ₹1,500
                 </button>
                 <span class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
-                  ✓ Free Delivery Included • Pause Anytime
+                  ✓ Free Delivery • Pause Anytime
                 </span>
               </div>
             </div>
@@ -503,117 +549,242 @@
       </section>
 
       <!-- HOW IT WORKS SECTION -->
-      <section id="how-it-works-section" class="py-16 bg-[#FAFAFA]">
+      <section id="how-it-works-section" class="py-5 sm:py-6 bg-[#FAFAFA]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-2">Effortless Healthy Eating</span>
-            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">How It Works</h2>
-            <p class="text-zinc-500 text-sm mt-2">Zero cooking hassle, zero compromise on quality and nutrition.</p>
+          <div class="text-center max-w-2xl mx-auto mb-4 sm:mb-5">
+            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-0.5">Effortless Healthy Eating</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">How It Works</h2>
+            <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Zero cooking hassle, zero compromise on quality and nutrition.</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm text-center space-y-3" data-aos="fade-up" data-aos-delay="0">
-              <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-xl mx-auto">1</div>
-              <h3 class="font-bold text-base text-zinc-950">Select Your Meals</h3>
-              <p class="text-zinc-500 text-xs leading-relaxed">Choose individual meals or pick a flexible 10-day / monthly meal subscription.</p>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3.5 sm:gap-4">
+            <div class="bg-white rounded-xl p-4 border border-zinc-100 shadow-sm text-center space-y-2" data-aos="fade-up" data-aos-delay="0">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-base mx-auto">1</div>
+              <h3 class="font-bold text-xs sm:text-sm text-zinc-950">Select Your Meals</h3>
+              <p class="text-zinc-500 text-[11px] leading-relaxed">Choose individual meals or pick a flexible 10-day / monthly meal subscription.</p>
             </div>
 
-            <div class="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm text-center space-y-3" data-aos="fade-up" data-aos-delay="100">
-              <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-xl mx-auto">2</div>
-              <h3 class="font-bold text-base text-zinc-950">Fresh Morning Prep</h3>
-              <p class="text-zinc-500 text-xs leading-relaxed">Prepared fresh every morning using authentic Andhra & Rayalaseema spices.</p>
+            <div class="bg-white rounded-xl p-4 border border-zinc-100 shadow-sm text-center space-y-2" data-aos="fade-up" data-aos-delay="100">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-base mx-auto">2</div>
+              <h3 class="font-bold text-xs sm:text-sm text-zinc-950">Fresh Morning Prep</h3>
+              <p class="text-zinc-500 text-[11px] leading-relaxed">Prepared fresh every morning using authentic Andhra & Rayalaseema spices.</p>
             </div>
 
-            <div class="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm text-center space-y-3" data-aos="fade-up" data-aos-delay="200">
-              <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-xl mx-auto">3</div>
-              <h3 class="font-bold text-base text-zinc-950">Punctual Delivery</h3>
-              <p class="text-zinc-500 text-xs leading-relaxed">Delivered hot & fresh to your office desk or home between 12:00 PM - 1:30 PM.</p>
+            <div class="bg-white rounded-xl p-4 border border-zinc-100 shadow-sm text-center space-y-2" data-aos="fade-up" data-aos-delay="200">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-base mx-auto">3</div>
+              <h3 class="font-bold text-xs sm:text-sm text-zinc-950">Punctual Delivery</h3>
+              <p class="text-zinc-500 text-[11px] leading-relaxed">Delivered hot & fresh to your office desk or home between 12:00 PM - 1:30 PM.</p>
             </div>
 
-            <div class="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm text-center space-y-3" data-aos="fade-up" data-aos-delay="300">
-              <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-xl mx-auto">4</div>
-              <h3 class="font-bold text-base text-zinc-950">Flexible Absences</h3>
-              <p class="text-zinc-500 text-xs leading-relaxed">Taking leave or working from home? Pause deliveries via your customer portal.</p>
+            <div class="bg-white rounded-xl p-4 border border-zinc-100 shadow-sm text-center space-y-2" data-aos="fade-up" data-aos-delay="300">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-base mx-auto">4</div>
+              <h3 class="font-bold text-xs sm:text-sm text-zinc-950">Flexible Absences</h3>
+              <p class="text-zinc-500 text-[11px] leading-relaxed">Taking leave or working from home? Pause deliveries via your customer portal.</p>
             </div>
           </div>
         </div>
       </section>
 
       <!-- SUBSCRIPTION PLANS SECTION -->
-      <section id="plans-section" class="py-16 bg-white border-y border-zinc-100">
+      <section id="plans-section" class="py-5 sm:py-6 bg-white border-y border-zinc-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-2">Value Meal Subscriptions</span>
-            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">Choose Your Meal Plan</h2>
-            <p class="text-zinc-500 text-sm mt-2">Save up to 25% with flexible monthly subscriptions. Pause anytime on days off.</p>
+          <div class="text-center max-w-2xl mx-auto mb-3 sm:mb-4">
+            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-0.5">Value Meal Subscriptions</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">Choose Your Meal Plan</h2>
+            <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Save with flexible monthly subscriptions. Pause anytime on days off.</p>
           </div>
 
-          <div id="subscription-plans-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+          <!-- Official Pricing Summary Pill Bar -->
+          <div class="mb-4 sm:mb-5 max-w-4xl mx-auto">
+            <div class="flex items-center justify-center flex-wrap gap-2 text-xs font-bold">
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm">🍳 Only Breakfast: <strong>₹1,900</strong></span>
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm">🍱 Breakfast + Lunch: <strong>₹4,600</strong></span>
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm">🍛 Only Lunch: <strong>₹3,000</strong></span>
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm">🍲 Lunch + Dinner: <strong>₹4,600</strong></span>
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm">🌙 Only Dinner: <strong>₹1,900</strong></span>
+              <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm">✨ Breakfast + Dinner: <strong>₹3,600</strong></span>
+              <span class="px-3 py-1.5 rounded-xl bg-zinc-950 text-amber-400 border border-zinc-800 shadow-sm">⚡ 10 Days (3 Times/Day): <strong>₹2,500</strong></span>
+            </div>
+          </div>
+
+          <div id="subscription-plans-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 items-stretch">
             <!-- Dynamically populated -->
           </div>
 
+          <!-- ==================== PUBLISHED DINNER MENU FLYER SPOTLIGHT ==================== -->
+          <div id="published-dinner-flyer-card" class="scroll-mt-24 mt-6 bg-gradient-to-br from-zinc-950 via-amber-950/70 to-zinc-950 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-2 border-amber-400 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-center">
+              
+              <!-- Left: Image Poster Display (Visible directly on page) -->
+              <div class="lg:col-span-5 flex flex-col items-center">
+                <div class="relative group cursor-pointer max-w-[280px] sm:max-w-xs w-full shadow-2xl rounded-2xl" onclick="openDinnerPosterModal()">
+                  <img src="images/dinner-menu-september.png" alt="September 2026 Night Dinner Monthly Subscription Menu" class="w-full h-auto rounded-2xl border-2 border-amber-400/90 group-hover:scale-[1.02] transition-transform duration-300 shadow-xl" />
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center text-white font-bold text-xs backdrop-blur-[1px]">
+                    <span class="bg-amber-400 text-zinc-950 px-3 py-1.5 rounded-full font-black text-xs shadow flex items-center gap-1">
+                      🔍 Click to Zoom Full Poster
+                    </span>
+                  </div>
+                </div>
+                <button onclick="openDinnerPosterModal()" class="mt-2 text-xs text-amber-300 hover:text-amber-200 font-bold flex items-center gap-1 cursor-pointer">
+                  <span>📜 View Full Screen Official Flyer</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </button>
+              </div>
+
+              <!-- Right: Details & Schedule Summary -->
+              <div class="lg:col-span-7 space-y-3 sm:space-y-4">
+                <div>
+                  <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-black uppercase tracking-wider mb-2">
+                    <span>🌙 Official Kitchen Menu Published</span>
+                  </div>
+                  <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-white font-heading leading-tight">
+                    September 2026 Night Dinner Monthly Subscription Menu
+                  </h3>
+                  <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                    Authentic Rayalaseema curries prepared with pure spices and delivered hot to your doorstep every evening.
+                  </p>
+                </div>
+
+                <div class="p-3 bg-white/5 rounded-2xl border border-white/10 space-y-1.5 text-xs">
+                  <div class="text-amber-300 font-bold flex items-center gap-1.5">
+                    <span>🥖 Customer Choice:</span>
+                    <strong class="text-white">Chapati or Regular Roti - As Per Customer Choice</strong>
+                  </div>
+                  <div class="text-zinc-300 flex items-center gap-1.5">
+                    <span>🔄 Rotation Rule:</span>
+                    <span>The same 15-day menu will be repeated from September 16 to September 30</span>
+                  </div>
+                  <div class="text-zinc-300 flex items-center gap-1.5">
+                    <span>⏰ Delivery Timing:</span>
+                    <span class="text-emerald-400 font-bold">7:30 PM - 9:00 PM (Night Dinner Slot)</span>
+                  </div>
+                </div>
+
+                <!-- 15 Days Highlights -->
+                <div>
+                  <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-400 block mb-1.5">15-Day Curry Rotation:</span>
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px]">
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 1 & 15:</strong> Leafy Veg Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 2:</strong> Vankaya Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 3 & 10:</strong> Aloo Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 4:</strong> Beans Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 5:</strong> Carrot Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 6:</strong> Bendakaya Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 7:</strong> Cabbage Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 8:</strong> Seasonal Leafy Veg</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 9:</strong> Beerakaya Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 11:</strong> Cluster/Broad Beans</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 12:</strong> Beetroot Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 13:</strong> Dondakaya Curry</div>
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5"><strong class="text-amber-400">Day 14:</strong> Cauliflower Curry</div>
+                  </div>
+                </div>
+
+                <!-- Pricing & Buttons -->
+                <div class="pt-2.5 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <span class="text-[11px] text-zinc-400 block font-bold">Monthly Dinner Subscription</span>
+                    <div class="flex items-baseline gap-1.5">
+                      <span class="text-2xl font-black text-amber-400">₹1,900</span>
+                      <span class="text-[11px] text-zinc-400">/ 30 Days (Just ₹63/meal)</span>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <button onclick="handleAddPlanToCart('plan-dinner')" class="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black rounded-xl text-xs transition shadow-lg flex items-center gap-1.5 cursor-pointer">
+                      <span>Subscribe Dinner (₹1,900)</span>
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
+                    <button onclick="openDinnerPosterModal()" class="px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-bold rounded-xl text-xs transition border border-zinc-700 cursor-pointer">
+                      🔍 Expand Flyer
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
           <!-- ==================== MONTHLY SUBSCRIBERS'S MENU (SEPTEMBER 2026) ==================== -->
-          <div id="monthly-menu-section" class="mt-16 pt-16 border-t border-zinc-100">
-            <div class="bg-gradient-to-b from-amber-50/60 via-white to-white rounded-3xl p-6 sm:p-10 border border-amber-200/70 shadow-xl">
+          <div id="monthly-menu-section" class="mt-5 pt-5 border-t border-zinc-100">
+            <div class="bg-gradient-to-b from-amber-50/60 via-white to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-amber-200/70 shadow-lg">
               
               <!-- Header -->
-              <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400 text-zinc-950 text-xs font-black uppercase tracking-wider mb-3 shadow-sm">
+              <div class="text-center max-w-3xl mx-auto mb-3.5 sm:mb-4">
+                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-400 text-zinc-950 text-[11px] font-black uppercase tracking-wider mb-1.5 shadow-sm">
                   <span>✨ Official Subscription Schedules</span>
                 </div>
-                <h3 class="text-2xl sm:text-4xl font-black text-zinc-950 font-heading">
-                  Monthly Subscribers Menu
+                <h3 class="text-xl sm:text-2xl font-black text-zinc-950 font-heading">
+                  Daily Subscriber Menu Schedules
                 </h3>
-                <div id="monthly-menu-badge" class="inline-block bg-zinc-950 text-amber-300 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full mt-2">
-                  September 2026 • Breakfast & Lunch Rotation
+                <div id="monthly-menu-badge" class="inline-block bg-zinc-950 text-amber-300 font-bold text-xs sm:text-sm px-3.5 py-0.5 rounded-full mt-1">
+                  September 2026 • Night Dinner Monthly Subscription Menu (7:30 PM - 9:00 PM)
                 </div>
-                <p id="monthly-menu-subtitle" class="text-zinc-500 text-xs sm:text-sm mt-2.5">
-                  Published daily meal rotation followed throughout September for all subscribers.
+                <p id="monthly-menu-subtitle" class="text-zinc-500 text-xs sm:text-sm mt-1">
+                  15-Day published dinner rotation with choice of Chapati or Regular Roti (Repeats Sep 16 - 30).
                 </p>
               </div>
 
-              <!-- Main Mode Switcher: Breakfast vs Lunch -->
-              <div class="flex justify-center mb-6">
-                <div class="w-full sm:w-auto max-w-md grid grid-cols-2 p-1.5 bg-zinc-900 rounded-2xl shadow-lg border border-zinc-800">
-                  <button id="tab-meal-breakfast" onclick="switchSubscriberMealType('breakfast')" class="w-full text-center py-3 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
-                    🍳 Morning Breakfast
+              <!-- Main Mode Switcher: Breakfast vs Lunch vs Night Dinner -->
+              <div class="flex justify-center mb-3.5">
+                <div class="w-full sm:w-auto max-w-lg grid grid-cols-3 p-1 bg-zinc-900 rounded-xl shadow border border-zinc-800">
+                  <button id="tab-meal-dinner" onclick="switchSubscriberMealType('dinner')" class="w-full text-center py-2 px-2 sm:px-4 rounded-lg font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
+                    🌙 Night Dinner
                   </button>
-                  <button id="tab-meal-lunch" onclick="switchSubscriberMealType('lunch')" class="w-full text-center py-3 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer">
-                    🍛 Afternoon Lunch
+                  <button id="tab-meal-breakfast" onclick="switchSubscriberMealType('breakfast')" class="w-full text-center py-2 px-2 sm:px-4 rounded-lg font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer">
+                    🍳 Breakfast
+                  </button>
+                  <button id="tab-meal-lunch" onclick="switchSubscriberMealType('lunch')" class="w-full text-center py-2 px-2 sm:px-4 rounded-lg font-bold text-xs sm:text-sm transition-all text-zinc-400 hover:text-white cursor-pointer">
+                    🍛 Lunch
                   </button>
                 </div>
               </div>
 
               <!-- Sub-tabs for Lunch (Week 1 & Week 2) - Only visible when Lunch is selected -->
-              <div id="lunch-week-selector" class="hidden justify-center mb-6 sm:mb-8">
-                <div class="w-full sm:w-auto max-w-sm grid grid-cols-2 p-1 sm:p-1.5 bg-zinc-100 rounded-2xl border border-zinc-200 shadow-inner">
-                  <button id="tab-week-1" onclick="switchSubscriberMenuWeek(1)" class="w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
+              <div id="lunch-week-selector" class="hidden justify-center mb-3.5">
+                <div class="w-full sm:w-auto max-w-sm grid grid-cols-2 p-1 bg-zinc-100 rounded-xl border border-zinc-200 shadow-inner">
+                  <button id="tab-week-1" onclick="switchSubscriberMenuWeek(1)" class="w-full text-center py-1.5 px-3 sm:px-5 rounded-lg font-extrabold text-xs sm:text-sm transition-all shadow bg-amber-400 text-zinc-950 cursor-pointer">
                     📅 Week 1 <span class="hidden sm:inline">(1 - 7 Sep)</span>
                   </button>
-                  <button id="tab-week-2" onclick="switchSubscriberMenuWeek(2)" class="w-full text-center py-2.5 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer">
+                  <button id="tab-week-2" onclick="switchSubscriberMenuWeek(2)" class="w-full text-center py-1.5 px-3 sm:px-5 rounded-lg font-bold text-xs sm:text-sm transition-all text-zinc-600 hover:text-zinc-950 cursor-pointer">
                     📅 Week 2 <span class="hidden sm:inline">(8 - 15 Sep)</span>
                   </button>
                 </div>
               </div>
 
+              <!-- Sub-banner for Dinner - Only visible when Dinner is selected -->
+              <div id="dinner-view-selector" class="flex justify-center items-center flex-wrap gap-2.5 mb-3.5">
+                <div class="bg-amber-100/90 border border-amber-300 text-amber-950 px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
+                  <span>🥖 Choice: <strong>Chapati or Regular Roti</strong></span>
+                  <span class="text-amber-400 font-black">•</span>
+                  <span>🔄 15-Day Menu Repeated from Sep 16 - 30</span>
+                </div>
+                <button onclick="openDinnerPosterModal()" class="px-3.5 py-1.5 bg-zinc-950 hover:bg-zinc-800 text-amber-400 border border-amber-400/40 rounded-xl text-xs font-black transition shadow flex items-center gap-1.5 cursor-pointer">
+                  <span>📜 View Official Menu Poster</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </button>
+              </div>
+
               <!-- Menu Days Grid Container -->
-              <div id="subscribers-menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              <div id="subscribers-menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 <!-- Dynamically populated by renderMonthlySubscribersMenu() -->
               </div>
 
               <!-- Commitment Assurance Card -->
-              <div class="mt-8 bg-zinc-950 text-white rounded-2xl p-5 sm:p-6 border border-zinc-800 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-                <div class="w-12 h-12 rounded-2xl bg-amber-400 text-zinc-950 flex items-center justify-center text-2xl flex-shrink-0 font-black">
+              <div class="mt-4 bg-zinc-950 text-white rounded-xl p-3.5 sm:p-4 border border-zinc-800 flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                <div class="w-8 h-8 rounded-xl bg-amber-400 text-zinc-950 flex items-center justify-center text-lg flex-shrink-0 font-black">
                   ⭐
                 </div>
                 <div class="flex-1 text-center sm:text-left">
-                  <h4 class="text-sm font-extrabold text-amber-300 uppercase tracking-wide">Our Authentic Tradition & Quality Assurance</h4>
-                  <p id="menu-commitment-text" class="text-zinc-300 text-xs leading-relaxed mt-1">
+                  <h4 class="text-xs sm:text-sm font-extrabold text-amber-300 uppercase tracking-wide">Our Authentic Tradition & Quality Assurance</h4>
+                  <p id="menu-commitment-text" class="text-zinc-300 text-xs leading-relaxed mt-0.5">
                     "This weekly breakfast menu will be followed throughout September with pure ghee and authentic Rayalaseema recipes. Your trust and continued support mean a great deal to us."
                   </p>
-                  <span class="text-[11px] text-zinc-400 font-semibold block mt-1">The Rayalaseema Cloud Kitchen | Where Spice Meets Tradition.</span>
+                  <span class="text-[10px] text-zinc-400 font-semibold block mt-0.5">The Rayalaseema Cloud Kitchen | Where Spice Meets Tradition.</span>
                 </div>
-                <button onclick="navigateTo('account'); switchAccountTab('plans');" class="px-5 py-3 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer whitespace-nowrap">
+                <button onclick="navigateTo('account'); switchAccountTab('plans');" class="px-3.5 py-2 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer whitespace-nowrap">
                   Subscribe / Manage Plan →
                 </button>
               </div>
@@ -624,28 +795,28 @@
       </section>
 
       <!-- CATERING & WHOLESALE SPOTLIGHT SECTION -->
-      <section id="catering-section" class="py-16 bg-[#FAFAFA]">
+      <section id="catering-section" class="py-5 sm:py-6 bg-[#FAFAFA]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="bg-zinc-950 text-white rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <div class="lg:col-span-8 space-y-4">
+          <div class="bg-zinc-950 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-center">
+              <div class="lg:col-span-8 space-y-2.5">
                 <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">B2B & Event Solutions</span>
-                <h2 class="text-3xl sm:text-4xl font-black font-heading">Corporate Catering & Bulk Meal Supply</h2>
-                <p class="text-zinc-400 text-sm leading-relaxed max-w-2xl">
+                <h2 class="text-2xl sm:text-3xl font-black font-heading">Corporate Catering & Bulk Meal Supply</h2>
+                <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed max-w-2xl">
                   Customized live counters, individual executive lunch boxes, and wholesale meal supply for IT companies, team parties, and private family gatherings.
                 </p>
-                <div class="flex flex-wrap gap-4 pt-2">
-                  <button onclick="openEnquiryModal('Corporate Catering & Event Supply')" class="px-6 py-3.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-xl text-sm transition shadow cursor-pointer">
+                <div class="flex flex-wrap gap-2.5 pt-0.5">
+                  <button onclick="openEnquiryModal('Corporate Catering & Event Supply')" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-xl text-xs sm:text-sm transition shadow cursor-pointer">
                     Request Custom Catering Quote
                   </button>
-                  <button onclick="navigateTo('services')" class="px-6 py-3.5 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-xl text-sm transition cursor-pointer">
+                  <button onclick="navigateTo('services')" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition cursor-pointer">
                     View All B2B Services
                   </button>
                 </div>
               </div>
-              <div class="lg:col-span-4 bg-zinc-900 p-6 rounded-2xl border border-zinc-800 space-y-3">
+              <div class="lg:col-span-4 bg-zinc-900 p-4 rounded-xl border border-zinc-800 space-y-2">
                 <div class="text-xs font-bold text-amber-400 uppercase">Catering Highlights</div>
-                <div class="text-xs text-zinc-300 space-y-2">
+                <div class="text-xs text-zinc-300 space-y-1">
                   <div>✓ Capacity: 20 to 2,000+ plates</div>
                   <div>✓ Hygienic insulated hot boxes</div>
                   <div>✓ Dedicated on-site service staff</div>
@@ -658,15 +829,15 @@
       </section>
 
       <!-- TESTIMONIALS SECTION -->
-      <section id="reviews-section" class="py-16 bg-white border-t border-zinc-100">
+      <section id="reviews-section" class="py-5 sm:py-6 bg-white border-t border-zinc-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-2">Customer Feedback</span>
-            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">What Our Customers Say</h2>
-            <p class="text-zinc-500 text-sm mt-2">Real reviews from professionals and teams enjoying our daily cloud kitchen meals.</p>
+          <div class="text-center max-w-2xl mx-auto mb-4 sm:mb-5">
+            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-0.5">Customer Feedback</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">What Our Customers Say</h2>
+            <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Real reviews from professionals and teams enjoying our daily cloud kitchen meals.</p>
           </div>
 
-          <div id="testimonials-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div id="testimonials-container" class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-5">
             <!-- Dynamically populated -->
           </div>
         </div>
@@ -676,31 +847,31 @@
 
 
     <!-- ==================== VIEW: ABOUT US ==================== -->
-    <section id="view-about" class="view-panel hidden py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="view-about" class="view-panel hidden py-4 sm:py-5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
 
         <!-- Hero Header -->
-        <div class="relative rounded-3xl bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 text-zinc-950 p-8 sm:p-14 overflow-hidden shadow-2xl">
+        <div class="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 text-zinc-950 p-4 sm:p-6 overflow-hidden shadow-lg">
           <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none">
-            <img src="images/logo.png" alt="Rayalaseema Fort Badge" class="w-96 h-96 object-contain" />
+            <img src="images/logo.png" alt="Rayalaseema Fort Badge" class="w-80 h-80 object-contain" />
           </div>
-          <div class="relative max-w-3xl space-y-5">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-950/10 border border-zinc-950/20 text-zinc-950 text-xs font-black tracking-wider uppercase">
+          <div class="relative max-w-3xl space-y-3">
+            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-zinc-950/10 border border-zinc-950/20 text-zinc-950 text-[11px] font-black tracking-wider uppercase">
               <span>🏰</span>
               <span>Where Spice Meets Tradition • Central Cloud Kitchen</span>
             </div>
-            <h1 class="text-3xl sm:text-5xl font-black font-heading tracking-tight leading-tight text-zinc-950">
+            <h1 class="text-2xl sm:text-3xl font-black font-heading tracking-tight leading-tight text-zinc-950">
               Honoring Centuries of Rayalaseema Culinary Heritage
             </h1>
-            <p class="text-zinc-900 text-base sm:text-lg font-medium leading-relaxed">
+            <p class="text-zinc-900 text-xs sm:text-sm font-medium leading-relaxed">
               Born from the historic soil of Kurnool, Kadapa, Anantapur, and Chittoor, <span class="font-bold">The Rayalaseema Cloud Kitchen</span> brings authentic ancestral recipes, slow-simmered gravies, and stone-ground spices directly to your office desk and dining table.
             </p>
-            <div class="flex flex-wrap gap-4 pt-2">
-              <button onclick="navigateTo('categories')" class="px-6 py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white font-extrabold rounded-xl text-sm transition shadow-lg flex items-center gap-2 cursor-pointer">
+            <div class="flex flex-wrap gap-2.5 pt-0.5">
+              <button onclick="navigateTo('categories')" class="px-4 py-2.5 bg-zinc-950 hover:bg-zinc-800 text-white font-extrabold rounded-xl text-xs sm:text-sm transition shadow-lg flex items-center gap-2 cursor-pointer">
                 <span>Explore Daily Meals Menu</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
               </button>
-              <button onclick="navigateTo('services')" class="px-6 py-3.5 bg-white/90 hover:bg-white text-zinc-950 font-extrabold rounded-xl text-sm transition shadow border border-amber-300 cursor-pointer">
+              <button onclick="navigateTo('services')" class="px-4 py-2.5 bg-white/90 hover:bg-white text-zinc-950 font-extrabold rounded-xl text-xs sm:text-sm transition shadow border border-amber-300 cursor-pointer">
                 <span>Our Catering & Wholesale</span>
               </button>
             </div>
@@ -708,61 +879,61 @@
         </div>
 
         <!-- Heritage Story & Emblem Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div class="lg:col-span-7 space-y-6">
-            <div class="inline-flex items-center gap-2 text-xs font-black text-amber-600 uppercase tracking-widest">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
+          <div class="lg:col-span-7 space-y-3">
+            <div class="inline-flex items-center gap-1.5 text-xs font-black text-amber-600 uppercase tracking-widest">
               <span>🌾</span>
               <span>Our Roots & Philosophy</span>
             </div>
-            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">
+            <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">
               The Legend of Kondareddy Fort & Royal Rayalaseema Flavors
             </h2>
-            <p class="text-zinc-600 text-sm leading-relaxed">
+            <p class="text-zinc-600 text-xs sm:text-sm leading-relaxed">
               Rayalaseema is legendary for its bold fortitude and unmatched gastronomic pride. For generations, traditional Rayalaseema kitchens have celebrated rustic, slow-simmered dishes cooked over low flames in earthenware pots with cold-pressed groundnut oil, freshly roasted cumin, curry leaves, and sun-dried Guntur red chillies.
             </p>
-            <p class="text-zinc-600 text-sm leading-relaxed">
+            <p class="text-zinc-600 text-xs sm:text-sm leading-relaxed">
               In an age of ultra-processed food and generic takeaway boxes, <span class="font-semibold text-zinc-900">The Rayalaseema Cloud Kitchen</span> was founded to restore real homestyle nourishment. Every sunrise at 5:00 AM, our master cooks start freshly boiling authentic lentils, stone-grinding secret spice blends, and slow-braising tender country meats.
             </p>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-              <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
-                <span class="text-2xl font-black text-amber-700 block font-heading">100%</span>
-                <span class="text-xs font-bold text-zinc-700">Cold-Pressed Oils & Pure Ghee</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-0.5">
+              <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+                <span class="text-lg font-black text-amber-700 block font-heading">100%</span>
+                <span class="text-[10px] font-bold text-zinc-700">Cold-Pressed Oils & Pure Ghee</span>
               </div>
-              <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200">
-                <span class="text-2xl font-black text-emerald-700 block font-heading">Zero</span>
-                <span class="text-xs font-bold text-zinc-700">Artificial Flavors or Colors</span>
+              <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                <span class="text-lg font-black text-emerald-700 block font-heading">Zero</span>
+                <span class="text-[10px] font-bold text-zinc-700">Artificial Flavors or Colors</span>
               </div>
-              <div class="p-4 rounded-2xl bg-zinc-100 border border-zinc-200">
-                <span class="text-2xl font-black text-zinc-900 block font-heading">5:00 AM</span>
-                <span class="text-xs font-bold text-zinc-700">Daily Morning Fresh Batches</span>
+              <div class="p-3 rounded-xl bg-zinc-100 border border-zinc-200">
+                <span class="text-lg font-black text-zinc-900 block font-heading">5:00 AM</span>
+                <span class="text-[10px] font-bold text-zinc-700">Daily Morning Fresh Batches</span>
               </div>
             </div>
           </div>
 
           <div class="lg:col-span-5">
-            <div class="bg-zinc-950 text-white rounded-3xl p-6 sm:p-8 border border-zinc-800 shadow-xl relative overflow-hidden text-center">
-              <div class="w-32 h-32 sm:w-36 sm:h-36 mx-auto rounded-full bg-white p-2 border-2 border-amber-400 mb-6 shadow-inner flex items-center justify-center">
+            <div class="bg-zinc-950 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-zinc-800 shadow-xl relative overflow-hidden text-center">
+              <div class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-full bg-white p-1.5 border-2 border-amber-400 mb-3 shadow-inner flex items-center justify-center">
                 <img src="images/logo.png" alt="Rayalaseema Emblem" class="w-full h-full object-contain rounded-full" />
               </div>
-              <h3 class="text-xl font-black font-heading text-white">The Rayalaseema Cloud Kitchen</h3>
-              <p class="text-amber-400 text-xs font-bold tracking-widest uppercase mt-1">"Where Spice Meets Tradition"</p>
-              <div class="my-6 border-t border-zinc-800"></div>
-              <div class="grid grid-cols-2 gap-4 text-left text-xs">
-                <div class="space-y-1">
-                  <span class="text-zinc-400 block font-medium">Headquarters</span>
+              <h3 class="text-base sm:text-lg font-black font-heading text-white">The Rayalaseema Cloud Kitchen</h3>
+              <p class="text-amber-400 text-[11px] font-bold tracking-widest uppercase mt-0.5">"Where Spice Meets Tradition"</p>
+              <div class="my-3 border-t border-zinc-800"></div>
+              <div class="grid grid-cols-2 gap-2.5 text-left text-xs">
+                <div class="space-y-0.5">
+                  <span class="text-zinc-400 block font-medium text-[10px]">Headquarters</span>
                   <span class="text-white font-bold block">Hitec City, Hyderabad</span>
                 </div>
-                <div class="space-y-1">
-                  <span class="text-zinc-400 block font-medium">Culinary Heritage</span>
+                <div class="space-y-0.5">
+                  <span class="text-zinc-400 block font-medium text-[10px]">Culinary Heritage</span>
                   <span class="text-white font-bold block">Kurnool & Kadapa</span>
                 </div>
-                <div class="space-y-1">
-                  <span class="text-zinc-400 block font-medium">Certification</span>
+                <div class="space-y-0.5">
+                  <span class="text-zinc-400 block font-medium text-[10px]">Certification</span>
                   <span class="text-emerald-400 font-bold block">FSSAI Grade-A Certified</span>
                 </div>
-                <div class="space-y-1">
-                  <span class="text-zinc-400 block font-medium">Daily Capacity</span>
+                <div class="space-y-0.5">
+                  <span class="text-zinc-400 block font-medium text-[10px]">Daily Capacity</span>
                   <span class="text-amber-400 font-bold block">5,000+ Fresh Meals</span>
                 </div>
               </div>
@@ -771,146 +942,91 @@
         </div>
 
         <!-- 4 Pillars of Excellence -->
-        <div class="space-y-8">
+        <div class="space-y-4">
           <div class="text-center max-w-2xl mx-auto">
-            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-2">Our Quality Creed</span>
-            <h2 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">The 4 Pillars of Rayalaseema Kitchen</h2>
-            <p class="text-zinc-500 text-sm mt-2">Every meal served upholds our non-negotiable promises of purity, health, and authentic taste.</p>
+            <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-0.5">Our Quality Creed</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">The 4 Pillars of Rayalaseema Kitchen</h2>
+            <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Every meal served upholds our non-negotiable promises of purity, health, and authentic taste.</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
-              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">🪔</div>
-              <h3 class="text-lg font-black text-zinc-900 mb-2">Cold-Pressed Oils & Ghee</h3>
-              <p class="text-zinc-600 text-xs leading-relaxed">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+            <div class="p-4 bg-white rounded-2xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition duration-300">🪔</div>
+              <h3 class="text-sm font-black text-zinc-900 mb-1">Cold-Pressed Oils & Ghee</h3>
+              <p class="text-zinc-600 text-[11px] leading-relaxed">
                 We strictly use cold-pressed groundnut oil, sesame oil, and authentic cow ghee. Zero palm oil, zero trans fats, and zero reused oils.
               </p>
             </div>
 
-            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
-              <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">🌶️</div>
-              <h3 class="text-lg font-black text-zinc-900 mb-2">Hand-Pounded Spices</h3>
-              <p class="text-zinc-600 text-xs leading-relaxed">
+            <div class="p-4 bg-white rounded-2xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-9 h-9 rounded-xl bg-red-100 text-red-700 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition duration-300">🌶️</div>
+              <h3 class="text-sm font-black text-zinc-900 mb-1">Hand-Pounded Spices</h3>
+              <p class="text-zinc-600 text-[11px] leading-relaxed">
                 Sun-dried Guntur chillies, authentic Kandi Podi gunpowder, turmeric roots, and roasted coriander crushed fresh every single morning.
               </p>
             </div>
 
-            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
-              <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">🌱</div>
-              <h3 class="text-lg font-black text-zinc-900 mb-2">Farm-To-Pot Freshness</h3>
-              <p class="text-zinc-600 text-xs leading-relaxed">
+            <div class="p-4 bg-white rounded-2xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition duration-300">🌱</div>
+              <h3 class="text-sm font-black text-zinc-900 mb-1">Farm-To-Pot Freshness</h3>
+              <p class="text-zinc-600 text-[11px] leading-relaxed">
                 Fresh seasonal vegetables, leafy greens, and certified fresh tender meats sourced daily directly from regional farmers and ethical partners.
               </p>
             </div>
 
-            <div class="p-6 bg-white rounded-3xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
-              <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition duration-300">📦</div>
-              <h3 class="text-lg font-black text-zinc-900 mb-2">Thermal Hot Delivery</h3>
-              <p class="text-zinc-600 text-xs leading-relaxed">
+            <div class="p-4 bg-white rounded-2xl border border-zinc-200/80 shadow-sm hover:shadow-md transition group">
+              <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg mb-2.5 group-hover:scale-110 transition duration-300">📦</div>
+              <h3 class="text-sm font-black text-zinc-900 mb-1">Thermal Hot Delivery</h3>
+              <p class="text-zinc-600 text-[11px] leading-relaxed">
                 Packed in 100% food-grade, leak-proof tamper-evident meal trays and dispatched in insulated thermal carriers for piping hot desk delivery.
               </p>
             </div>
           </div>
         </div>
 
-        <!-- Daily Kitchen Timeline -->
-        <div class="bg-amber-50/70 border border-amber-200/80 rounded-3xl p-8 sm:p-12 space-y-8">
-          <div class="text-center max-w-2xl mx-auto">
-            <span class="text-xs font-black text-amber-700 uppercase tracking-widest block mb-1">Our Morning Routine</span>
-            <h2 class="text-3xl font-black font-heading text-zinc-950">A Day in Our Central Cloud Kitchen</h2>
-            <p class="text-zinc-600 text-xs sm:text-sm mt-1">From fresh farm arrivals at sunrise to hot delivery at your workstation.</p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm space-y-2 text-center">
-              <span class="text-xs font-black px-2.5 py-1 bg-amber-400 text-zinc-950 rounded-full inline-block">4:30 AM</span>
-              <h4 class="font-bold text-sm text-zinc-900">Farm Sourcing</h4>
-              <p class="text-zinc-500 text-xs">Fresh vegetables, country greens, herbs, and meats arrive directly from regional farms.</p>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm space-y-2 text-center">
-              <span class="text-xs font-black px-2.5 py-1 bg-amber-400 text-zinc-950 rounded-full inline-block">5:30 AM</span>
-              <h4 class="font-bold text-sm text-zinc-900">Slow Fire Cooking</h4>
-              <p class="text-zinc-500 text-xs">Lentils are boiled, spices stone-ground, and signature curries slow-simmered in pure ghee.</p>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm space-y-2 text-center">
-              <span class="text-xs font-black px-2.5 py-1 bg-amber-400 text-zinc-950 rounded-full inline-block">10:45 AM</span>
-              <h4 class="font-bold text-sm text-zinc-900">Touchless Sealing</h4>
-              <p class="text-zinc-500 text-xs">Automated packaging in spill-proof, microwave-safe, tamper-evident food trays.</p>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm space-y-2 text-center">
-              <span class="text-xs font-black px-2.5 py-1 bg-amber-400 text-zinc-950 rounded-full inline-block">12:30 PM</span>
-              <h4 class="font-bold text-sm text-zinc-900">Piping Hot Delivery</h4>
-              <p class="text-zinc-500 text-xs">Dispatched in thermal insulated bags straight to your office desk or home.</p>
-            </div>
-          </div>
-        </div>
-
         <!-- Kitchen Hygiene & Safety Standards -->
-        <div class="bg-zinc-900 text-white rounded-3xl p-8 sm:p-12 border border-zinc-800">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div class="space-y-4">
+        <div class="bg-zinc-900 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-zinc-800">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-center">
+            <div class="space-y-2.5">
               <span class="text-xs font-black text-amber-400 uppercase tracking-widest block">World-Class Standards</span>
-              <h2 class="text-3xl font-black font-heading text-white">Central Cloud Kitchen Hygiene & Food Safety</h2>
+              <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Central Cloud Kitchen Hygiene & Safety</h2>
               <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed">
                 Our central kitchen in Hitec City operates under strict GMP (Good Manufacturing Practices) and ISO-aligned food safety protocols:
               </p>
-              <ul class="space-y-2.5 text-xs text-zinc-300 pt-2">
-                <li class="flex items-center gap-2.5">
-                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+              <ul class="space-y-1.5 text-xs text-zinc-300 pt-0.5">
+                <li class="flex items-center gap-2">
+                  <span class="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-bold">✓</span>
                   <span>Triple-Stage RO Water Purification for all cooking, boiling, and washing</span>
                 </li>
-                <li class="flex items-center gap-2.5">
-                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+                <li class="flex items-center gap-2">
+                  <span class="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-bold">✓</span>
                   <span>Daily Health & Temperature Checks for 100% of kitchen staff & chefs</span>
                 </li>
-                <li class="flex items-center gap-2.5">
-                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+                <li class="flex items-center gap-2">
+                  <span class="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-bold">✓</span>
                   <span>Touchless, Automated Tray Sealing to guarantee zero contamination</span>
-                </li>
-                <li class="flex items-center gap-2.5">
-                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
-                  <span>Daily Micro-Batch Quality Testing with strict spice & salt calibration</span>
                 </li>
               </ul>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
-                <span class="text-3xl font-black text-amber-400 font-heading block mb-1">150K+</span>
-                <span class="text-xs text-zinc-300 font-semibold">Meals Prepared & Delivered</span>
+            <div class="grid grid-cols-2 gap-2.5">
+              <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 text-center">
+                <span class="text-xl font-black text-amber-400 font-heading block">150K+</span>
+                <span class="text-[10px] text-zinc-300 font-semibold">Meals Delivered</span>
               </div>
-              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
-                <span class="text-3xl font-black text-emerald-400 font-heading block mb-1">45+</span>
-                <span class="text-xs text-zinc-300 font-semibold">Corporate IT Tech Parks</span>
+              <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 text-center">
+                <span class="text-xl font-black text-emerald-400 font-heading block">45+</span>
+                <span class="text-[10px] text-zinc-300 font-semibold">IT Tech Parks</span>
               </div>
-              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
-                <span class="text-3xl font-black text-amber-400 font-heading block mb-1">4.9 ★</span>
-                <span class="text-xs text-zinc-300 font-semibold">Customer Happiness Rating</span>
+              <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 text-center">
+                <span class="text-xl font-black text-amber-400 font-heading block">4.9 ★</span>
+                <span class="text-[10px] text-zinc-300 font-semibold">Customer Rating</span>
               </div>
-              <div class="bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 text-center">
-                <span class="text-3xl font-black text-emerald-400 font-heading block mb-1">100%</span>
-                <span class="text-xs text-zinc-300 font-semibold">On-Time Lunch Guarantee</span>
+              <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 text-center">
+                <span class="text-xl font-black text-emerald-400 font-heading block">100%</span>
+                <span class="text-[10px] text-zinc-300 font-semibold">On-Time Guarantee</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- CTA Banner -->
-        <div class="rounded-3xl bg-amber-400 text-zinc-950 p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-          <div class="space-y-1 text-center sm:text-left">
-            <h3 class="text-2xl sm:text-3xl font-black font-heading">Ready to Experience True Rayalaseema Flavor?</h3>
-            <p class="text-zinc-800 text-xs sm:text-sm font-medium">Order individual meals today or choose our flexible monthly corporate meal plans.</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <button onclick="navigateTo('categories')" class="px-6 py-3.5 bg-zinc-950 hover:bg-zinc-800 text-white font-black rounded-xl text-xs sm:text-sm transition shadow-md cursor-pointer">
-              Order Meals Now
-            </button>
-            <button onclick="navigateTo('trial-banner')" class="px-6 py-3.5 bg-white hover:bg-zinc-50 text-zinc-950 font-black rounded-xl text-xs sm:text-sm transition shadow-md border border-amber-500/40 cursor-pointer">
-              10-Day Trial
-            </button>
           </div>
         </div>
 
@@ -919,55 +1035,70 @@
 
 
     <!-- ==================== VIEW 2: OUR MEALS / CATEGORIES ==================== -->
-    <section id="view-categories" class="view-panel hidden py-10">
+    <section id="view-categories" class="view-panel hidden py-4 sm:py-5">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-3.5 sm:mb-4">
           <div>
-            <h1 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">Our Chef-Curated Meals</h1>
-            <p class="text-zinc-500 text-sm mt-1">Order individual meals directly with "Buy Now" or add multiple items to your cart.</p>
+            <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">Our Chef-Curated Meals</h1>
+            <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Order individual meals directly with "Buy Now" or add multiple items to your cart.</p>
           </div>
           
           <!-- Search box -->
-          <div class="mt-4 md:mt-0 relative w-full md:w-72">
-            <input type="text" id="product-search-input" oninput="handleSearchInput(event)" placeholder="Search meals by name or ingredient..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400 shadow-sm" />
-            <svg class="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <div class="mt-2.5 md:mt-0 relative w-full md:w-72">
+            <input type="text" id="product-search-input" oninput="handleSearchInput(event)" placeholder="Search meals by name or ingredient..." class="w-full pl-9 pr-3.5 py-1.5 bg-white border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400 shadow-sm" />
+            <svg class="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
         </div>
 
-        <!-- Filter Tabs for Official Menu Card Categories (Horizontal Touch-Scrollable on Mobile) -->
-        <div class="overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 pb-3 mb-6 border-b border-zinc-200/80">
-          <div class="flex items-center gap-2 w-max">
-            <button onclick="setCategoryFilter('all')" data-category="all" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-zinc-900 text-amber-400 border-zinc-900 shadow-sm cursor-pointer whitespace-nowrap">
+        <!-- September Dinner Menu Flyer Banner -->
+        <div class="mb-4 bg-gradient-to-r from-amber-950 via-zinc-900 to-zinc-950 text-white rounded-2xl p-3.5 sm:p-4 border border-amber-400/60 shadow flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <img src="images/dinner-menu-september.png" alt="Dinner Menu Poster" class="w-11 h-14 object-cover rounded-lg border-2 border-amber-400 shadow-md cursor-pointer hover:scale-105 transition" onclick="openDinnerPosterModal()" />
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-wider text-amber-400 block">🌙 Official Kitchen Published Menu</span>
+              <h4 class="text-sm sm:text-base font-bold text-white leading-tight">September 2026 Night Dinner Monthly Subscription</h4>
+              <p class="text-[11px] text-zinc-300">Chapati or Regular Roti with daily Rayalaseema curries • ₹1,900 / month</p>
+            </div>
+          </div>
+          <button onclick="scrollToDinnerMenu(event)" class="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl shadow cursor-pointer whitespace-nowrap">
+            View Full Dinner Flyer & Schedule →
+          </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 mb-3.5 border-b border-zinc-200/80">
+          <div class="flex items-center gap-1.5 w-max">
+            <button onclick="setCategoryFilter('all')" data-category="all" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-zinc-900 text-amber-400 border-zinc-900 shadow-sm cursor-pointer whitespace-nowrap">
               All Dishes (22)
             </button>
-            <button onclick="setCategoryFilter('signature-dishes')" data-category="signature-dishes" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+            <button onclick="setCategoryFilter('signature-dishes')" data-category="signature-dishes" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
               👑 Signature Dishes (5)
             </button>
-            <button onclick="setCategoryFilter('bagara-rice')" data-category="bagara-rice" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+            <button onclick="setCategoryFilter('bagara-rice')" data-category="bagara-rice" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
               🍚 Bagara Rice (2)
             </button>
-            <button onclick="setCategoryFilter('special-curries')" data-category="special-curries" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-red-400 transition cursor-pointer whitespace-nowrap">
+            <button onclick="setCategoryFilter('special-curries')" data-category="special-curries" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-red-400 transition cursor-pointer whitespace-nowrap">
               🍗 Special Curries (3)
             </button>
-            <button onclick="setCategoryFilter('roti-specials')" data-category="roti-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer whitespace-nowrap">
+            <button onclick="setCategoryFilter('roti-specials')" data-category="roti-specials" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer whitespace-nowrap">
               🫓 Jonna Roti (2)
             </button>
-            <button onclick="setCategoryFilter('biryani-specials')" data-category="biryani-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+            <button onclick="setCategoryFilter('biryani-specials')" data-category="biryani-specials" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
               🥘 Biryani Specials (3)
             </button>
-            <button onclick="setCategoryFilter('paneer-specials')" data-category="paneer-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer whitespace-nowrap">
+            <button onclick="setCategoryFilter('paneer-specials')" data-category="paneer-specials" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-emerald-400 transition cursor-pointer whitespace-nowrap">
               🧀 Paneer & Dal (4)
             </button>
-            <button onclick="setCategoryFilter('rice-specials')" data-category="rice-specials" class="filter-tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
+            <button onclick="setCategoryFilter('rice-specials')" data-category="rice-specials" class="filter-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-zinc-200 bg-white text-zinc-700 hover:border-amber-400 transition cursor-pointer whitespace-nowrap">
               🍛 Rice Specials (3)
             </button>
           </div>
         </div>
 
-        <!-- Products Grid with Buy Now & Add to Cart -->
-        <div id="categories-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Products Grid -->
+        <div id="categories-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-5">
           <!-- Dynamically populated -->
         </div>
 
@@ -976,16 +1107,16 @@
 
 
     <!-- ==================== VIEW 3: OUR SERVICES ==================== -->
-    <section id="view-services" class="view-panel hidden py-10">
+    <section id="view-services" class="view-panel hidden py-4 sm:py-5">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="text-center max-w-2xl mx-auto mb-12">
-          <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-2">B2B & Tailored Catering</span>
-          <h1 class="text-3xl sm:text-4xl font-black text-zinc-950 font-heading">Our Cloud Kitchen Services</h1>
-          <p class="text-zinc-500 text-sm mt-2">Comprehensive meal supply and custom catering solutions for companies, events, and individuals.</p>
+        <div class="text-center max-w-2xl mx-auto mb-4 sm:mb-5">
+          <span class="text-xs font-extrabold text-amber-600 uppercase tracking-widest block mb-0.5">B2B & Tailored Catering</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">Our Cloud Kitchen Services</h1>
+          <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Comprehensive meal supply and custom catering solutions for companies, events, and individuals.</p>
         </div>
 
-        <div id="services-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div id="services-grid-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <!-- Dynamically populated -->
         </div>
 
@@ -994,33 +1125,33 @@
 
 
     <!-- ==================== VIEW 4: SHOPPING CART ==================== -->
-    <section id="view-cart" class="view-panel hidden py-10">
+    <section id="view-cart" class="view-panel hidden py-4 sm:py-5">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="mb-8">
-          <h1 class="text-3xl font-black text-zinc-950 font-heading">Your Shopping Cart</h1>
-          <p class="text-zinc-500 text-sm mt-1">Review your selected meals and proceed to fast checkout.</p>
+        <div class="mb-3.5 sm:mb-4">
+          <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading">Your Shopping Cart</h1>
+          <p class="text-zinc-500 text-xs sm:text-sm mt-0.5">Review your selected meals and proceed to fast checkout.</p>
         </div>
 
         <!-- Empty Cart State -->
-        <div id="cart-empty-state" class="hidden bg-white rounded-3xl p-12 text-center border border-zinc-100 shadow-sm max-w-lg mx-auto">
-          <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+        <div id="cart-empty-state" class="hidden bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center border border-zinc-100 shadow-sm max-w-lg mx-auto">
+          <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-2.5 text-2xl">
             🥣
           </div>
-          <h2 class="text-2xl font-bold text-zinc-900 mb-2">Your cart is empty</h2>
-          <p class="text-zinc-500 text-sm mb-6 leading-relaxed">Looks like you haven't added any fresh meals to your cart yet. Explore our signature meals today!</p>
-          <button onclick="navigateTo('categories')" class="px-8 py-3.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-2xl text-sm transition shadow-md inline-flex items-center gap-2 cursor-pointer">
+          <h2 class="text-lg sm:text-xl font-bold text-zinc-900 mb-1">Your cart is empty</h2>
+          <p class="text-zinc-500 text-xs sm:text-sm mb-4 leading-relaxed">Looks like you haven't added any fresh meals to your cart yet. Explore our signature meals today!</p>
+          <button onclick="navigateTo('categories')" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-xl text-xs sm:text-sm transition shadow-md inline-flex items-center gap-2 cursor-pointer">
             Explore Menu Meals →
           </button>
         </div>
 
         <!-- Active Cart Layout -->
-        <div id="cart-content-wrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div id="cart-content-wrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-5">
           
           <!-- Left: Cart Items List -->
-          <div class="lg:col-span-7 bg-white rounded-3xl p-6 border border-zinc-100 shadow-sm">
-            <div class="flex items-center justify-between pb-4 border-b border-zinc-100 mb-2">
-              <span class="text-sm font-bold text-zinc-700">Order Items</span>
+          <div class="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-zinc-100 shadow-sm">
+            <div class="flex items-center justify-between pb-2.5 border-b border-zinc-100 mb-2">
+              <span class="text-xs sm:text-sm font-bold text-zinc-700">Order Items</span>
               <button onclick="app.clearCart()" class="text-xs text-red-500 hover:text-red-700 font-semibold">Clear All</button>
             </div>
             
@@ -1040,70 +1171,70 @@
     </section>
 
 
-    <!-- ==================== VIEW 5: USER ACCOUNT & SETTINGS (WITH MY ORDERS) ==================== -->
-    <section id="view-account" class="view-panel hidden py-10">
+    <!-- ==================== VIEW 5: USER ACCOUNT & SETTINGS ==================== -->
+    <section id="view-account" class="view-panel hidden py-4 sm:py-5">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Logged In State: Full Account Dashboard with Sidebar Navigation -->
+        <!-- Logged In State -->
         <div id="account-dashboard-wrapper">
           
           <!-- Top Account Banner -->
-          <div class="bg-gradient-to-r from-zinc-950 via-zinc-900 to-amber-950 text-white rounded-3xl p-6 sm:p-8 mb-8 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div class="flex items-center gap-4">
-              <div id="account-banner-avatar" class="w-16 h-16 rounded-2xl bg-amber-400 text-zinc-950 font-black text-2xl flex items-center justify-center border-2 border-amber-300 shadow">
+          <div class="bg-gradient-to-r from-zinc-950 via-zinc-900 to-amber-950 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 mb-4 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5">
+            <div class="flex items-center gap-3">
+              <div id="account-banner-avatar" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-400 text-zinc-950 font-black text-lg flex items-center justify-center border-2 border-amber-300 shadow">
                 RK
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <h1 id="account-banner-name" class="text-2xl font-black font-heading text-white">Rahul Kumar</h1>
-                  <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold">Active Customer</span>
+                  <h1 id="account-banner-name" class="text-lg sm:text-xl font-black font-heading text-white">Rahul Kumar</h1>
+                  <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold">Active Customer</span>
                 </div>
-                <p id="account-banner-contact" class="text-xs text-zinc-400 mt-0.5">rahul.kumar@hitec-tech.com • +91 98765 43210</p>
+                <p id="account-banner-contact" class="text-[11px] text-zinc-400 mt-0.5">rahul.kumar@hitec-tech.com • +91 98765 43210</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-3">
-              <button onclick="navigateTo('categories')" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold text-xs rounded-xl transition shadow flex items-center gap-1.5 cursor-pointer">
+            <div class="flex items-center gap-2.5">
+              <button onclick="navigateTo('categories')" class="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold text-xs rounded-xl transition shadow flex items-center gap-1.5 cursor-pointer">
                 <span>Order New Meal</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
               </button>
             </div>
           </div>
 
           <!-- Main Account Hub Grid -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             
             <!-- Left Sidebar Navigation Tabs -->
-            <div class="lg:col-span-3 bg-white rounded-3xl p-4 border border-zinc-200/70 shadow-sm space-y-1.5 sticky top-24">
+            <div class="lg:col-span-3 bg-white rounded-2xl sm:rounded-3xl p-2.5 border border-zinc-200/70 shadow-sm space-y-1 sticky top-16">
               <button onclick="switchAccountTab('orders')" id="tab-nav-orders" class="account-nav-btn active">
-                <span class="text-base">📦</span>
+                <span class="text-sm">📦</span>
                 <span class="flex-1">My Orders</span>
-                <span id="account-orders-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-amber-400 text-zinc-950 font-extrabold">2</span>
+                <span id="account-orders-badge" class="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-400 text-zinc-950 font-extrabold">2</span>
               </button>
 
               <button onclick="switchAccountTab('profile')" id="tab-nav-profile" class="account-nav-btn">
-                <span class="text-base">👤</span>
+                <span class="text-sm">👤</span>
                 <span class="flex-1">Profile Details</span>
               </button>
 
               <button onclick="switchAccountTab('plans')" id="tab-nav-plans" class="account-nav-btn">
-                <span class="text-base">🥣</span>
+                <span class="text-sm">🥣</span>
                 <span class="flex-1">My Subscription</span>
               </button>
 
               <button onclick="switchAccountTab('pause')" id="tab-nav-pause" class="account-nav-btn">
-                <span class="text-base">⏸️</span>
+                <span class="text-sm">⏸️</span>
                 <span class="flex-1">Pause / Resume</span>
               </button>
 
               <button onclick="switchAccountTab('addresses')" id="tab-nav-addresses" class="account-nav-btn">
-                <span class="text-base">📍</span>
+                <span class="text-sm">📍</span>
                 <span class="flex-1">Saved Addresses</span>
               </button>
 
-              <div class="pt-3 mt-3 border-t border-zinc-100">
+              <div class="pt-1.5 mt-1.5 border-t border-zinc-100">
                 <button onclick="handleLogout()" class="account-nav-btn text-red-600 hover:bg-red-50 hover:text-red-700">
-                  <span class="text-base">🚪</span>
+                  <span class="text-sm">🚪</span>
                   <span class="flex-1 font-bold">Logout</span>
                 </button>
               </div>
@@ -1113,11 +1244,11 @@
             <div class="lg:col-span-9">
               
               <!-- SUB-PANEL 1: MY ORDERS -->
-              <div id="subpanel-orders" class="account-subpanel space-y-6">
-                <div class="flex items-center justify-between pb-4 border-b border-zinc-200/80">
+              <div id="subpanel-orders" class="account-subpanel space-y-4">
+                <div class="flex items-center justify-between pb-2.5 border-b border-zinc-200/80">
                   <div>
-                    <h2 class="text-2xl font-black text-zinc-950 font-heading">My Orders</h2>
-                    <p class="text-xs text-zinc-500 mt-0.5">Track active deliveries, inspect receipts, or reorder past meals.</p>
+                    <h2 class="text-lg sm:text-xl font-black text-zinc-950 font-heading">My Orders</h2>
+                    <p class="text-[11px] text-zinc-500 mt-0.5">Track active deliveries, inspect receipts, or reorder past meals.</p>
                   </div>
                   <button onclick="navigateTo('categories')" class="text-xs font-bold text-amber-600 hover:text-amber-700 hover:underline">
                     + Order Another Meal
@@ -1125,39 +1256,39 @@
                 </div>
 
                 <!-- Orders List -->
-                <div id="account-orders-list" class="space-y-4">
+                <div id="account-orders-list" class="space-y-3">
                   <!-- Rendered dynamically -->
                 </div>
               </div>
 
               <!-- SUB-PANEL 2: PROFILE -->
               <div id="subpanel-profile" class="account-subpanel hidden">
-                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200/70 shadow-sm space-y-6">
-                  <div class="pb-4 border-b border-zinc-100">
-                    <h2 class="text-2xl font-black text-zinc-950 font-heading">Profile Details</h2>
-                    <p class="text-xs text-zinc-500 mt-0.5">Update your personal contact details and meal preferences.</p>
+                <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-zinc-200/70 shadow-sm space-y-4">
+                  <div class="pb-2.5 border-b border-zinc-100">
+                    <h2 class="text-lg sm:text-xl font-black text-zinc-950 font-heading">Profile Details</h2>
+                    <p class="text-[11px] text-zinc-500 mt-0.5">Update your personal contact details and meal preferences.</p>
                   </div>
 
-                  <form id="profile-edit-form" onsubmit="handleSaveProfile(event)" class="space-y-4 max-w-xl">
+                  <form id="profile-edit-form" onsubmit="handleSaveProfile(event)" class="space-y-3 max-w-xl">
                     <div>
-                      <label class="text-xs font-bold text-zinc-700 block mb-1">Full Name</label>
-                      <input type="text" id="profile-name-input" required class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
+                      <label class="text-[11px] font-bold text-zinc-700 block mb-1">Full Name</label>
+                      <input type="text" id="profile-name-input" required class="w-full px-3.5 py-1.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label class="text-xs font-bold text-zinc-700 block mb-1">Mobile Number</label>
-                        <input type="tel" id="profile-phone-input" required class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
+                        <label class="text-[11px] font-bold text-zinc-700 block mb-1">Mobile Number</label>
+                        <input type="tel" id="profile-phone-input" required class="w-full px-3.5 py-1.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
                       </div>
                       <div>
-                        <label class="text-xs font-bold text-zinc-700 block mb-1">Email Address</label>
-                        <input type="email" id="profile-email-input" required class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
+                        <label class="text-[11px] font-bold text-zinc-700 block mb-1">Email Address</label>
+                        <input type="email" id="profile-email-input" required class="w-full px-3.5 py-1.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
                       </div>
                     </div>
 
                     <div>
-                      <label class="text-xs font-bold text-zinc-700 block mb-1">Dietary Preference</label>
-                      <select id="profile-diet-input" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400">
+                      <label class="text-[11px] font-bold text-zinc-700 block mb-1">Dietary Preference</label>
+                      <select id="profile-diet-input" class="w-full px-3.5 py-1.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400">
                         <option value="Veg Only">Vegetarian Only</option>
                         <option value="Non-Veg Focused">Non-Vegetarian Focused</option>
                         <option value="Balanced / Mixed">Balanced (Veg + Non-Veg + Fruits)</option>
@@ -1165,7 +1296,7 @@
                       </select>
                     </div>
 
-                    <button type="submit" class="px-6 py-3 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
+                    <button type="submit" class="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
                       Save Profile Changes
                     </button>
                   </form>
@@ -1173,30 +1304,28 @@
               </div>
 
               <!-- SUB-PANEL 3: MY SUBSCRIPTION / PLANS -->
-              <div id="subpanel-plans" class="account-subpanel hidden space-y-6">
-                <!-- Rendered dynamically -->
+              <div id="subpanel-plans" class="account-subpanel hidden space-y-4">
                 <div id="account-plans-container"></div>
               </div>
 
               <!-- SUB-PANEL 4: PAUSE / RESUME SUBSCRIPTION -->
-              <div id="subpanel-pause" class="account-subpanel hidden space-y-6">
-                <!-- Rendered dynamically -->
+              <div id="subpanel-pause" class="account-subpanel hidden space-y-4">
                 <div id="account-pause-container"></div>
               </div>
 
               <!-- SUB-PANEL 5: SAVED ADDRESSES -->
-              <div id="subpanel-addresses" class="account-subpanel hidden space-y-6">
-                <div class="flex items-center justify-between pb-4 border-b border-zinc-200/80">
+              <div id="subpanel-addresses" class="account-subpanel hidden space-y-4">
+                <div class="flex items-center justify-between pb-2.5 border-b border-zinc-200/80">
                   <div>
-                    <h2 class="text-2xl font-black text-zinc-950 font-heading">Saved Delivery Addresses</h2>
-                    <p class="text-xs text-zinc-500 mt-0.5">Manage office and home delivery destinations for quick checkout.</p>
+                    <h2 class="text-lg sm:text-xl font-black text-zinc-950 font-heading">Saved Delivery Addresses</h2>
+                    <p class="text-[11px] text-zinc-500 mt-0.5">Manage office and home delivery destinations for quick checkout.</p>
                   </div>
-                  <button onclick="openAddressModal()" class="px-4 py-2 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                  <button onclick="openAddressModal()" class="px-3 py-1 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer">
                     <span>+ Add New Address</span>
                   </button>
                 </div>
 
-                <div id="account-addresses-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="account-addresses-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <!-- Rendered dynamically -->
                 </div>
               </div>
@@ -1205,34 +1334,34 @@
           </div>
         </div>
 
-        <!-- Logged Out State: Auth Box -->
-        <div id="account-auth-wrapper" class="hidden max-w-md mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200/80 shadow-xl">
-          <div class="text-center mb-6">
-            <img src="image.png" alt="Rayalaseema Cloud Kitchen Logo" class="w-16 h-16 rounded-full object-contain p-0.5 mx-auto mb-3 shadow-md border-2 border-amber-400 bg-white" />
-            <h2 class="text-2xl font-black text-zinc-950">Customer Login</h2>
-            <p class="text-zinc-500 text-xs mt-1">Sign in to track orders, manage subscriptions, and pause dates.</p>
+        <!-- Logged Out State -->
+        <div id="account-auth-wrapper" class="hidden max-w-md mx-auto bg-white rounded-2xl sm:rounded-3xl p-5 border border-zinc-200/80 shadow-xl">
+          <div class="text-center mb-4">
+            <img src="image.png" alt="Rayalaseema Cloud Kitchen Logo" class="w-12 h-12 rounded-full object-contain p-0.5 mx-auto mb-2 shadow-md border-2 border-amber-400 bg-white" />
+            <h2 class="text-lg font-black text-zinc-950">Customer Login</h2>
+            <p class="text-zinc-500 text-xs mt-0.5">Sign in to track orders, manage subscriptions, and pause dates.</p>
           </div>
 
-          <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+          <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-3">
             <div>
-              <label class="text-xs font-bold text-zinc-700 block mb-1">Email or Phone Number</label>
-              <input type="text" id="auth-email" value="rahul.kumar@hitec-tech.com" required class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-amber-400" />
+              <label class="text-[11px] font-bold text-zinc-700 block mb-1">Email or Phone Number</label>
+              <input type="text" id="auth-email" value="rahul.kumar@hitec-tech.com" required class="w-full px-3.5 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
             </div>
 
             <div>
               <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-zinc-700">Password</label>
+                <label class="text-[11px] font-bold text-zinc-700">Password</label>
                 <a href="javascript:void(0)" onclick="app.showToast('Demo password reset link sent!', 'info')" class="text-xs text-amber-600 font-bold hover:underline">Forgot?</a>
               </div>
-              <input type="password" id="auth-password" value="password123" required class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm font-medium focus:outline-none focus:border-amber-400" />
+              <input type="password" id="auth-password" value="password123" required class="w-full px-3.5 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-medium focus:outline-none focus:border-amber-400" />
             </div>
 
-            <button type="submit" class="w-full py-3.5 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-extrabold rounded-xl text-sm transition shadow-md cursor-pointer">
+            <button type="submit" class="w-full py-2.5 bg-amber-400 hover:bg-amber-500 active:scale-95 text-zinc-950 font-extrabold rounded-xl text-xs sm:text-sm transition shadow-md cursor-pointer">
               Sign In to My Account
             </button>
           </form>
 
-          <div class="pt-6 mt-6 border-t border-zinc-100 text-center text-xs text-zinc-500">
+          <div class="pt-3 mt-3 border-t border-zinc-100 text-center text-xs text-zinc-500">
             Need a meal plan? <button onclick="navigateTo('trial-banner')" class="text-amber-600 font-bold hover:underline cursor-pointer">Start a 10-day trial</button>
           </div>
         </div>
@@ -1243,24 +1372,24 @@
   </main>
 
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-zinc-950 text-white pt-16 pb-12 border-t border-zinc-900">
+  <footer class="bg-zinc-950 text-white pt-6 pb-5 border-t border-zinc-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-zinc-800">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 pb-5 border-b border-zinc-800">
         
         <!-- Col 1: Brand Info -->
-        <div class="lg:col-span-2 space-y-4">
-          <div class="flex items-center gap-3">
-            <img src="image.png" alt="Rayalaseema Cloud Kitchen Logo" class="w-12 h-12 rounded-full object-contain p-0.5 shadow-md border-2 border-amber-400/80 bg-white" />
+        <div class="lg:col-span-2 space-y-2.5">
+          <div class="flex items-center gap-2.5">
+            <img src="image.png" alt="Rayalaseema Cloud Kitchen Logo" class="w-9 h-9 rounded-full object-contain p-0.5 shadow-md border-2 border-amber-400/80 bg-white" />
             <div>
-              <span class="text-xl font-black font-heading text-white block">The Rayalaseema Cloud Kitchen</span>
-              <span class="text-[10px] tracking-widest text-amber-400 font-bold uppercase">Where Spice Meets Tradition.</span>
+              <span class="text-base font-black font-heading text-white block">The Rayalaseema Cloud Kitchen</span>
+              <span class="text-[9px] tracking-widest text-amber-400 font-bold uppercase">Where Spice Meets Tradition.</span>
             </div>
           </div>
           <p class="text-zinc-400 text-xs leading-relaxed max-w-sm">
-            Authentic Rayalaseema Signature Bhojanam, Ragi Sangati, Bagara Rice, Jonna Roti, Gongura Chicken, Mutton Biryani, and fresh homestyle curries prepared with regional spices.
+            Authentic Rayalaseema Signature Bhojanam, Ragi Sangati, Bagara Rice, Jonna Roti, Gongura Chicken, Chicken Biryani, and fresh homestyle curries prepared with regional spices.
           </p>
-          <div class="space-y-1 text-xs">
+          <div class="space-y-0.5 text-xs">
             <div class="text-amber-400 font-bold">
               📞 For Orders Contact: <a href="tel:9063424694" class="underline text-white hover:text-amber-400 font-black">+91 9063424694</a>
             </div>
@@ -1271,9 +1400,9 @@
         </div>
 
         <!-- Col 2: Quick Links -->
-        <div class="space-y-3 text-xs">
-          <h4 class="font-bold text-sm text-white uppercase tracking-wider">Quick Links</h4>
-          <ul class="space-y-2 text-zinc-400">
+        <div class="space-y-2 text-xs">
+          <h4 class="font-bold text-xs text-white uppercase tracking-wider">Quick Links</h4>
+          <ul class="space-y-1 text-zinc-400">
             <li><a href="#home" onclick="navigateTo('home'); return false;" class="hover:text-amber-400 transition cursor-pointer">Home</a></li>
             <li><a href="#about" onclick="navigateTo('about'); return false;" class="hover:text-amber-400 transition cursor-pointer">About Us</a></li>
             <li><a href="#categories" onclick="navigateTo('categories'); return false;" class="hover:text-amber-400 transition cursor-pointer">Our Dishes</a></li>
@@ -1284,9 +1413,9 @@
         </div>
 
         <!-- Col 3: Categories -->
-        <div class="space-y-3 text-xs">
-          <h4 class="font-bold text-sm text-white uppercase tracking-wider">Menu Specials</h4>
-          <ul class="space-y-2 text-zinc-400">
+        <div class="space-y-2 text-xs">
+          <h4 class="font-bold text-xs text-white uppercase tracking-wider">Menu Specials</h4>
+          <ul class="space-y-1 text-zinc-400">
             <li><a href="#categories" onclick="navigateTo('categories', 'signature-dishes'); return false;" class="hover:text-amber-400 transition cursor-pointer">Signature Dishes (from ₹59)</a></li>
             <li><a href="#categories" onclick="navigateTo('categories', 'bagara-rice'); return false;" class="hover:text-amber-400 transition cursor-pointer">Bagara Rice Specials</a></li>
             <li><a href="#categories" onclick="navigateTo('categories', 'special-curries'); return false;" class="hover:text-amber-400 transition cursor-pointer">Gongura Curries & Fry</a></li>
@@ -1295,9 +1424,9 @@
         </div>
 
         <!-- Col 4: Services & Help -->
-        <div class="space-y-3 text-xs">
-          <h4 class="font-bold text-sm text-white uppercase tracking-wider">Services</h4>
-          <ul class="space-y-2 text-zinc-400">
+        <div class="space-y-2 text-xs">
+          <h4 class="font-bold text-xs text-white uppercase tracking-wider">Services</h4>
+          <ul class="space-y-1 text-zinc-400">
             <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Corporate Catering</a></li>
             <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Wholesale Food Supply</a></li>
             <li><a href="#services" onclick="navigateTo('services'); return false;" class="hover:text-amber-400 transition cursor-pointer">Retail Doorstep Supply</a></li>
@@ -1308,11 +1437,11 @@
       </div>
 
       <!-- Bottom Bar -->
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-4">
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-zinc-500 gap-2">
         <div>
           © 2026 Rayalaseema Foods / Cloud Kitchen. All rights reserved.
         </div>
-        <div class="flex gap-6">
+        <div class="flex gap-4">
           <a href="javascript:void(0)" class="hover:text-zinc-300">Privacy Policy</a>
           <a href="javascript:void(0)" class="hover:text-zinc-300">Terms & Conditions</a>
           <a href="javascript:void(0)" class="hover:text-zinc-300">Contact Us</a>
@@ -1564,6 +1693,25 @@
     </div>
   </div>
 
+  <!-- ==================== MODAL: OFFICIAL DINNER MENU POSTER ==================== -->
+  <div id="dinner-poster-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4" onclick="closeDinnerPosterModal(event)">
+    <div class="relative bg-zinc-950 rounded-2xl max-w-md w-full max-h-[92vh] overflow-y-auto p-3 border border-amber-500/40 shadow-2xl" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between pb-2 px-1 border-b border-zinc-800">
+        <div>
+          <span class="text-amber-400 font-black text-xs sm:text-sm block">Official Published Dinner Menu</span>
+          <span class="text-[10px] text-zinc-400">September 2026 • Night Subscription</span>
+        </div>
+        <button onclick="closeDinnerPosterModal()" class="w-7 h-7 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center font-bold text-xs cursor-pointer">✕</button>
+      </div>
+      <div class="py-2.5 text-center">
+        <img src="images/dinner-menu-september.png" alt="September 2026 Night Dinner Monthly Subscription Menu" class="w-full h-auto rounded-xl shadow-lg border border-amber-950 mx-auto" />
+      </div>
+      <div class="pt-2 px-1 flex justify-between items-center text-[11px] text-zinc-400 border-t border-zinc-800">
+        <span class="text-amber-300/80">Where Spice Meets Tradition</span>
+        <button onclick="closeDinnerPosterModal()" class="px-3 py-1 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold rounded-lg cursor-pointer">Close</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ==================== MOBILE APP-LIKE BOTTOM NAVIGATION DOCK ==================== -->
   <nav id="mobile-bottom-dock" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-zinc-200/90 shadow-2xl px-2 py-1.5 flex items-center justify-around">
@@ -1596,7 +1744,7 @@
   <div id="toast-container"></div>
 
   <!-- Application Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/data.js?v=20260925_2"></script>
+  <script src="js/app.js?v=20260925_2"></script>
 </body>
 </html>

@@ -62,26 +62,26 @@
   </header>
 
   <!-- ==================== MAIN CONTENT ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-5">
     
     <!-- Top Summary Banner -->
-    <div class="bg-gradient-to-r from-amber-600 via-amber-700 to-zinc-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="bg-gradient-to-r from-amber-600 via-amber-700 to-zinc-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span class="text-xs font-black uppercase tracking-widest text-amber-200 bg-black/20 px-3 py-1 rounded-full border border-white/10 inline-block mb-2">
+          <span class="text-xs font-black uppercase tracking-widest text-amber-200 bg-black/20 px-3 py-0.5 rounded-full border border-white/10 inline-block mb-1.5">
             10-Day Plan Operations Ledger
           </span>
-          <h1 class="text-2xl sm:text-3xl font-black font-heading">Food Subscription & Kitchen Dispatch System</h1>
-          <p class="text-xs sm:text-sm text-amber-100 mt-1 max-w-2xl leading-relaxed">
+          <h1 class="text-xl sm:text-2xl font-black font-heading">Food Subscription & Kitchen Dispatch System</h1>
+          <p class="text-xs text-amber-100 mt-1 max-w-2xl leading-relaxed">
             Manage customer 10-day food plans, pause/resume status, 5:30 PM daily preparation lock, and live meal cooking queue with 100% Zero Food Loss Guarantee.
           </p>
         </div>
 
-        <div class="flex flex-wrap gap-2.5">
-          <button onclick="openNewSubModal()" class="px-5 py-3 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-extrabold text-xs rounded-2xl transition shadow-lg flex items-center gap-1.5 cursor-pointer">
+        <div class="flex flex-wrap gap-2">
+          <button onclick="openNewSubModal()" class="px-4 py-2.5 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-extrabold text-xs rounded-xl transition shadow-lg flex items-center gap-1.5 cursor-pointer">
             <span>+ Add New Customer Subscription</span>
           </button>
-          <button onclick="resetAllDemoSubscriptions()" class="px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-2xl transition border border-white/20 cursor-pointer">
+          <button onclick="resetAllDemoSubscriptions()" class="px-3.5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition border border-white/20 cursor-pointer">
             🔄 Reset All Demo Data
           </button>
         </div>
@@ -89,54 +89,54 @@
     </div>
 
     <!-- 4 KPI Overview Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       
-      <div class="bg-white rounded-3xl p-6 border border-zinc-200/80 shadow-sm">
-        <div class="flex items-center justify-between text-zinc-400 mb-2">
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-zinc-200/80 shadow-sm">
+        <div class="flex items-center justify-between text-zinc-400 mb-1.5">
           <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Total Subscriptions</span>
           <span class="text-xl">📋</span>
         </div>
-        <div class="text-3xl font-black text-zinc-950 font-heading" id="kpi-total-subs">3</div>
-        <span class="text-[11px] text-zinc-500 mt-1 block">Registered 10-Day Plans</span>
+        <div class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading" id="kpi-total-subs">3</div>
+        <span class="text-[11px] text-zinc-500 mt-0.5 block">Registered 10-Day Plans</span>
       </div>
 
-      <div class="bg-emerald-50 rounded-3xl p-6 border border-emerald-200 shadow-sm">
-        <div class="flex items-center justify-between text-emerald-700 mb-2">
+      <div class="bg-emerald-50 rounded-2xl p-4 sm:p-5 border border-emerald-200 shadow-sm">
+        <div class="flex items-center justify-between text-emerald-700 mb-1.5">
           <span class="text-xs font-bold uppercase tracking-wider text-emerald-800">Tomorrow's Kitchen Batch</span>
           <span class="text-xl">👨‍🍳</span>
         </div>
-        <div class="text-3xl font-black text-emerald-700 font-heading" id="kpi-active-tomorrow">2</div>
-        <span class="text-[11px] text-emerald-800 font-semibold mt-1 block">Active Meals to Cook Tomorrow</span>
+        <div class="text-2xl sm:text-3xl font-black text-emerald-700 font-heading" id="kpi-active-tomorrow">2</div>
+        <span class="text-[11px] text-emerald-800 font-semibold mt-0.5 block">Active Meals to Cook Tomorrow</span>
       </div>
 
-      <div class="bg-amber-50 rounded-3xl p-6 border border-amber-200 shadow-sm">
-        <div class="flex items-center justify-between text-amber-700 mb-2">
+      <div class="bg-amber-50 rounded-2xl p-4 sm:p-5 border border-amber-200 shadow-sm">
+        <div class="flex items-center justify-between text-amber-700 mb-1.5">
           <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Paused for Tomorrow</span>
           <span class="text-xl">⏸️</span>
         </div>
-        <div class="text-3xl font-black text-amber-700 font-heading" id="kpi-paused-tomorrow">1</div>
-        <span class="text-[11px] text-amber-800 font-semibold mt-1 block">Excluded from Prep (Zero Loss)</span>
+        <div class="text-2xl sm:text-3xl font-black text-amber-700 font-heading" id="kpi-paused-tomorrow">1</div>
+        <span class="text-[11px] text-amber-800 font-semibold mt-0.5 block">Excluded from Prep (Zero Loss)</span>
       </div>
 
-      <div class="bg-blue-50 rounded-3xl p-6 border border-blue-200 shadow-sm">
-        <div class="flex items-center justify-between text-blue-700 mb-2">
+      <div class="bg-blue-50 rounded-2xl p-4 sm:p-5 border border-blue-200 shadow-sm">
+        <div class="flex items-center justify-between text-blue-700 mb-1.5">
           <span class="text-xs font-bold uppercase tracking-wider text-blue-800">Completed Plans</span>
           <span class="text-xl">🎉</span>
         </div>
-        <div class="text-3xl font-black text-blue-700 font-heading" id="kpi-completed-subs">1</div>
-        <span class="text-[11px] text-blue-800 font-semibold mt-1 block">Full 10/10 Days Delivered</span>
+        <div class="text-2xl sm:text-3xl font-black text-blue-700 font-heading" id="kpi-completed-subs">1</div>
+        <span class="text-[11px] text-blue-800 font-semibold mt-0.5 block">Full 10/10 Days Delivered</span>
       </div>
 
     </div>
 
     <!-- ==================== SECTION 1: TOMORROW'S KITCHEN PREPARATION QUEUE ==================== -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200/80 shadow-sm space-y-6">
+    <div class="bg-white rounded-2xl p-4 sm:p-6 border border-zinc-200/80 shadow-sm space-y-4">
       
-      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-zinc-100">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-zinc-100">
         <div>
           <div class="flex items-center gap-2">
             <span class="text-base">🔥</span>
-            <h2 class="text-xl font-black text-zinc-950 font-heading">Tomorrow's Kitchen Meal Prep & Dispatch Queue</h2>
+            <h2 class="text-lg sm:text-xl font-black text-zinc-950 font-heading">Tomorrow's Kitchen Meal Prep & Dispatch Queue</h2>
           </div>
           <p class="text-xs text-zinc-500 mt-0.5">
             Auto-filtered list of meals to prepare tomorrow. Subscriptions paused before 5:30 PM are automatically excluded so no meal is wasted.
@@ -151,10 +151,10 @@
       </div>
 
       <!-- Two-Column Kitchen Board -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
         
         <!-- Column 1: Cook & Dispatch Tomorrow (Active) -->
-        <div class="lg:col-span-8 space-y-4">
+        <div class="lg:col-span-8 space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
@@ -168,7 +168,7 @@
         </div>
 
         <!-- Column 2: Paused Subscriptions (DO NOT PREPARE) -->
-        <div class="lg:col-span-4 space-y-4">
+        <div class="lg:col-span-4 space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
@@ -186,13 +186,13 @@
     </div>
 
     <!-- ==================== SECTION 2: MASTER SUBSCRIPTION LEDGER ==================== -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200/80 shadow-sm space-y-6">
+    <div class="bg-white rounded-2xl p-4 sm:p-6 border border-zinc-200/80 shadow-sm space-y-4">
       
-      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-zinc-100">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-zinc-100">
         <div>
           <div class="flex items-center gap-2">
             <span class="text-base">📊</span>
-            <h2 class="text-xl font-black text-zinc-950 font-heading">10-Day Plan Customer Subscriptions Ledger</h2>
+            <h2 class="text-lg sm:text-xl font-black text-zinc-950 font-heading">10-Day Plan Customer Subscriptions Ledger</h2>
           </div>
           <p class="text-xs text-zinc-500 mt-0.5">
             Track each customer's Consumed Days, Remaining Food Days, Paused Dates, and Next Delivery schedule.
