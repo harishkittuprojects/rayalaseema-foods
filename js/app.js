@@ -366,47 +366,95 @@ document.addEventListener('DOMContentLoaded', () => {
 // Single Page Application Router
 function initRouter() {
   const mainViews = ['home', 'about', 'categories', 'services', 'cart', 'account'];
-  const homeSections = ['about-section', 'our-bowls-section', 'trial-banner', 'how-it-works-section', 'plans-section', 'published-dinner-flyer-card', 'monthly-menu-section', 'catering-section', 'reviews-section'];
+
+  // Comprehensive route & section alias mapping
+  const routeMap = {
+    // Primary Views
+    'home': { type: 'view', view: 'home' },
+    'about': { type: 'view', view: 'about' },
+    'categories': { type: 'view', view: 'categories' },
+    'meals': { type: 'view', view: 'categories' },
+    'our-meals': { type: 'view', view: 'categories' },
+    'menu': { type: 'view', view: 'categories' },
+    'dishes': { type: 'view', view: 'categories' },
+    'services': { type: 'view', view: 'services' },
+    'our-services': { type: 'view', view: 'services' },
+    'cart': { type: 'view', view: 'cart' },
+    'checkout': { type: 'view', view: 'cart' },
+    'account': { type: 'view', view: 'account', tab: 'profile' },
+    'profile': { type: 'view', view: 'account', tab: 'profile' },
+    'login': { type: 'view', view: 'account', tab: 'profile' },
+    'orders': { type: 'view', view: 'account', tab: 'orders' },
+    'my-orders': { type: 'view', view: 'account', tab: 'orders' },
+    'account-plans': { type: 'view', view: 'account', tab: 'plans' },
+
+    // In-Page Sections inside Home
+    'plans': { type: 'section', sectionId: 'plans-section' },
+    'plans-section': { type: 'section', sectionId: 'plans-section' },
+    'subscription-plans': { type: 'section', sectionId: 'plans-section' },
+    'catering': { type: 'section', sectionId: 'catering-section' },
+    'catering-section': { type: 'section', sectionId: 'catering-section' },
+    'monthly-menu': { type: 'section', sectionId: 'monthly-menu-section' },
+    'monthly-menu-section': { type: 'section', sectionId: 'monthly-menu-section' },
+    'dinner': { type: 'section', sectionId: 'published-dinner-flyer-card', action: 'dinner' },
+    'dinner-menu': { type: 'section', sectionId: 'published-dinner-flyer-card', action: 'dinner' },
+    'published-dinner-flyer-card': { type: 'section', sectionId: 'published-dinner-flyer-card', action: 'dinner' },
+    'about-section': { type: 'section', sectionId: 'about-section' },
+    'how-it-works': { type: 'section', sectionId: 'how-it-works-section' },
+    'how-it-works-section': { type: 'section', sectionId: 'how-it-works-section' },
+    'trial': { type: 'section', sectionId: 'trial-banner' },
+    'trial-banner': { type: 'section', sectionId: 'trial-banner' },
+    'reviews': { type: 'section', sectionId: 'reviews-section' },
+    'reviews-section': { type: 'section', sectionId: 'reviews-section' },
+    'our-bowls': { type: 'section', sectionId: 'our-bowls-section' },
+    'our-bowls-section': { type: 'section', sectionId: 'our-bowls-section' }
+  };
+
+  // Instant direct jump to element with sticky header clearance
+  function jumpToSectionDirectly(sectionId) {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+    const headerOffset = 70;
+    const elementPosition = el.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+    window.scrollTo({
+      top: Math.max(0, elementPosition),
+      behavior: 'auto' // Instant direct jump
+    });
+  }
 
   window.navigateTo = function(target, filterCategory = null) {
     if (filterCategory) {
       window.setCategoryFilter(filterCategory);
     }
 
-    // Direct Section Scroll inside Home
-    if (homeSections.includes(target)) {
+    const route = routeMap[target] || (document.getElementById(target) ? { type: 'section', sectionId: target } : { type: 'view', view: target });
+
+    if (route.type === 'section') {
       showView('home');
-      setTimeout(() => {
-        const el = document.getElementById(target);
-        if (el) {
-          const headerOffset = 64;
-          const elementPosition = el.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      }, 50);
-      window.location.hash = target;
-      return;
-    }
-
-    if (target === 'login' || target === 'orders') {
-      showView('account');
-      if (target === 'orders') {
-        switchAccountTab('orders');
+      if (route.action === 'dinner' && typeof window.switchSubscriberMealType === 'function') {
+        window.switchSubscriberMealType('dinner');
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.location.hash = target;
+      jumpToSectionDirectly(route.sectionId);
+      // Ensure pixel-perfect placement on next paint
+      requestAnimationFrame(() => jumpToSectionDirectly(route.sectionId));
+      try {
+        window.history.replaceState(null, null, '#' + target);
+      } catch (err) {}
       return;
     }
 
-    if (mainViews.includes(target)) {
-      showView(target);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.location.hash = target;
+    // Full View navigation
+    const viewName = mainViews.includes(route.view) ? route.view : 'home';
+    showView(viewName);
+
+    if (route.tab && typeof switchAccountTab === 'function') {
+      switchAccountTab(route.tab);
     }
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    try {
+      window.history.replaceState(null, null, '#' + target);
+    } catch (err) {}
   };
 
   function showView(viewName) {
@@ -433,7 +481,7 @@ function initRouter() {
       }
     });
 
-    // Render respective data if needed
+    // Render respective data immediately
     if (viewName === 'categories') {
       renderCategoriesGrid();
     } else if (viewName === 'cart') {
@@ -443,47 +491,41 @@ function initRouter() {
     }
 
     if (typeof AOS !== 'undefined') {
-      setTimeout(() => AOS.refresh(), 100);
+      AOS.refresh();
     }
   }
 
   function handleHashChange() {
     let hash = window.location.hash.replace('#', '') || 'home';
+    const route = routeMap[hash] || (document.getElementById(hash) ? { type: 'section', sectionId: hash } : null);
 
-    if (homeSections.includes(hash)) {
+    if (route && route.type === 'section') {
       showView('home');
-      setTimeout(() => {
-        const el = document.getElementById(hash);
-        if (el) {
-          const headerOffset = 80;
-          const elementPosition = el.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      }, 80);
+      if (route.action === 'dinner' && typeof window.switchSubscriberMealType === 'function') {
+        window.switchSubscriberMealType('dinner');
+      }
+      jumpToSectionDirectly(route.sectionId);
+      requestAnimationFrame(() => jumpToSectionDirectly(route.sectionId));
       return;
     }
 
-    if (hash === 'orders') {
-      showView('account');
-      switchAccountTab('orders');
-      return;
+    let viewName = 'home';
+    let tab = null;
+
+    if (route && route.type === 'view') {
+      viewName = mainViews.includes(route.view) ? route.view : 'home';
+      tab = route.tab;
+    } else if (mainViews.includes(hash)) {
+      viewName = hash;
     }
 
-    if (hash === 'login') {
-      showView('account');
-      return;
+    showView(viewName);
+
+    if (tab && typeof switchAccountTab === 'function') {
+      switchAccountTab(tab);
     }
 
-    if (!mainViews.includes(hash)) {
-      hash = 'home';
-    }
-
-    showView(hash);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
   window.addEventListener('hashchange', handleHashChange);
@@ -686,16 +728,336 @@ window.setCategoryFilter = function(category) {
   renderCategoriesGrid();
 };
 
-window.handleSearchInput = function(e) {
-  app.searchQuery = e.target.value;
+// ==================== SEARCH & RECENT SEARCHES ENGINE (Flipkart / Amazon Style) ====================
+
+const POPULAR_SEARCH_KEYWORDS = [
+  { text: '🍗 Gongura Chicken', query: 'Gongura Chicken' },
+  { text: '👑 Rayalaseema Bhojanam', query: 'Rayalaseema Bhojanam' },
+  { text: '🍚 Bagara Rice', query: 'Bagara Rice' },
+  { text: '🫓 Jonna Roti', query: 'Jonna Roti' },
+  { text: '🥘 Chicken Biryani', query: 'Chicken Biryani' },
+  { text: '🧀 Paneer Butter Masala', query: 'Paneer' },
+  { text: '🌙 September Dinner Menu', query: 'Dinner' },
+  { text: '⚡ 10-Day Plan', query: 'Plan' }
+];
+
+app.getRecentSearches = function() {
+  try {
+    const stored = localStorage.getItem('rk_recent_searches');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {}
+  const defaults = ['Gongura Chicken', 'Ragi Sangati', 'Bagara Rice', 'Rayalaseema Bhojanam', 'Chicken Biryani'];
+  try {
+    localStorage.setItem('rk_recent_searches', JSON.stringify(defaults));
+  } catch (e) {}
+  return defaults;
+};
+
+app.saveRecentSearch = function(term) {
+  if (!term || !term.trim()) return;
+  const cleanTerm = term.trim();
+  let searches = app.getRecentSearches();
+  searches = searches.filter(s => s.toLowerCase() !== cleanTerm.toLowerCase());
+  searches.unshift(cleanTerm);
+  if (searches.length > 8) searches = searches.slice(0, 8);
+  try {
+    localStorage.setItem('rk_recent_searches', JSON.stringify(searches));
+  } catch (e) {}
+};
+
+app.removeRecentSearch = function(term, context = 'navbar') {
+  let searches = app.getRecentSearches();
+  searches = searches.filter(s => s.toLowerCase() !== term.toLowerCase());
+  try {
+    localStorage.setItem('rk_recent_searches', JSON.stringify(searches));
+  } catch (e) {}
+  app.renderSearchDropdown(context);
+};
+
+app.clearAllRecentSearches = function(context = 'navbar') {
+  try {
+    localStorage.setItem('rk_recent_searches', JSON.stringify([]));
+  } catch (e) {}
+  app.renderSearchDropdown(context);
+};
+
+app.renderSearchDropdown = function(context = 'navbar') {
+  const dropdown = document.getElementById(`${context}-search-dropdown`);
+  const input = document.getElementById(`${context}-search-input`);
+  const clearBtn = document.getElementById(`${context}-search-clear`);
+  if (!dropdown || !input) return;
+
+  const query = input.value.trim().toLowerCase();
+  if (clearBtn) {
+    if (input.value.length > 0) clearBtn.classList.remove('hidden');
+    else clearBtn.classList.add('hidden');
+  }
+
+  const recentSearches = app.getRecentSearches();
+
+  if (!query) {
+    // Mode 1: Empty Query -> Show Recent Searches + Popular/Trending Searches (Flipkart / Amazon style)
+    let recentHtml = '';
+    if (recentSearches.length > 0) {
+      recentHtml = `
+        <div class="px-3.5 py-2.5 bg-zinc-50 border-b border-zinc-100 flex items-center justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Recent Searches
+          </span>
+          <button type="button" onmousedown="event.preventDefault(); app.clearAllRecentSearches('${context}')" class="text-[11px] font-semibold text-amber-600 hover:text-amber-800 transition cursor-pointer">
+            Clear All
+          </button>
+        </div>
+        <div class="py-1">
+          ${recentSearches.map(term => `
+            <div class="search-recent-item flex items-center justify-between px-3.5 py-2 hover:bg-amber-50/70 cursor-pointer group transition" onmousedown="event.preventDefault(); app.selectRecentSearch('${term.replace(/'/g, "\\'")}', '${context}')">
+              <div class="flex items-center gap-2.5 text-xs text-zinc-800 group-hover:text-amber-700 font-medium">
+                <svg class="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>${term}</span>
+              </div>
+              <button type="button" onmousedown="event.stopPropagation(); event.preventDefault(); app.removeRecentSearch('${term.replace(/'/g, "\\'")}', '${context}')" class="recent-remove-btn text-zinc-400 hover:text-red-500 p-1 rounded-full hover:bg-zinc-200 text-xs" title="Remove search">
+                ✕
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      recentHtml = `
+        <div class="px-3.5 py-3 text-center text-xs text-zinc-400">
+          No recent searches
+        </div>
+      `;
+    }
+
+    const popularHtml = `
+      <div class="px-3.5 py-2 bg-zinc-50 border-t border-b border-zinc-100 flex items-center justify-between">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+          <span>🔥</span> Popular Searches
+        </span>
+      </div>
+      <div class="p-3 flex flex-wrap gap-1.5">
+        ${POPULAR_SEARCH_KEYWORDS.map(item => `
+          <button type="button" onmousedown="event.preventDefault(); app.selectRecentSearch('${item.query.replace(/'/g, "\\'")}', '${context}')" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-100 hover:bg-amber-100 hover:text-amber-900 text-zinc-700 border border-zinc-200 transition cursor-pointer">
+            ${item.text}
+          </button>
+        `).join('')}
+      </div>
+    `;
+
+    dropdown.innerHTML = recentHtml + popularHtml;
+  } else {
+    // Mode 2: Query entered -> Show matching dishes + matching categories in live dropdown
+    const matchedProducts = MENU_DATA.products.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.description.toLowerCase().includes(query) ||
+      p.categoryName.toLowerCase().includes(query)
+    ).slice(0, 5);
+
+    let matchHtml = `
+      <div class="px-3.5 py-2 bg-zinc-50 border-b border-zinc-100 flex items-center justify-between">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+          Dishes matching "${query}" (${matchedProducts.length})
+        </span>
+      </div>
+    `;
+
+    if (matchedProducts.length > 0) {
+      matchHtml += `
+        <div class="divide-y divide-zinc-50 py-1">
+          ${matchedProducts.map(p => {
+            const regex = new RegExp(`(${query})`, 'gi');
+            const highlightedName = p.name.replace(regex, '<span class="text-amber-600 font-black">$1</span>');
+            return `
+              <div class="px-3.5 py-2 hover:bg-amber-50 flex items-center justify-between gap-3 cursor-pointer group transition" onmousedown="event.preventDefault(); app.selectProductDirectly('${p.id}', '${p.name.replace(/'/g, "\\'")}', '${context}')">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                  <img src="${p.image}" alt="${p.name}" class="w-8 h-8 rounded-lg object-cover flex-shrink-0 border border-zinc-200" />
+                  <div class="truncate">
+                    <div class="text-xs font-bold text-zinc-900 group-hover:text-amber-700 truncate">${highlightedName}</div>
+                    <div class="text-[10px] text-zinc-500">${p.categoryName}</div>
+                  </div>
+                </div>
+                <div class="text-right flex-shrink-0">
+                  <span class="text-xs font-extrabold text-zinc-950">₹${p.price}</span>
+                  <span class="block text-[9px] text-emerald-600 font-bold">Order →</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div class="p-2 bg-zinc-50 border-t border-zinc-100 text-center">
+          <button type="button" onmousedown="event.preventDefault(); app.selectRecentSearch('${query.replace(/'/g, "\\'")}', '${context}')" class="w-full py-1.5 text-xs font-bold text-amber-700 hover:text-amber-900 bg-amber-100 hover:bg-amber-200 rounded-lg transition">
+            See all results for "${query}" →
+          </button>
+        </div>
+      `;
+    } else {
+      matchHtml += `
+        <div class="p-4 text-center text-xs text-zinc-500">
+          No meals found matching "${query}".
+          <div class="mt-2">
+            <button type="button" onmousedown="event.preventDefault(); app.clearSearchInput('${context}')" class="px-3 py-1 bg-zinc-100 hover:bg-zinc-200 rounded-lg text-zinc-800 font-bold text-xs">
+              Clear & View All
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    dropdown.innerHTML = matchHtml;
+  }
+
+  dropdown.classList.remove('hidden');
+};
+
+app.openSearchDropdown = function(context = 'navbar') {
+  app.renderSearchDropdown(context);
+};
+
+app.closeSearchDropdown = function(context = 'navbar') {
+  setTimeout(() => {
+    const dropdown = document.getElementById(`${context}-search-dropdown`);
+    if (dropdown) dropdown.classList.add('hidden');
+  }, 200);
+};
+
+app.handleSearchInputChange = function(e, context = 'navbar') {
+  const val = e.target.value;
+  app.searchQuery = val;
+  
+  // Sync search input value across other contexts
+  ['navbar', 'categories', 'mobile'].forEach(ctx => {
+    if (ctx !== context) {
+      const otherInput = document.getElementById(`${ctx}-search-input`);
+      if (otherInput) otherInput.value = val;
+      const otherClear = document.getElementById(`${ctx}-search-clear`);
+      if (otherClear) {
+        if (val.length > 0) otherClear.classList.remove('hidden');
+        else otherClear.classList.add('hidden');
+      }
+    }
+  });
+
+  app.renderSearchDropdown(context);
   renderCategoriesGrid();
 };
 
-window.clearSearchAndFilter = function() {
+app.handleSearchKeyDown = function(e, context = 'navbar') {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const input = document.getElementById(`${context}-search-input`);
+    if (input && input.value.trim()) {
+      const term = input.value.trim();
+      app.saveRecentSearch(term);
+      app.searchQuery = term;
+      navigateTo('categories');
+      renderCategoriesGrid();
+      const dropdown = document.getElementById(`${context}-search-dropdown`);
+      if (dropdown) dropdown.classList.add('hidden');
+      input.blur();
+    }
+  } else if (e.key === 'Escape') {
+    const dropdown = document.getElementById(`${context}-search-dropdown`);
+    if (dropdown) dropdown.classList.add('hidden');
+    e.target.blur();
+  }
+};
+
+app.selectRecentSearch = function(term, context = 'navbar') {
+  app.saveRecentSearch(term);
+  app.searchQuery = term;
+  
+  ['navbar', 'categories', 'mobile'].forEach(ctx => {
+    const input = document.getElementById(`${ctx}-search-input`);
+    if (input) input.value = term;
+    const clearBtn = document.getElementById(`${ctx}-search-clear`);
+    if (clearBtn) clearBtn.classList.remove('hidden');
+    const dropdown = document.getElementById(`${ctx}-search-dropdown`);
+    if (dropdown) dropdown.classList.add('hidden');
+  });
+
+  navigateTo('categories');
+  renderCategoriesGrid();
+  
+  const grid = document.getElementById('categories-product-grid');
+  if (grid) {
+    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
+app.selectProductDirectly = function(productId, productName, context = 'navbar') {
+  app.saveRecentSearch(productName);
+  app.searchQuery = productName;
+
+  ['navbar', 'categories', 'mobile'].forEach(ctx => {
+    const input = document.getElementById(`${ctx}-search-input`);
+    if (input) input.value = productName;
+    const clearBtn = document.getElementById(`${ctx}-search-clear`);
+    if (clearBtn) clearBtn.classList.remove('hidden');
+    const dropdown = document.getElementById(`${ctx}-search-dropdown`);
+    if (dropdown) dropdown.classList.add('hidden');
+  });
+
+  navigateTo('categories');
+  renderCategoriesGrid();
+
+  setTimeout(() => {
+    const card = document.getElementById(`product-card-${productId}`);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('ring-4', 'ring-amber-400');
+      setTimeout(() => card.classList.remove('ring-4', 'ring-amber-400'), 2500);
+    }
+  }, 100);
+};
+
+app.clearSearchInput = function(context = 'navbar') {
   app.searchQuery = '';
-  app.currentFilter = 'all';
-  const searchInput = document.getElementById('product-search-input');
-  if (searchInput) searchInput.value = '';
+  ['navbar', 'categories', 'mobile'].forEach(ctx => {
+    const input = document.getElementById(`${ctx}-search-input`);
+    if (input) input.value = '';
+    const clearBtn = document.getElementById(`${ctx}-search-clear`);
+    if (clearBtn) clearBtn.classList.add('hidden');
+  });
+
+  renderCategoriesGrid();
+  app.renderSearchDropdown(context);
+};
+
+window.toggleMobileSearchBar = function() {
+  const mobileBar = document.getElementById('mobile-search-bar-container');
+  if (!mobileBar) return;
+  mobileBar.classList.toggle('hidden');
+  if (!mobileBar.classList.contains('hidden')) {
+    const input = document.getElementById('mobile-search-input');
+    if (input) {
+      input.focus();
+      app.openSearchDropdown('mobile');
+    }
+  }
+};
+
+// Global click listener to close search dropdowns when clicking outside
+document.addEventListener('click', function(e) {
+  ['navbar', 'categories', 'mobile'].forEach(ctx => {
+    const container = document.getElementById(`${ctx}-search-container`);
+    const dropdown = document.getElementById(`${ctx}-search-dropdown`);
+    if (container && dropdown && !container.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+});
+
+window.handleSearchInput = function(e) {
+  app.handleSearchInputChange(e, 'categories');
+};
+
+window.clearSearchAndFilter = function() {
+  app.clearSearchInput('categories');
   window.setCategoryFilter('all');
 };
 
@@ -2042,20 +2404,20 @@ function renderSubscriptionPlans() {
       <div>
         <div class="flex items-start justify-between mb-3 gap-2">
           <div>
-            <span class="text-[11px] font-extrabold text-amber-700 uppercase tracking-wider block mb-0.5">${plan.tag}</span>
+            <span class="text-xs font-black text-amber-700 uppercase tracking-wider block mb-0.5">${plan.tag}</span>
             <h3 class="text-lg sm:text-xl font-black text-zinc-900 font-heading leading-tight">${plan.name}</h3>
           </div>
           <div class="text-right flex-shrink-0">
             <span class="text-xl sm:text-2xl font-black text-zinc-950">₹${typeof plan.totalPrice === 'number' ? plan.totalPrice.toLocaleString('en-IN') : plan.totalPrice}</span>
-            <span class="text-[11px] text-zinc-500 font-bold block">/ ${plan.days === 10 ? '10 days' : 'month'}</span>
+            <span class="text-xs text-zinc-500 font-bold block">/ ${plan.days === 10 ? '10 days' : 'month'}</span>
           </div>
         </div>
 
-        <p class="text-zinc-600 text-xs leading-relaxed mb-3">${plan.description}</p>
+        <p class="text-zinc-600 text-xs sm:text-sm leading-relaxed mb-3">${plan.description}</p>
 
         <div class="space-y-2 pt-2.5 border-t border-zinc-100 mb-3">
           ${plan.features.map(f => `
-            <div class="flex items-center gap-2.5 text-xs text-zinc-700 font-medium">
+            <div class="flex items-center gap-2.5 text-xs sm:text-sm text-zinc-700 font-medium">
               <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
               </div>
@@ -2065,7 +2427,7 @@ function renderSubscriptionPlans() {
         </div>
 
         ${plan.id.includes('dinner') ? `
-          <button type="button" onclick="window.switchSubscriberMealType('dinner'); document.getElementById('monthly-menu-section')?.scrollIntoView({behavior: 'smooth'});" class="w-full text-center text-xs font-bold text-amber-800 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 py-1.5 px-2 rounded-xl mb-3 border border-amber-200/70 transition flex items-center justify-center gap-1 cursor-pointer">
+          <button type="button" onclick="window.switchSubscriberMealType('dinner'); document.getElementById('published-dinner-flyer-card')?.scrollIntoView({behavior: 'smooth'});" class="w-full text-center text-xs sm:text-sm font-bold text-amber-800 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 py-2 px-3 rounded-xl mb-3 border border-amber-200/70 transition flex items-center justify-center gap-1 cursor-pointer">
             <span>📜 View Published Dinner Menu</span>
           </button>
         ` : ''}

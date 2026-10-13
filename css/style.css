@@ -74,6 +74,15 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 /* Active Nav link underline */
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
 .nav-link.active {
   color: #111827;
   font-weight: 800;
@@ -352,7 +361,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 @media (max-width: 768px) {
   body {
-    padding-bottom: calc(3.8rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   /* Food card touch layout */
@@ -398,3 +407,72 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     gap: 0.5rem;
   }
 }
+
+/* Flipkart / Amazon Style Search Bar & Recent Searches Dropdown */
+.search-pill-input {
+  border: 1.5px solid #22c55e;
+  border-radius: 9999px;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.search-pill-input:focus,
+.search-pill-input:focus-within {
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.search-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 1rem;
+  border: 1px solid #E4E4E7;
+  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.06);
+  z-index: 60;
+  overflow: hidden;
+  animation: searchDropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes searchDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-recent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-recent-item:hover {
+  background-color: #F4F4F5;
+}
+
+.search-recent-item .recent-remove-btn {
+  opacity: 0.5;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.search-recent-item:hover .recent-remove-btn {
+  opacity: 1;
+}
+
+.search-highlight {
+  font-weight: 800;
+  color: #D97706;
+}
+

@@ -644,6 +644,25 @@ const MENU_DATA = {
       cta: "Get Breakfast Plan"
     },
     {
+      id: "plan-breakfast-lunch-dinner",
+      name: "Breakfast + Lunch + Dinner",
+      tag: "All 3 Meals • Full-Day Plan",
+      pricePerDay: 193,
+      totalPrice: 5800,
+      days: 30,
+      popular: true,
+      description: "Complete all-day nutrition: Hot breakfast in the morning, authentic full lunch at noon, and light wholesome dinner at night. Total cooking freedom with maximum monthly savings.",
+      features: [
+        "3 Meals Daily: Morning Breakfast + Noon Lunch + Night Dinner",
+        "90 Total Deliveries per Month (3 Times A Day)",
+        "Breakfast (7:30-9 AM) • Lunch (12-1:30 PM) • Dinner (7:30-9 PM)",
+        "Daily Menu Rotation: Dosa/Idli, Andhra Meals & Hot Phulkas",
+        "Save ₹1,000 with Monthly All-Inclusive Combo Rate",
+        "Pause Absences Before 5:30 PM Cutoff (Zero Food Loss)"
+      ],
+      cta: "Get Breakfast + Lunch + Dinner"
+    },
+    {
       id: "plan-breakfast-lunch",
       name: "Breakfast + Lunch",
       tag: "Daytime Work Combo",
