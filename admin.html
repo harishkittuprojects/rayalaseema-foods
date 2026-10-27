@@ -222,9 +222,6 @@
               <button onclick="triggerCloudinaryQuickUpload()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition border border-white/20 cursor-pointer">
                 ☁️ Upload Image
               </button>
-              <button onclick="syncWebsiteToSupabase()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
-                🚀 Sync to Supabase
-              </button>
             </div>
           </div>
         </div>
@@ -290,7 +287,7 @@
           <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
             <h3 class="text-base font-bold text-white">Connected Cloud Services</h3>
             
-            <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
+            <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-1.5">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-white flex items-center gap-1.5">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Supabase Database
@@ -298,9 +295,6 @@
                 <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded">Connected</span>
               </div>
               <p class="text-[11px] text-zinc-400">Project: <span class="text-zinc-200">sjcjxetwxrdxwnhzpzaq</span></p>
-              <button onclick="syncWebsiteToSupabase()" class="w-full py-1.5 bg-zinc-800 hover:bg-zinc-700 text-amber-400 text-xs font-bold rounded-lg transition">
-                ⚡ Force Sync Data Now
-              </button>
             </div>
 
             <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
@@ -756,13 +750,11 @@
                 Project URL: <span class="text-zinc-200 font-mono">https://sjcjxetwxrdxwnhzpzaq.supabase.co</span>
               </p>
             </div>
-            <div class="flex flex-wrap gap-2">
-              <button onclick="syncWebsiteToSupabase()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
-                🚀 Push All Data to Supabase
-              </button>
-              <button onclick="pullDataFromSupabase()" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs rounded-xl transition cursor-pointer border border-zinc-700">
-                📥 Pull from Supabase
-              </button>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-800 text-emerald-400 font-bold text-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Automatic Live Sync Active</span>
+              </span>
             </div>
           </div>
 
@@ -773,7 +765,7 @@
               <li>Open your Supabase Project: <a href="https://supabase.com/dashboard/project/sjcjxetwxrdxwnhzpzaq/sql/new" target="_blank" class="text-amber-400 underline font-semibold">Supabase SQL Editor (Click here)</a></li>
               <li>Click the button below to copy the complete SQL Schema.</li>
               <li>Paste it into the Supabase SQL Editor and press <strong>RUN</strong>.</li>
-              <li>Click <strong>"Push All Data to Supabase"</strong> above to seed all dishes and menus!</li>
+              <li>Your database tables will be created and live automatic synchronization is enabled!</li>
             </ol>
             <div class="pt-2">
               <button onclick="copySupabaseSqlScript()" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-amber-300 text-xs font-bold rounded-xl border border-zinc-700 transition cursor-pointer">
