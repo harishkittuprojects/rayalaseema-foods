@@ -100,6 +100,49 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-radius: 2px;
 }
 
+/* Strict Brand Logo Avatar Dimensions (Guarantees video never blows out on mobile) */
+.nav-brand-avatar {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #F59E0B !important;
+  background-color: #09090B !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+@media (min-width: 640px) {
+  .nav-brand-avatar {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
+  }
+}
+
+.nav-brand-avatar video,
+.nav-brand-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 9999px !important;
+  display: block !important;
+  pointer-events: none !important;
+}
+
 /* Food Card Hover effect */
 .food-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

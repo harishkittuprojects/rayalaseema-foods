@@ -85,18 +85,18 @@
   <!-- ==================== HEADER / NAVBAR ==================== -->
   <header id="main-header" class="sticky top-0 z-50 glass-nav border-b border-zinc-100 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-15 sm:h-16">
+      <div class="flex items-center justify-between h-14 sm:h-16">
         
         <!-- Left Section: Brand Logo + Aligned Left Desktop Navigation -->
         <div class="flex items-center min-w-0">
           
           <!-- Brand Logo -->
           <a href="#home" onclick="navigateTo('home'); return false;" class="shrink-0 flex items-center gap-2 sm:gap-3 group cursor-pointer select-none" title="The Rayalaseema Cloud Kitchen">
-            <div class="relative w-8.5 h-8.5 sm:w-11 sm:h-11 rounded-full overflow-hidden border-2 border-amber-400 group-hover:scale-105 transition-transform duration-300 bg-zinc-950 shrink-0 shadow-md flex items-center justify-center">
-              <video autoplay loop muted playsinline poster="image.png" class="w-full h-full object-cover">
+            <div class="nav-brand-avatar group-hover:scale-105 transition-transform duration-300">
+              <video autoplay loop muted playsinline poster="image.png">
                 <source src="rayalaseema-foods.mp4" type="video/mp4">
                 <source src="https://res.cloudinary.com/ufqzv6wv/video/upload/v1793110336/rjmodwaibzooeka4ni1b.mp4" type="video/mp4">
-                <img src="image.png" alt="The Rayalaseema Cloud Kitchen" class="w-full h-full object-contain p-0.5 bg-white" />
+                <img src="image.png" alt="The Rayalaseema Cloud Kitchen" class="p-0.5 bg-white" />
               </video>
             </div>
             <div class="flex flex-col justify-center text-left">
@@ -164,10 +164,10 @@
           <!-- Cart Button with Dynamic Badge -->
           <a href="#cart" onclick="navigateTo('cart'); return false;" class="relative p-1.5 sm:p-2 rounded-full hover:bg-amber-50 text-zinc-800 transition flex items-center gap-1 group cursor-pointer shrink-0" title="View Cart">
             <div class="relative">
-              <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5 group-hover:scale-110 transition text-zinc-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 group-hover:scale-110 transition text-zinc-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
               </svg>
-              <span class="cart-badge-count hidden absolute -top-1.5 -right-1.5 bg-amber-500 text-zinc-950 text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+              <span class="cart-badge-count hidden absolute -top-1.5 -right-1.5 bg-amber-500 text-zinc-950 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                 0
               </span>
             </div>
