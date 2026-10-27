@@ -63,33 +63,12 @@
 </head>
 <body class="bg-[#FAFAFA] text-zinc-800 antialiased selection:bg-amber-300 selection:text-zinc-950 flex flex-col min-h-screen">
 
-  <!-- ==================== CINEMATIC OPENING VIDEO PRESENTATION (MOBILE & DESKTOP OPTIMIZED) ==================== -->
-  <div id="brand-video-splash" onclick="dismissSplashVideo()" class="fixed inset-0 z-[100] w-full h-full bg-zinc-950 flex flex-col items-center justify-center p-4 sm:p-6 transition-all duration-700 ease-out cursor-pointer select-none overflow-hidden">
-    
-    <!-- Ambient Golden Glow & Blurred Background Video (Eliminates mobile black voids) -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <video id="splash-bg-blur" autoplay muted loop playsinline class="w-full h-full object-cover blur-2xl opacity-40 scale-125">
-        <source src="rayalaseema-foods.mp4" type="video/mp4">
-        <source src="https://res.cloudinary.com/ufqzv6wv/video/upload/v1793110336/rjmodwaibzooeka4ni1b.mp4" type="video/mp4">
-      </video>
-      <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/30 to-zinc-950"></div>
-    </div>
-
-    <!-- Centerpiece Video Showcase Card -->
-    <div class="relative z-10 w-full max-w-lg md:max-w-2xl px-1 sm:px-0 flex flex-col items-center justify-center">
-      <div class="w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden bg-black/90 border-2 border-amber-400/80 shadow-[0_0_60px_rgba(245,158,11,0.35)]">
-        <video id="splash-intro-video" autoplay muted playsinline class="w-full h-full object-cover">
-          <source src="rayalaseema-foods.mp4" type="video/mp4">
-          <source src="https://res.cloudinary.com/ufqzv6wv/video/upload/v1793110336/rjmodwaibzooeka4ni1b.mp4" type="video/mp4">
-        </video>
-      </div>
-
-      <!-- Subtle Mobile Dismiss Hint -->
-      <div class="mt-4 text-[10px] sm:text-xs font-bold text-amber-300/80 tracking-widest uppercase bg-zinc-900/80 backdrop-blur-md px-3.5 py-1 rounded-full border border-amber-400/30 shadow-md">
-        Tap anywhere to enter
-      </div>
-    </div>
-
+  <!-- ==================== CINEMATIC FULLSCREEN INTRO VIDEO (DESKTOP & MOBILE EDGE-TO-EDGE) ==================== -->
+  <div id="brand-video-splash" onclick="dismissSplashVideo()" class="fixed inset-0 z-[100] w-full h-full bg-black flex items-center justify-center cursor-pointer select-none overflow-hidden transition-all duration-700 ease-out m-0 p-0 border-0">
+    <video id="splash-intro-video" autoplay muted playsinline class="w-full h-full object-cover object-center m-0 p-0 border-0">
+      <source src="rayalaseema-foods.mp4" type="video/mp4">
+      <source src="https://res.cloudinary.com/ufqzv6wv/video/upload/v1793110336/rjmodwaibzooeka4ni1b.mp4" type="video/mp4">
+    </video>
   </div>
 
   <!-- ==================== HEADER / NAVBAR ==================== -->
@@ -1936,8 +1915,6 @@
         setTimeout(() => {
           splash.classList.add('hidden');
           if (video) video.pause();
-          const bg = document.getElementById('splash-bg-blur');
-          if (bg) bg.pause();
         }, 500);
       };
 
@@ -1949,8 +1926,6 @@
         video.currentTime = 0;
         configureMediumVideo();
         video.play().then(() => configureMediumVideo()).catch(() => {});
-        const bg = document.getElementById('splash-bg-blur');
-        if (bg) { bg.currentTime = 0; bg.play().catch(() => {}); }
         splashTimeout = setTimeout(() => {
           dismissSplashVideo();
         }, 7000);
