@@ -1883,32 +1883,28 @@
 
       let splashTimeout = null;
 
-      function configureFastVideo() {
-        // Fast playback rate: scaled so the animation plays snappily in 3 to 3.5 seconds
-        if (video.duration && video.duration > 3.5) {
-          video.playbackRate = Math.min(3.5, video.duration / 3.2);
-        } else {
-          video.playbackRate = 2.0;
-        }
+      function configureMediumVideo() {
+        // Medium slow pace: natural, smooth, and easily readable (1.4x speed, ~6-7 seconds)
+        video.playbackRate = 1.4;
       }
 
-      // Configure fast playback on metadata load & play
-      video.addEventListener('loadedmetadata', configureFastVideo);
-      video.addEventListener('play', configureFastVideo);
+      // Configure playback speed on metadata load & play
+      video.addEventListener('loadedmetadata', configureMediumVideo);
+      video.addEventListener('play', configureMediumVideo);
 
       // Auto dismiss when video finishes
       video.addEventListener('ended', () => {
         dismissSplashVideo();
       });
 
-      // Strict 3.5-second timer cap so the intro is snappy and fast
+      // Comfortable medium timer matching the video
       splashTimeout = setTimeout(() => {
         dismissSplashVideo();
-      }, 3500);
+      }, 7000);
 
       // Start autoplay
       video.play().then(() => {
-        configureFastVideo();
+        configureMediumVideo();
       }).catch(() => {});
 
       window.dismissSplashVideo = function() {
@@ -1925,11 +1921,11 @@
         void splash.offsetWidth;
         splash.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
         video.currentTime = 0;
-        configureFastVideo();
-        video.play().then(() => configureFastVideo()).catch(() => {});
+        configureMediumVideo();
+        video.play().then(() => configureMediumVideo()).catch(() => {});
         splashTimeout = setTimeout(() => {
           dismissSplashVideo();
-        }, 3500);
+        }, 7000);
       };
 
       // Press Escape or click to dismiss immediately
