@@ -3,669 +3,993 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin & Kitchen Dashboard | The Rayalaseema Foods</title>
-  
+  <title>Master Admin Portal | The Rayalaseema Foods</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="image.png" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet" />
 
   <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-    .font-heading {
-      font-family: 'Playfair Display', serif;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-heading { font-family: 'Playfair Display', serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #18181b; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 9999px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
   </style>
+
+  <script>
+    // Clean URL /admin fallback
+    if (window.location.pathname.endsWith('/admin.html') && window.history && window.history.replaceState) {
+      // Optional pretty state
+    }
+  </script>
 </head>
-<body class="bg-zinc-100 text-zinc-900 min-h-screen flex flex-col">
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col selection:bg-amber-400 selection:text-zinc-950">
 
-  <!-- ==================== ADMIN HEADER ==================== -->
-  <header class="bg-zinc-950 text-white sticky top-0 z-40 shadow-xl border-b border-zinc-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
-      
-      <!-- Brand & Title -->
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 group">
-          <img src="image.png" alt="Rayalaseema Foods Emblem" class="w-10 h-10 rounded-full object-cover border border-amber-400 bg-white" />
+  <!-- ============================================================================== -->
+  <!-- 1. AUTHENTICATION GATE (LOGIN MODAL) -->
+  <!-- ============================================================================== -->
+  <div id="admin-auth-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-md">
+    <div class="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      <!-- Glow effect -->
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <!-- Logo & Header -->
+        <div class="text-center mb-6">
+          <div class="inline-flex p-1 rounded-full bg-zinc-800 border-2 border-amber-400 mb-3 shadow-lg shadow-amber-500/10">
+            <img src="image.png" alt="Rayalaseema Foods" class="w-14 h-14 rounded-full object-contain bg-white" />
+          </div>
+          <h1 class="text-2xl font-black font-heading text-white">Rayalaseema Foods</h1>
+          <span class="text-xs font-bold tracking-widest uppercase text-amber-400 block mt-1">Master Admin & CMS Portal</span>
+          <p class="text-xs text-zinc-400 mt-2">Manage products, menu rotations, subscriptions, and Cloudinary media</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-4">
           <div>
-            <span class="text-base font-black font-heading text-white block group-hover:text-amber-400 transition">Rayalaseema Cloud Kitchen</span>
-            <span class="text-[10px] tracking-widest text-amber-400 font-extrabold uppercase block">Admin & Kitchen Dispatch Operations</span>
+            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Admin Email</label>
+            <div class="relative">
+              <input type="text" id="login-email" required placeholder="admin@rayalaseemafoods.com" value="admin@rayalaseemafoods.com" class="w-full px-4 py-3 bg-zinc-950 border border-zinc-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400 transition" />
+            </div>
           </div>
-        </a>
-      </div>
 
-      <!-- Cutoff Clock & Mode Switcher -->
-      <div class="flex flex-wrap items-center gap-3">
-        <div id="admin-cutoff-badge" class="px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          <span>5:30 PM Cutoff: <strong id="admin-time-display">3:30 PM (Open)</strong></span>
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400">Password</label>
+              <button type="button" onclick="togglePasswordVisibility()" class="text-[11px] text-amber-400 hover:underline">Show/Hide</button>
+            </div>
+            <div class="relative">
+              <input type="password" id="login-password" required placeholder="Enter admin password" value="admin" class="w-full px-4 py-3 bg-zinc-950 border border-zinc-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400 transition" />
+            </div>
+          </div>
+
+          <div id="login-error-msg" class="hidden p-3 rounded-xl bg-red-950/80 border border-red-500/50 text-red-300 text-xs font-semibold"></div>
+
+          <button type="submit" id="login-submit-btn" class="w-full py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-zinc-950 font-black text-sm rounded-xl transition shadow-lg shadow-amber-500/20 active:scale-98 cursor-pointer flex items-center justify-center gap-2">
+            <span>Sign In to Admin Portal</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </form>
+
+        <!-- Credentials hint -->
+        <div class="mt-6 pt-5 border-t border-zinc-800 text-center">
+          <p class="text-[11px] text-zinc-400">
+            Default credentials: <strong class="text-zinc-200">admin@rayalaseemafoods.com</strong> / <strong class="text-zinc-200">admin</strong>
+          </p>
+          <a href="index.html" class="inline-block text-xs font-bold text-amber-400 hover:underline mt-2">← Back to Customer Website</a>
         </div>
-
-        <!-- Simulation Switcher Buttons -->
-        <div class="bg-zinc-900 p-1 rounded-xl border border-zinc-800 flex items-center text-[11px] font-bold">
-          <button onclick="setAdminTimeMode('before')" id="btn-mode-before" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white transition">3:30 PM (Before 5:30 PM)</button>
-          <button onclick="setAdminTimeMode('after')" id="btn-mode-after" class="px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition">6:15 PM (After 5:30 PM)</button>
-          <button onclick="setAdminTimeMode('real')" id="btn-mode-real" class="px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition">Device Clock</button>
-        </div>
-
-        <a href="index.html" class="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-extrabold text-xs rounded-xl transition shadow">
-          ← Back to Store
-        </a>
       </div>
-
     </div>
-  </header>
+  </div>
 
-  <!-- ==================== MAIN CONTENT ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 space-y-6 sm:space-y-8">
+  <!-- ============================================================================== -->
+  <!-- 2. MASTER ADMIN PORTAL (AUTHENTICATED) -->
+  <!-- ============================================================================== -->
+  <div id="admin-main-portal" class="hidden flex-1 flex flex-col min-h-screen">
     
-    <!-- Top Summary Banner -->
-    <div class="bg-gradient-to-r from-amber-600 via-amber-700 to-zinc-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <span class="text-xs font-black uppercase tracking-widest text-amber-200 bg-black/20 px-3 py-0.5 rounded-full border border-white/10 inline-block mb-1.5">
-            10-Day Plan Operations Ledger
-          </span>
-          <h1 class="text-xl sm:text-2xl font-black font-heading">Food Subscription & Kitchen Dispatch System</h1>
-          <p class="text-xs text-amber-100 mt-1 max-w-2xl leading-relaxed">
-            Manage customer 10-day food plans, pause/resume status, 5:30 PM daily preparation lock, and live meal cooking queue with 100% Zero Food Loss Guarantee.
-          </p>
+    <!-- TOP NAVBAR -->
+    <header class="bg-zinc-900 border-b border-zinc-800 sticky top-0 z-40 shadow-xl">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- Brand & Title -->
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="flex items-center gap-2.5 group">
+            <img src="image.png" alt="Rayalaseema Foods" class="w-10 h-10 rounded-full object-contain p-0.5 border border-amber-400 bg-white" />
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-base font-black font-heading text-white group-hover:text-amber-400 transition leading-none">Rayalaseema Foods</span>
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-amber-400 text-zinc-950">Master Admin</span>
+              </div>
+              <span class="text-[10px] tracking-wider text-zinc-400 font-semibold block mt-1">Supabase & Cloudinary Integrated CMS</span>
+            </div>
+          </a>
         </div>
 
-        <div class="flex flex-wrap gap-2">
-          <button onclick="openNewSubModal()" class="px-4 py-2.5 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-extrabold text-xs rounded-xl transition shadow-lg flex items-center gap-1.5 cursor-pointer">
-            <span>+ Add New Customer Subscription</span>
-          </button>
-          <button onclick="resetAllDemoSubscriptions()" class="px-3.5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition border border-white/20 cursor-pointer">
-            🔄 Reset All Demo Data
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4 KPI Overview Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      
-      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-zinc-200/80 shadow-sm">
-        <div class="flex items-center justify-between text-zinc-400 mb-1.5">
-          <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Total Subscriptions</span>
-          <span class="text-xl">📋</span>
-        </div>
-        <div class="text-2xl sm:text-3xl font-black text-zinc-950 font-heading" id="kpi-total-subs">3</div>
-        <span class="text-[11px] text-zinc-500 mt-0.5 block">Registered 10-Day Plans</span>
-      </div>
-
-      <div class="bg-emerald-50 rounded-2xl p-4 sm:p-5 border border-emerald-200 shadow-sm">
-        <div class="flex items-center justify-between text-emerald-700 mb-1.5">
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-800">Tomorrow's Kitchen Batch</span>
-          <span class="text-xl">👨‍🍳</span>
-        </div>
-        <div class="text-2xl sm:text-3xl font-black text-emerald-700 font-heading" id="kpi-active-tomorrow">2</div>
-        <span class="text-[11px] text-emerald-800 font-semibold mt-0.5 block">Active Meals to Cook Tomorrow</span>
-      </div>
-
-      <div class="bg-amber-50 rounded-2xl p-4 sm:p-5 border border-amber-200 shadow-sm">
-        <div class="flex items-center justify-between text-amber-700 mb-1.5">
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Paused for Tomorrow</span>
-          <span class="text-xl">⏸️</span>
-        </div>
-        <div class="text-2xl sm:text-3xl font-black text-amber-700 font-heading" id="kpi-paused-tomorrow">1</div>
-        <span class="text-[11px] text-amber-800 font-semibold mt-0.5 block">Excluded from Prep (Zero Loss)</span>
-      </div>
-
-      <div class="bg-blue-50 rounded-2xl p-4 sm:p-5 border border-blue-200 shadow-sm">
-        <div class="flex items-center justify-between text-blue-700 mb-1.5">
-          <span class="text-xs font-bold uppercase tracking-wider text-blue-800">Completed Plans</span>
-          <span class="text-xl">🎉</span>
-        </div>
-        <div class="text-2xl sm:text-3xl font-black text-blue-700 font-heading" id="kpi-completed-subs">1</div>
-        <span class="text-[11px] text-blue-800 font-semibold mt-0.5 block">Full 10/10 Days Delivered</span>
-      </div>
-
-    </div>
-
-    <!-- ==================== SECTION 1: TOMORROW'S KITCHEN PREPARATION QUEUE ==================== -->
-    <div class="bg-white rounded-2xl p-4 sm:p-6 border border-zinc-200/80 shadow-sm space-y-4">
-      
-      <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-zinc-100">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-base">🔥</span>
-            <h2 class="text-lg sm:text-xl font-black text-zinc-950 font-heading">Tomorrow's Kitchen Meal Prep & Dispatch Queue</h2>
+        <!-- Sync Indicator, Cutoff Clock & Actions -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Database Sync Status Pill -->
+          <div id="db-status-badge" onclick="switchAdminTab('supabase')" title="Supabase Database Status" class="px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40 cursor-pointer hover:bg-emerald-900/60 transition">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="db-status-text">Supabase Active</span>
           </div>
-          <p class="text-xs text-zinc-500 mt-0.5">
-            Auto-filtered list of meals to prepare tomorrow. Subscriptions paused before 5:30 PM are automatically excluded so no meal is wasted.
-          </p>
+
+          <!-- Cutoff Clock Badge -->
+          <div id="admin-cutoff-badge" class="hidden sm:flex px-3 py-1.5 rounded-full text-xs font-bold border items-center gap-1.5 bg-amber-950/60 text-amber-300 border-amber-500/40">
+            <span>5:30 PM Cutoff: <strong id="admin-time-display">Open</strong></span>
+          </div>
+
+          <!-- Live Store Link -->
+          <a href="index.html" target="_blank" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold rounded-xl transition flex items-center gap-1 border border-zinc-700">
+            <span>View Website</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          </a>
+
+          <!-- Logout Button -->
+          <button onclick="handleAdminLogout()" class="px-3 py-1.5 bg-red-950 hover:bg-red-900 text-red-300 border border-red-800/60 text-xs font-bold rounded-xl transition cursor-pointer">
+            Sign Out
+          </button>
+        </div>
+
+      </div>
+
+      <!-- NAVIGATION TABS -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-zinc-800/80 overflow-x-auto custom-scrollbar">
+        <nav class="flex items-center gap-1 py-1.5 min-w-max text-xs font-bold">
+          <button onclick="switchAdminTab('dashboard')" id="tab-btn-dashboard" class="admin-tab-btn px-3 py-2 rounded-xl text-amber-400 bg-zinc-800 flex items-center gap-1.5">
+            <span>📊</span><span>Dashboard</span>
+          </button>
+          <button onclick="switchAdminTab('dishes')" id="tab-btn-dishes" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>🍲</span><span>Dishes & Products</span>
+          </button>
+          <button onclick="switchAdminTab('categories')" id="tab-btn-categories" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>📁</span><span>Categories</span>
+          </button>
+          <button onclick="switchAdminTab('menus')" id="tab-btn-menus" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>📅</span><span>Rotational Menus</span>
+          </button>
+          <button onclick="switchAdminTab('plans')" id="tab-btn-plans" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>💳</span><span>Subscription Packages</span>
+          </button>
+          <button onclick="switchAdminTab('subscriptions')" id="tab-btn-subscriptions" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>🥣</span><span>Kitchen Dispatch (10-Day)</span>
+          </button>
+          <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>📦</span><span>Orders & Bookings</span>
+          </button>
+          <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>⚙️</span><span>Branding & Contacts</span>
+          </button>
+          <button onclick="switchAdminTab('cloudinary')" id="tab-btn-cloudinary" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>☁️</span><span>Cloudinary Media</span>
+          </button>
+          <button onclick="switchAdminTab('supabase')" id="tab-btn-supabase" class="admin-tab-btn px-3 py-2 rounded-xl text-zinc-400 hover:text-white flex items-center gap-1.5">
+            <span>⚡</span><span>Supabase Hub</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ============================================================================== -->
+    <!-- MAIN TAB CONTENTS CONTAINER -->
+    <!-- ============================================================================== -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+      <!-- ========================================== -->
+      <!-- TAB 1: DASHBOARD OVERVIEW -->
+      <!-- ========================================== -->
+      <section id="tab-content-dashboard" class="tab-panel space-y-6">
+        
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-amber-600 via-amber-700 to-zinc-900 text-white rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div>
+              <span class="text-xs font-black uppercase tracking-widest text-amber-200 bg-black/30 px-3 py-1 rounded-full border border-white/10 inline-block mb-2">
+                Live Store Management
+              </span>
+              <h2 class="text-2xl sm:text-3xl font-black font-heading">Rayalaseema Cloud Kitchen Operations</h2>
+              <p class="text-xs sm:text-sm text-amber-100 mt-2 max-w-2xl leading-relaxed">
+                Control products, categories, 15-day lunch rotation, dinner flyers, pricing, and live customer subscriptions. All changes sync directly to Supabase and media uploads stream to Cloudinary!
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="openDishModal()" class="px-4 py-2.5 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-extrabold text-xs rounded-xl transition shadow flex items-center gap-1.5 cursor-pointer">
+                <span>+ Add New Dish</span>
+              </button>
+              <button onclick="triggerCloudinaryQuickUpload()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition border border-white/20 cursor-pointer">
+                ☁️ Upload Image
+              </button>
+              <button onclick="syncWebsiteToSupabase()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
+                🚀 Sync to Supabase
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Key Metrics -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center justify-between text-zinc-400 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Total Dishes</span>
+              <span class="text-xl">🍲</span>
+            </div>
+            <div class="text-3xl font-black text-white font-heading" id="stat-total-dishes">0</div>
+            <span class="text-[11px] text-amber-400 mt-1 block">Live in Menu</span>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center justify-between text-zinc-400 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Categories</span>
+              <span class="text-xl">📁</span>
+            </div>
+            <div class="text-3xl font-black text-white font-heading" id="stat-total-cats">0</div>
+            <span class="text-[11px] text-zinc-400 mt-1 block">Active Meal Categories</span>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center justify-between text-zinc-400 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">10-Day Subscribers</span>
+              <span class="text-xl">🥣</span>
+            </div>
+            <div class="text-3xl font-black text-emerald-400 font-heading" id="stat-active-subs">0</div>
+            <span class="text-[11px] text-emerald-500 mt-1 block">Active Plans</span>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center justify-between text-zinc-400 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Prep Queue Tomorrow</span>
+              <span class="text-xl">🔥</span>
+            </div>
+            <div class="text-3xl font-black text-amber-400 font-heading" id="stat-prep-tomorrow">0</div>
+            <span class="text-[11px] text-amber-300 mt-1 block">Meals Locked for Kitchen</span>
+          </div>
+        </div>
+
+        <!-- Recent Activity & Quick Links -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Recent Orders / Subscriptions -->
+          <div class="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-base font-bold text-white">Tomorrow's Kitchen Dispatch Prep</h3>
+                <p class="text-xs text-zinc-400">Subscribers who will receive lunch delivery at 12:30 PM tomorrow</p>
+              </div>
+              <button onclick="switchAdminTab('subscriptions')" class="text-xs text-amber-400 hover:underline font-bold">
+                View Full Kitchen Ledger →
+              </button>
+            </div>
+            <div id="dashboard-kitchen-summary" class="space-y-2.5">
+              <!-- Dynamically filled -->
+            </div>
+          </div>
+
+          <!-- Cloudinary & Supabase Quick Status -->
+          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+            <h3 class="text-base font-bold text-white">Connected Cloud Services</h3>
+            
+            <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Supabase Database
+                </span>
+                <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded">Connected</span>
+              </div>
+              <p class="text-[11px] text-zinc-400">Project: <span class="text-zinc-200">sjcjxetwxrdxwnhzpzaq</span></p>
+              <button onclick="syncWebsiteToSupabase()" class="w-full py-1.5 bg-zinc-800 hover:bg-zinc-700 text-amber-400 text-xs font-bold rounded-lg transition">
+                ⚡ Force Sync Data Now
+              </button>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span> Cloudinary Media
+                </span>
+                <span class="text-[10px] font-bold text-blue-400 bg-blue-950 px-2 py-0.5 rounded">Active</span>
+              </div>
+              <p class="text-[11px] text-zinc-400">Cloud: <span class="text-zinc-200">ufqzv6wv</span></p>
+              <button onclick="switchAdminTab('cloudinary')" class="w-full py-1.5 bg-zinc-800 hover:bg-zinc-700 text-blue-300 text-xs font-bold rounded-lg transition">
+                ☁️ Open Media Uploader
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 2: DISHES & PRODUCTS CRUD -->
+      <!-- ========================================== -->
+      <section id="tab-content-dishes" class="tab-panel hidden space-y-6">
+        
+        <!-- Header & Action Row -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Dishes & Menu Items</h2>
+            <p class="text-xs text-zinc-400">Add, edit, delete dishes, update prices, and upload dish photos to Cloudinary.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="openDishModal()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow flex items-center gap-1.5 cursor-pointer">
+              <span>+ Add New Dish</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex-1 min-w-[200px]">
+            <input type="text" id="dish-search-input" oninput="filterDishesTable()" placeholder="Search dish by name or ingredient..." class="w-full px-3.5 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400" />
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="dish-category-filter" onchange="filterDishesTable()" class="px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-zinc-200 focus:outline-none focus:border-amber-400">
+              <option value="all">All Categories</option>
+              <!-- Filled dynamically -->
+            </select>
+            <select id="dish-diet-filter" onchange="filterDishesTable()" class="px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-zinc-200 focus:outline-none focus:border-amber-400">
+              <option value="all">All Diets</option>
+              <option value="veg">🟢 Pure Veg Only</option>
+              <option value="nonveg">🔴 Non-Veg Only</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dishes Table -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-zinc-950 text-zinc-400 uppercase text-[10px] font-bold tracking-wider border-b border-zinc-800">
+                <tr>
+                  <th class="p-3.5">Image</th>
+                  <th class="p-3.5">Dish Details</th>
+                  <th class="p-3.5">Category</th>
+                  <th class="p-3.5">Price (₹)</th>
+                  <th class="p-3.5">Diet</th>
+                  <th class="p-3.5">Nutrition</th>
+                  <th class="p-3.5">Featured</th>
+                  <th class="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dishes-table-body" class="divide-y divide-zinc-800/60 font-medium">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 3: CATEGORIES CRUD -->
+      <!-- ========================================== -->
+      <section id="tab-content-categories" class="tab-panel hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Meal Categories</h2>
+            <p class="text-xs text-zinc-400">Manage categories, badge styles, descriptions, and category cover photos.</p>
+          </div>
+          <button onclick="openCategoryModal()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow flex items-center gap-1.5 cursor-pointer">
+            <span>+ Add New Category</span>
+          </button>
+        </div>
+
+        <div id="categories-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 4: ROTATIONAL MENUS (BREAKFAST, LUNCH, DINNER) -->
+      <!-- ========================================== -->
+      <section id="tab-content-menus" class="tab-panel hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Monthly Rotational Subscriber Menus</h2>
+            <p class="text-xs text-zinc-400">Edit the 15-day lunch schedule, breakfast items rotation, and dinner flyer banner.</p>
+          </div>
+          <button onclick="saveAllMenuChanges()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
+            ✓ Save All Menu Changes
+          </button>
+        </div>
+
+        <!-- Sub Tabs for Menus -->
+        <div class="flex border-b border-zinc-800 gap-2">
+          <button onclick="switchMenuSubTab('lunch')" id="menu-subtab-lunch" class="px-4 py-2 text-xs font-bold border-b-2 border-amber-400 text-amber-400">
+            ☀️ Afternoon Lunch 15-Day Rotation
+          </button>
+          <button onclick="switchMenuSubTab('breakfast')" id="menu-subtab-breakfast" class="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white border-b-2 border-transparent">
+            🌅 Morning Breakfast Menu
+          </button>
+          <button onclick="switchMenuSubTab('dinner')" id="menu-subtab-dinner" class="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white border-b-2 border-transparent">
+            🌙 Night Dinner Menu & Flyer
+          </button>
+        </div>
+
+        <!-- 1. Lunch Rotation Sub-Panel -->
+        <div id="menu-panel-lunch" class="space-y-4">
+          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+            <h3 class="text-base font-bold text-white mb-2">15-Day Afternoon Lunch Rotation Items</h3>
+            <p class="text-xs text-zinc-400 mb-6">Subscribers get a different traditional curry and bread/rice every single day. Edit any day below:</p>
+            
+            <div id="lunch-rotation-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Breakfast Sub-Panel -->
+        <div id="menu-panel-breakfast" class="hidden space-y-4">
+          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+            <h3 class="text-base font-bold text-white">Breakfast Rotation Menu (Idli, Dosa, Pongal, Ponganalu)</h3>
+            <div id="breakfast-rotation-list" class="space-y-3">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Dinner Sub-Panel -->
+        <div id="menu-panel-dinner" class="hidden space-y-6">
+          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+            <h3 class="text-base font-bold text-white">Night Dinner Menu & Cloudinary Flyer Banner</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-1">Dinner Operating Hours</label>
+                  <input type="text" id="dinner-timing-input" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" value="7:30 PM - 10:30 PM (Daily)" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-1">Headline</label>
+                  <input type="text" id="dinner-title-input" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" value="Authentic Seema Night Dinner Special" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-1">Dinner Flyer / Poster Image URL (Cloudinary)</label>
+                  <div class="flex gap-2">
+                    <input type="text" id="dinner-flyer-url" class="flex-1 px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+                    <button type="button" onclick="uploadFlyerToCloudinary()" class="px-3.5 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-bold text-xs rounded-xl cursor-pointer">
+                      Upload
+                    </button>
+                  </div>
+                  <input type="file" id="dinner-flyer-file" accept="image/*" class="hidden" onchange="handleFlyerFileChosen(event)" />
+                </div>
+              </div>
+
+              <!-- Flyer Preview -->
+              <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-4 flex flex-col items-center justify-center">
+                <span class="text-xs font-bold text-zinc-400 mb-2">Live Flyer Preview</span>
+                <img id="dinner-flyer-preview" src="image.png" alt="Flyer Preview" class="max-h-60 rounded-xl object-contain border border-zinc-700" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 5: SUBSCRIPTION PLANS & PRICING -->
+      <!-- ========================================== -->
+      <section id="tab-content-plans" class="tab-panel hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Subscription Packages & Pricing</h2>
+            <p class="text-xs text-zinc-400">Modify 10-day trial and monthly package pricing and features.</p>
+          </div>
+        </div>
+
+        <div id="subscription-plans-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 6: KITCHEN DISPATCH & 10-DAY LEDGER -->
+      <!-- ========================================== -->
+      <section id="tab-content-subscriptions" class="tab-panel hidden space-y-6">
+        <div class="bg-gradient-to-r from-amber-600 via-amber-700 to-zinc-900 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-black uppercase tracking-widest text-amber-200 bg-black/20 px-3 py-0.5 rounded-full border border-white/10 inline-block mb-1.5">
+                10-Day Plan Operations Ledger
+              </span>
+              <h2 class="text-xl sm:text-2xl font-black font-heading">Food Subscription & Kitchen Dispatch System</h2>
+              <p class="text-xs text-amber-100 mt-1 max-w-2xl leading-relaxed">
+                Manage customer 10-day food plans, pause/resume status, 5:30 PM daily preparation lock, and live meal cooking queue with 100% Zero Food Loss Guarantee.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="openNewSubModal()" class="px-4 py-2.5 bg-zinc-950 hover:bg-zinc-800 text-amber-400 font-extrabold text-xs rounded-xl transition shadow flex items-center gap-1.5 cursor-pointer">
+                <span>+ Add New Customer Subscription</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
+            <span class="text-xs font-bold uppercase text-zinc-400">Total Plans</span>
+            <div class="text-2xl font-black text-white" id="sub-kpi-total">0</div>
+          </div>
+          <div class="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
+            <span class="text-xs font-bold uppercase text-emerald-400">Active Tomorrow</span>
+            <div class="text-2xl font-black text-emerald-400" id="sub-kpi-active">0</div>
+          </div>
+          <div class="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
+            <span class="text-xs font-bold uppercase text-amber-400">Paused Tomorrow</span>
+            <div class="text-2xl font-black text-amber-400" id="sub-kpi-paused">0</div>
+          </div>
+          <div class="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
+            <span class="text-xs font-bold uppercase text-zinc-400">Completed</span>
+            <div class="text-2xl font-black text-zinc-300" id="sub-kpi-completed">0</div>
+          </div>
+        </div>
+
+        <!-- Cutoff Simulation Controller -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <span class="font-bold text-zinc-300">5:30 PM Cutoff Simulator:</span>
+          <div class="flex items-center gap-2">
+            <button onclick="setAdminTimeMode('before')" id="btn-mode-before" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold">3:30 PM (Before Cutoff)</button>
+            <button onclick="setAdminTimeMode('after')" id="btn-mode-after" class="px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 font-bold">6:15 PM (After Cutoff)</button>
+            <button onclick="setAdminTimeMode('real')" id="btn-mode-real" class="px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 font-bold">Device Real Time</button>
+          </div>
+        </div>
+
+        <!-- Subscribers Table -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-zinc-950 text-zinc-400 uppercase text-[10px] font-bold tracking-wider border-b border-zinc-800">
+                <tr>
+                  <th class="p-3.5">Customer</th>
+                  <th class="p-3.5">Meal Preference</th>
+                  <th class="p-3.5">10-Day Balance</th>
+                  <th class="p-3.5">Status</th>
+                  <th class="p-3.5">Next Delivery</th>
+                  <th class="p-3.5">Paused Dates</th>
+                  <th class="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="subscribers-table-body" class="divide-y divide-zinc-800/60 font-medium">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 7: ORDERS & BOOKINGS -->
+      <!-- ========================================== -->
+      <section id="tab-content-orders" class="tab-panel hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Customer Orders & Deliveries</h2>
+            <p class="text-xs text-zinc-400">Track and update customer lunch orders and catering bookings.</p>
+          </div>
+        </div>
+
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-zinc-950 text-zinc-400 uppercase text-[10px] font-bold tracking-wider border-b border-zinc-800">
+                <tr>
+                  <th class="p-3.5">Order ID</th>
+                  <th class="p-3.5">Customer & Phone</th>
+                  <th class="p-3.5">Items</th>
+                  <th class="p-3.5">Total Amount</th>
+                  <th class="p-3.5">Address</th>
+                  <th class="p-3.5">Status</th>
+                  <th class="p-3.5 text-right">Change Status</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body" class="divide-y divide-zinc-800/60 font-medium">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 8: BRANDING & CONTACT SETTINGS -->
+      <!-- ========================================== -->
+      <section id="tab-content-settings" class="tab-panel hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Website Branding & Contact Details</h2>
+            <p class="text-xs text-zinc-400">Update hero headlines, announcement ticker, phone numbers, and UPI details.</p>
+          </div>
+          <button onclick="saveSiteSettings()" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
+            ✓ Save Settings
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Text Settings -->
+          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-amber-400">Hero Section & Announcements</h3>
+            
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">Hero Title</label>
+              <input type="text" id="setting-hero-title" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">Hero Subtitle</label>
+              <textarea id="setting-hero-subtitle" rows="3" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">Top Announcement Bar Text</label>
+              <input type="text" id="setting-announcement" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            </div>
+          </div>
+
+          <!-- Contact & UPI Settings -->
+          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-amber-400">Contact & Payment Information</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-zinc-400 mb-1">Phone Number</label>
+                <input type="text" id="setting-phone" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-zinc-400 mb-1">WhatsApp Support</label>
+                <input type="text" id="setting-whatsapp" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">Support Email</label>
+              <input type="text" id="setting-email" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">Kitchen Address</label>
+              <input type="text" id="setting-address" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">UPI Payment ID</label>
+              <input type="text" id="setting-upi" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Account Security -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-amber-400">Admin Login Security</h3>
+          <p class="text-xs text-zinc-400">Change your master admin login email and password.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">Admin Email</label>
+              <input type="email" id="setting-admin-email" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 mb-1">New Password</label>
+              <input type="password" id="setting-admin-password" placeholder="Enter new password" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            </div>
+          </div>
+          <button onclick="updateAdminCredentials()" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-amber-400 text-xs font-bold rounded-xl transition">
+            Update Admin Login Credentials
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 9: CLOUDINARY MEDIA HUB -->
+      <!-- ========================================== -->
+      <section id="tab-content-cloudinary" class="tab-panel hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black font-heading text-white">Cloudinary Media Hub</h2>
+            <p class="text-xs text-zinc-400">Upload food photos, flyers, or banners directly to Cloudinary (Cloud: <strong class="text-amber-400">ufqzv6wv</strong>).</p>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Uploader -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 text-center space-y-4">
+          <div class="w-16 h-16 rounded-full bg-amber-400/10 text-amber-400 flex items-center justify-center mx-auto text-2xl">
+            ☁️
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">Upload Any Image to Cloudinary</h3>
+            <p class="text-xs text-zinc-400 mt-1">PNG, JPG, WEBP accepted. Images are instantly signed and stored on Cloudinary.</p>
+          </div>
+          <div class="max-w-md mx-auto">
+            <input type="file" id="cloudinary-standalone-file" accept="image/*" class="block w-full text-xs text-zinc-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-400 file:text-zinc-950 hover:file:bg-amber-500 cursor-pointer" onchange="handleStandaloneMediaUpload(event)" />
+          </div>
+          <div id="media-upload-spinner" class="hidden text-xs text-amber-400 font-bold animate-pulse">
+            ⏳ Uploading to Cloudinary ufqzv6wv... Please wait...
+          </div>
+        </div>
+
+        <!-- Latest Upload Result Box -->
+        <div id="media-result-box" class="hidden bg-zinc-900 border border-emerald-500/50 rounded-3xl p-6 space-y-4">
+          <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold">
+            <span>✓ Image Successfully Uploaded to Cloudinary!</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <img id="media-result-preview" src="" alt="Uploaded media" class="w-24 h-24 rounded-2xl object-cover border border-zinc-700 bg-zinc-950 shrink-0" />
+            <div class="flex-1 min-w-0 w-full space-y-2">
+              <input type="text" id="media-result-url" readonly class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-amber-300 font-mono select-all" />
+              <button onclick="copyCloudinaryUrl()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition cursor-pointer">
+                📋 Copy Secure URL
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 10: SUPABASE SETUP & SYNC HUB -->
+      <!-- ========================================== -->
+      <section id="tab-content-supabase" class="tab-panel hidden space-y-6">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Cloud Database Integration</span>
+              <h2 class="text-2xl font-black font-heading text-white mt-1">Supabase Project Sync Hub</h2>
+              <p class="text-xs text-zinc-400 mt-1">
+                Project URL: <span class="text-zinc-200 font-mono">https://sjcjxetwxrdxwnhzpzaq.supabase.co</span>
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="syncWebsiteToSupabase()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl transition shadow cursor-pointer">
+                🚀 Push All Data to Supabase
+              </button>
+              <button onclick="pullDataFromSupabase()" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs rounded-xl transition cursor-pointer border border-zinc-700">
+                📥 Pull from Supabase
+              </button>
+            </div>
+          </div>
+
+          <!-- Instructions Card -->
+          <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-5 space-y-3">
+            <h4 class="text-xs font-bold uppercase text-amber-400">Step-by-Step Supabase Setup (Run Once):</h4>
+            <ol class="list-decimal list-inside text-xs text-zinc-300 space-y-1.5 leading-relaxed">
+              <li>Open your Supabase Project: <a href="https://supabase.com/dashboard/project/sjcjxetwxrdxwnhzpzaq/sql/new" target="_blank" class="text-amber-400 underline font-semibold">Supabase SQL Editor (Click here)</a></li>
+              <li>Click the button below to copy the complete SQL Schema.</li>
+              <li>Paste it into the Supabase SQL Editor and press <strong>RUN</strong>.</li>
+              <li>Click <strong>"Push All Data to Supabase"</strong> above to seed all dishes and menus!</li>
+            </ol>
+            <div class="pt-2">
+              <button onclick="copySupabaseSqlScript()" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-amber-300 text-xs font-bold rounded-xl border border-zinc-700 transition cursor-pointer">
+                📋 Copy Supabase Setup SQL Script
+              </button>
+            </div>
+          </div>
+
+          <!-- JSON Backup & Restore -->
+          <div class="pt-4 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h4 class="text-xs font-bold text-white">Local & File Backups</h4>
+              <p class="text-[11px] text-zinc-400">Download a full JSON snapshot of all products, menus, and subscriptions.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="downloadJsonBackup()" class="px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold rounded-xl border border-zinc-700 transition">
+                💾 Download JSON Backup
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============================================================================== -->
+  <!-- 3. MODALS (ADD/EDIT DISH, CATEGORY, SUBSCRIPTION) -->
+  <!-- ============================================================================== -->
+
+  <!-- ADD / EDIT DISH MODAL -->
+  <div id="dish-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm overflow-y-auto">
+    <div class="w-full max-w-xl bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative my-8">
+      <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-5">
+        <div>
+          <h3 id="dish-modal-title" class="text-lg font-black font-heading text-white">Add New Dish</h3>
+          <p class="text-xs text-zinc-400">Upload photo to Cloudinary and set dish pricing and details</p>
+        </div>
+        <button onclick="closeDishModal()" class="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center font-bold text-sm">✕</button>
+      </div>
+
+      <form id="dish-form" onsubmit="handleSaveDish(event)" class="space-y-4">
+        <input type="hidden" id="dish-id" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Dish Name *</label>
+            <input type="text" id="dish-name" required placeholder="e.g. Gongura Chicken Fry" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Category *</label>
+            <select id="dish-category" required class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Diet Type</label>
+            <select id="dish-is-veg" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400">
+              <option value="true">🟢 Pure Veg</option>
+              <option value="false">🔴 Non-Veg</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Selling Price (₹) *</label>
+            <input type="number" id="dish-price" required min="1" placeholder="199" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Original Price (₹)</label>
+            <input type="number" id="dish-orig-price" min="1" placeholder="249" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Calories</label>
+            <input type="text" id="dish-calories" placeholder="e.g. 350 kcal" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Protein</label>
+            <input type="text" id="dish-protein" placeholder="e.g. 18g Protein" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Description</label>
+          <textarea id="dish-description" rows="2" placeholder="Authentic Rayalaseema spices cooked with..." class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+
+        <!-- Cloudinary Dish Image Uploader -->
+        <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-amber-400">Dish Image (Cloudinary)</label>
+            <span id="dish-upload-status" class="text-[10px] text-zinc-400"></span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <img id="dish-image-preview" src="images/veg-meals.jpg" alt="Preview" class="w-14 h-14 rounded-xl object-cover border border-zinc-700 bg-zinc-900 shrink-0" />
+            <div class="flex-1 min-w-0">
+              <input type="text" id="dish-image-url" placeholder="Paste image URL or upload below" class="w-full px-3 py-1.5 bg-zinc-900 border border-zinc-700 rounded-lg text-xs text-zinc-200 mb-1.5" />
+              <input type="file" id="dish-image-file" accept="image/*" class="text-[11px] text-zinc-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-amber-400 file:text-zinc-950 hover:file:bg-amber-500 cursor-pointer" onchange="handleDishImageChosen(event)" />
+            </div>
+          </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-zinc-600 bg-zinc-100 px-3 py-1 rounded-lg" id="kitchen-prep-count-badge">
-            2 Meals Scheduled
-          </span>
-        </div>
-      </div>
-
-      <!-- Two-Column Kitchen Board -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        
-        <!-- Column 1: Cook & Dispatch Tomorrow (Active) -->
-        <div class="lg:col-span-8 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-              Meals to Prepare & Dispatch Tomorrow (12:30 PM Lunch Slot)
-            </span>
-          </div>
-
-          <div id="kitchen-active-list" class="space-y-3">
-            <!-- Rendered dynamically -->
-          </div>
+          <input type="checkbox" id="dish-popular" class="w-4 h-4 rounded text-amber-400 bg-zinc-950 border-zinc-700" />
+          <label for="dish-popular" class="text-xs font-bold text-zinc-300">Feature this dish on Homepage (Popular Tag)</label>
         </div>
 
-        <!-- Column 2: Paused Subscriptions (DO NOT PREPARE) -->
-        <div class="lg:col-span-4 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
-              Paused (Do NOT Cook - Zero Loss)
-            </span>
-          </div>
-
-          <div id="kitchen-paused-list" class="space-y-3">
-            <!-- Rendered dynamically -->
-          </div>
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-zinc-800">
+          <button type="button" onclick="closeDishModal()" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-xs rounded-xl">Cancel</button>
+          <button type="submit" id="btn-save-dish" class="px-6 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl shadow cursor-pointer">
+            Save Dish
+          </button>
         </div>
-
-      </div>
-
-    </div>
-
-    <!-- ==================== SECTION 2: MASTER SUBSCRIPTION LEDGER ==================== -->
-    <div class="bg-white rounded-2xl p-4 sm:p-6 border border-zinc-200/80 shadow-sm space-y-4">
-      
-      <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-zinc-100">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-base">📊</span>
-            <h2 class="text-lg sm:text-xl font-black text-zinc-950 font-heading">10-Day Plan Customer Subscriptions Ledger</h2>
-          </div>
-          <p class="text-xs text-zinc-500 mt-0.5">
-            Track each customer's Consumed Days, Remaining Food Days, Paused Dates, and Next Delivery schedule.
-          </p>
-        </div>
-
-        <!-- Filter Tabs -->
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="filterAdminTable('all')" id="btn-filter-all" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-950 text-white">All Plans</button>
-          <button onclick="filterAdminTable('active')" id="btn-filter-active" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200">🟢 Active Only</button>
-          <button onclick="filterAdminTable('paused')" id="btn-filter-paused" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200">⏸️ Paused</button>
-          <button onclick="filterAdminTable('completed')" id="btn-filter-completed" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200">🎉 Completed</button>
-        </div>
-      </div>
-
-      <!-- Subscriptions Table -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead>
-            <tr class="bg-zinc-50 border-b border-zinc-200/80 text-zinc-500 font-extrabold uppercase tracking-wider">
-              <th class="p-3.5">Customer & Contact</th>
-              <th class="p-3.5">Plan & Meal Type</th>
-              <th class="p-3.5">Consumed / Total Days</th>
-              <th class="p-3.5">Remaining Days</th>
-              <th class="p-3.5">Status</th>
-              <th class="p-3.5">Next Delivery</th>
-              <th class="p-3.5">Paused Dates</th>
-              <th class="p-3.5 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="admin-subscriptions-tbody" class="divide-y divide-zinc-100">
-            <!-- Rendered dynamically -->
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- ==================== MODAL: ADD NEW SUBSCRIPTION ==================== -->
-  <div id="new-sub-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-zinc-100 relative">
-      <button onclick="closeNewSubModal()" class="absolute top-5 right-5 text-zinc-400 hover:text-zinc-700 font-bold text-lg">✕</button>
-      
-      <div class="mb-5">
-        <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-md uppercase tracking-wider">Admin Entry</span>
-        <h3 class="text-xl font-black text-zinc-950 mt-1">Register New 10-Day Subscription</h3>
-      </div>
-
-      <form id="new-sub-form" onsubmit="handleCreateNewSubscription(event)" class="space-y-4">
-        <div>
-          <label class="text-xs font-bold text-zinc-700 block mb-1">Customer Full Name</label>
-          <input type="text" id="new-sub-name" required placeholder="e.g. Vikram Rao" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="text-xs font-bold text-zinc-700 block mb-1">Mobile Phone</label>
-            <input type="tel" id="new-sub-phone" required placeholder="+91 99887 66554" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400" />
-          </div>
-          <div>
-            <label class="text-xs font-bold text-zinc-700 block mb-1">Meal Preference</label>
-            <select id="new-sub-meal" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400">
-              <option value="Rayalaseema Deluxe Veg Full Meal">Deluxe Veg Meal</option>
-              <option value="Rayalaseema Chicken Curry & Biryani Meal">Chicken Biryani Meal</option>
-              <option value="Exotic Antioxidant Fruit Crunch Meal">Fruit Fitness Meal</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-xs font-bold text-zinc-700 block mb-1">Delivery Address (Office / Desk)</label>
-          <textarea id="new-sub-address" required rows="2" placeholder="Building 3, DLF Cyber City, Gachibowli, Hyderabad" class="w-full px-4 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400"></textarea>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="text-xs font-bold text-zinc-700 block mb-1">Total Days Entitlement</label>
-            <input type="number" id="new-sub-total" value="10" readonly class="w-full px-4 py-2.5 bg-zinc-100 border border-zinc-200 rounded-xl text-xs font-bold text-zinc-600" />
-          </div>
-          <div>
-            <label class="text-xs font-bold text-zinc-700 block mb-1">Initial Consumed Days</label>
-            <select id="new-sub-consumed" class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-400">
-              <option value="1">1 Day Consumed (Today)</option>
-              <option value="0">0 Days Consumed (Starts Tomorrow)</option>
-            </select>
-          </div>
-        </div>
-
-        <button type="submit" class="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black rounded-xl text-xs transition shadow cursor-pointer">
-          Create & Activate Subscription
-        </button>
       </form>
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
-  <div id="admin-toast" class="hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold text-white transition-all transform duration-300"></div>
+  <!-- ADD / EDIT CATEGORY MODAL -->
+  <div id="category-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm">
+    <div class="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-5">
+        <h3 id="category-modal-title" class="text-lg font-black font-heading text-white">Add Category</h3>
+        <button onclick="closeCategoryModal()" class="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center font-bold text-sm">✕</button>
+      </div>
 
-  <!-- Scripts -->
+      <form id="category-form" onsubmit="handleSaveCategory(event)" class="space-y-4">
+        <input type="hidden" id="category-id" />
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Category Name *</label>
+          <input type="text" id="category-name" required placeholder="e.g. Signature Dishes" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Tagline</label>
+          <input type="text" id="category-tagline" placeholder="e.g. The Pride of Seema" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Description</label>
+          <textarea id="category-description" rows="2" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Badge</label>
+            <input type="text" id="category-badge" placeholder="House Special" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Color Theme</label>
+            <select id="category-color" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white">
+              <option value="amber">Amber</option>
+              <option value="emerald">Emerald</option>
+              <option value="red">Red</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Category Image URL (Cloudinary)</label>
+          <div class="flex gap-2">
+            <input type="text" id="category-image-url" class="flex-1 px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+            <input type="file" id="category-image-file" accept="image/*" class="hidden" onchange="handleCatImageChosen(event)" />
+            <button type="button" onclick="document.getElementById('category-image-file').click()" class="px-3 py-2 bg-amber-400 text-zinc-950 font-bold text-xs rounded-xl">Upload</button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-zinc-800">
+          <button type="button" onclick="closeCategoryModal()" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-xs rounded-xl">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD NEW CUSTOMER SUBSCRIPTION MODAL -->
+  <div id="new-sub-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm">
+    <div class="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-5">
+        <h3 class="text-lg font-black font-heading text-white">Add Customer Subscription</h3>
+        <button onclick="closeNewSubModal()" class="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center font-bold text-sm">✕</button>
+      </div>
+
+      <form id="new-sub-form" onsubmit="handleCreateNewSubscription(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Customer Full Name *</label>
+          <input type="text" id="new-sub-name" required placeholder="e.g. Ramesh Kumar" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Phone Number *</label>
+            <input type="tel" id="new-sub-phone" required placeholder="+91 98765 43210" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-zinc-300 mb-1">Meal Preference *</label>
+            <select id="new-sub-meal" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white">
+              <option value="Rayalaseema Deluxe Veg Full Meal">🟢 Rayalaseema Deluxe Veg Meal</option>
+              <option value="Special Rayalaseema Non-Veg Full Meal">🔴 Rayalaseema Non-Veg Meal</option>
+              <option value="Healthy High-Protein Diet Meal">🥗 High-Protein Fitness Meal</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Delivery Address *</label>
+          <textarea id="new-sub-address" required rows="2" placeholder="Tower 3, Mindspace IT Park, Hitec City, Hyderabad" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-zinc-300 mb-1">Initial Consumed Days (Usually 0 or 1)</label>
+          <input type="number" id="new-sub-consumed" min="0" max="10" value="0" class="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white" />
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-zinc-800">
+          <button type="button" onclick="closeNewSubModal()" class="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-xs rounded-xl">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 bg-amber-400 hover:bg-amber-500 text-zinc-950 font-black text-xs rounded-xl">Create Subscription</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="admin-toast" class="hidden fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold text-white transition-all transform duration-300 bg-zinc-900 border border-amber-400/50"></div>
+
+  <!-- Application Scripts -->
   <script src="js/data.js"></script>
-  <script>
-    let adminFilter = 'all';
-    let subscriptions = [];
-
-    function loadAdminData() {
-      try {
-        const saved = localStorage.getItem('rck_subscriptions');
-        subscriptions = saved ? JSON.parse(saved) : (MENU_DATA.initialSubscriptions || []);
-        
-        // Also check if current user activeSubscription exists and sync
-        const userSaved = localStorage.getItem('rck_user');
-        if (userSaved) {
-          const u = JSON.parse(userSaved);
-          if (u.activeSubscription) {
-            const idx = subscriptions.findIndex(s => s.id === u.activeSubscription.id || s.customerName === u.name);
-            if (idx !== -1) {
-              subscriptions[idx] = { ...subscriptions[idx], ...u.activeSubscription };
-            } else {
-              subscriptions.unshift(u.activeSubscription);
-            }
-          }
-        }
-      } catch (e) {
-        subscriptions = MENU_DATA.initialSubscriptions || [];
-      }
-      renderAdminDashboard();
-    }
-
-    function saveAdminData() {
-      localStorage.setItem('rck_subscriptions', JSON.stringify(subscriptions));
-      
-      // If Rahul Kumar's subscription was updated, also update rck_user
-      const rahulSub = subscriptions.find(s => s.customerName === "Rahul Kumar" || s.id === "SUB-10D-89421");
-      if (rahulSub) {
-        const userSaved = localStorage.getItem('rck_user');
-        let u = userSaved ? JSON.parse(userSaved) : { name: "Rahul Kumar", phone: "+91 98765 43210" };
-        u.activeSubscription = rahulSub;
-        localStorage.setItem('rck_user', JSON.stringify(u));
-      }
-      renderAdminDashboard();
-    }
-
-    function getTimeMode() {
-      return localStorage.getItem('rck_time_mode') || 'before';
-    }
-
-    function setAdminTimeMode(mode) {
-      localStorage.setItem('rck_time_mode', mode);
-      showAdminToast(`Simulation Clock set to: ${mode === 'before' ? '3:30 PM (Before 5:30 PM)' : mode === 'after' ? '6:15 PM (After 5:30 PM)' : 'Real Device Clock'}`);
-      updateCutoffClockBadge();
-    }
-
-    function updateCutoffClockBadge() {
-      const mode = getTimeMode();
-      const badge = document.getElementById('admin-cutoff-badge');
-      const timeDisplay = document.getElementById('admin-time-display');
-      const btnBefore = document.getElementById('btn-mode-before');
-      const btnAfter = document.getElementById('btn-mode-after');
-      const btnReal = document.getElementById('btn-mode-real');
-
-      btnBefore.className = mode === 'before' ? 'px-2.5 py-1 rounded-lg bg-emerald-600 text-white transition' : 'px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition';
-      btnAfter.className = mode === 'after' ? 'px-2.5 py-1 rounded-lg bg-red-600 text-white transition' : 'px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition';
-      btnReal.className = mode === 'real' ? 'px-2.5 py-1 rounded-lg bg-zinc-800 text-white transition' : 'px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white transition';
-
-      if (mode === 'before') {
-        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40';
-        timeDisplay.textContent = '3:30 PM (Cutoff Open)';
-      } else if (mode === 'after') {
-        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-red-950/60 text-red-300 border-red-500/40';
-        timeDisplay.textContent = '6:15 PM (Cutoff Closed)';
-      } else {
-        const now = new Date();
-        const isBefore = (now.getHours() < 17 || (now.getHours() === 17 && now.getMinutes() < 30));
-        badge.className = isBefore 
-          ? 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
-          : 'px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-red-950/60 text-red-300 border-red-500/40';
-        timeDisplay.textContent = `${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (${isBefore ? 'Open' : 'Closed'})`;
-      }
-    }
-
-    function renderAdminDashboard() {
-      updateCutoffClockBadge();
-
-      const totalSubs = subscriptions.length;
-      const activeTomorrow = subscriptions.filter(s => s.status === 'Active' && !s.isPausedTomorrow && s.consumedDays < s.totalDays);
-      const pausedTomorrow = subscriptions.filter(s => s.isPausedTomorrow || s.status === 'Paused for Tomorrow');
-      const completedSubs = subscriptions.filter(s => s.status === 'Completed' || s.consumedDays >= s.totalDays);
-
-      document.getElementById('kpi-total-subs').textContent = totalSubs;
-      document.getElementById('kpi-active-tomorrow').textContent = activeTomorrow.length;
-      document.getElementById('kpi-paused-tomorrow').textContent = pausedTomorrow.length;
-      document.getElementById('kpi-completed-subs').textContent = completedSubs.length;
-      document.getElementById('kitchen-prep-count-badge').textContent = `${activeTomorrow.length} Meals Scheduled for Tomorrow`;
-
-      // Render Kitchen Active List
-      const kitchenActiveContainer = document.getElementById('kitchen-active-list');
-      if (activeTomorrow.length === 0) {
-        kitchenActiveContainer.innerHTML = `
-          <div class="p-6 bg-zinc-50 rounded-2xl border border-zinc-200 text-center text-xs text-zinc-500">
-            No meals scheduled for preparation tomorrow.
-          </div>
-        `;
-      } else {
-        kitchenActiveContainer.innerHTML = activeTomorrow.map(s => `
-          <div class="bg-emerald-50/50 rounded-2xl p-4 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-black text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-md">
-                  ${s.mealType || 'Rayalaseema Deluxe Full Meal'}
-                </span>
-                <span class="text-xs font-bold text-zinc-700">${s.customerName}</span>
-                <span class="text-xs text-zinc-400">(${s.customerPhone})</span>
-              </div>
-              <p class="text-xs text-zinc-600">📍 ${s.customerAddress}</p>
-              <div class="text-[11px] text-zinc-500">
-                Plan Progress: <strong>Day ${s.consumedDays + 1} of ${s.totalDays}</strong> • Remaining Balance: <strong>${s.remainingDays} days</strong>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <button onclick="adminMarkConsumed('${s.id}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow cursor-pointer whitespace-nowrap">
-                ✓ Mark Delivered
-              </button>
-              <button onclick="adminTogglePause('${s.id}')" class="px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs rounded-xl transition cursor-pointer whitespace-nowrap">
-                ⏸️ Pause
-              </button>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      // Render Kitchen Paused List
-      const kitchenPausedContainer = document.getElementById('kitchen-paused-list');
-      if (pausedTomorrow.length === 0) {
-        kitchenPausedContainer.innerHTML = `
-          <div class="p-6 bg-zinc-50 rounded-2xl border border-zinc-200 text-center text-xs text-zinc-400">
-            No customers currently paused for tomorrow.
-          </div>
-        `;
-      } else {
-        kitchenPausedContainer.innerHTML = pausedTomorrow.map(s => `
-          <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-zinc-900">${s.customerName}</span>
-              <span class="text-[10px] font-black text-amber-800 bg-amber-200 px-2 py-0.5 rounded">PAUSED</span>
-            </div>
-            <p class="text-[11px] text-zinc-600">Paused before 5:30 PM. <strong>Zero meal prepared.</strong></p>
-            <div class="text-[10px] text-emerald-700 font-semibold">
-              ✓ Remaining: ${s.remainingDays} Days Preserved (Auto-resumes Day After)
-            </div>
-            <button onclick="adminTogglePause('${s.id}')" class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition cursor-pointer">
-              ▶️ Resume Tomorrow
-            </button>
-          </div>
-        `).join('');
-      }
-
-      // Render Subscriptions Master Table
-      const tbody = document.getElementById('admin-subscriptions-tbody');
-      let filtered = subscriptions;
-      if (adminFilter === 'active') filtered = subscriptions.filter(s => s.status === 'Active' && !s.isPausedTomorrow && s.consumedDays < s.totalDays);
-      if (adminFilter === 'paused') filtered = subscriptions.filter(s => s.isPausedTomorrow || s.status === 'Paused for Tomorrow');
-      if (adminFilter === 'completed') filtered = subscriptions.filter(s => s.status === 'Completed' || s.consumedDays >= s.totalDays);
-
-      tbody.innerHTML = filtered.map(s => {
-        const isPaused = s.isPausedTomorrow || s.status === 'Paused for Tomorrow';
-        const isCompleted = s.status === 'Completed' || s.consumedDays >= s.totalDays;
-
-        return `
-          <tr class="hover:bg-zinc-50/80 transition">
-            <td class="p-3.5">
-              <div class="font-bold text-zinc-900">${s.customerName}</div>
-              <div class="text-[11px] text-zinc-500">${s.customerPhone}</div>
-              <div class="text-[11px] text-zinc-400 truncate max-w-xs">${s.customerAddress}</div>
-            </td>
-
-            <td class="p-3.5">
-              <span class="font-bold text-zinc-800 block">${s.planName || '10-Day Plan'}</span>
-              <span class="text-[11px] text-zinc-500">${s.mealType || 'Deluxe Veg Full Meal'}</span>
-            </td>
-
-            <td class="p-3.5">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-zinc-900 text-sm">${s.consumedDays || 0} / ${s.totalDays || 10}</span>
-                <div class="w-16 h-2 bg-zinc-200 rounded-full overflow-hidden">
-                  <div class="h-full bg-emerald-500 rounded-full" style="width: ${Math.min(100, Math.round(((s.consumedDays || 0)/(s.totalDays || 10))*100))}%"></div>
-                </div>
-              </div>
-              <span class="text-[10px] text-zinc-400">Consumed Days</span>
-            </td>
-
-            <td class="p-3.5">
-              <span class="text-sm font-black text-emerald-600">${s.remainingDays !== undefined ? s.remainingDays : (s.totalDays - s.consumedDays)} Days</span>
-              <span class="text-[10px] text-zinc-400 block">Zero Loss</span>
-            </td>
-
-            <td class="p-3.5">
-              <span class="px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider inline-block ${
-                isCompleted ? 'bg-blue-100 text-blue-800 border border-blue-300' :
-                isPaused ? 'bg-amber-100 text-amber-800 border border-amber-300' :
-                'bg-emerald-100 text-emerald-800 border border-emerald-300'
-              }">
-                ${isCompleted ? '🎉 Completed' : isPaused ? '⏸️ Paused' : '🟢 Active'}
-              </span>
-            </td>
-
-            <td class="p-3.5 font-semibold text-zinc-700">
-              ${isCompleted ? 'All Days Consumed' : isPaused ? 'Resumes Day After Tomorrow' : 'Tomorrow (12:30 PM)'}
-            </td>
-
-            <td class="p-3.5">
-              ${(s.pausedDates && s.pausedDates.length > 0) 
-                ? s.pausedDates.map(d => `<span class="inline-block bg-zinc-100 text-zinc-700 px-2 py-0.5 rounded text-[10px] mr-1 mb-1 font-medium">${d}</span>`).join('') 
-                : '<span class="text-zinc-400 text-[11px]">None</span>'}
-            </td>
-
-            <td class="p-3.5 text-right">
-              <div class="flex items-center justify-end gap-1.5">
-                ${!isCompleted ? `
-                  <button onclick="adminMarkConsumed('${s.id}')" title="Record 1 Day Consumed" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow cursor-pointer">
-                    +1 Consumed
-                  </button>
-                  <button onclick="adminTogglePause('${s.id}')" title="Toggle Pause for Tomorrow" class="px-2.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-amber-400 rounded-lg text-xs font-bold transition cursor-pointer">
-                    ${isPaused ? '▶️ Resume' : '⏸️ Pause'}
-                  </button>
-                ` : `
-                  <button onclick="adminResetPlan('${s.id}')" class="px-2.5 py-1.5 bg-zinc-200 hover:bg-zinc-300 text-zinc-800 rounded-lg text-xs font-bold transition cursor-pointer">
-                    🔄 Reset
-                  </button>
-                `}
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function filterAdminTable(filter) {
-      adminFilter = filter;
-      ['all', 'active', 'paused', 'completed'].forEach(f => {
-        const btn = document.getElementById(`btn-filter-${f}`);
-        if (btn) {
-          btn.className = f === filter ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-950 text-white' : 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-zinc-100 text-zinc-700 hover:bg-zinc-200';
-        }
-      });
-      renderAdminDashboard();
-    }
-
-    function adminMarkConsumed(subId) {
-      const sub = subscriptions.find(s => s.id === subId);
-      if (!sub) return;
-
-      if (sub.consumedDays >= sub.totalDays) {
-        showAdminToast("Subscription already completed all 10 days!", "info");
-        return;
-      }
-
-      sub.consumedDays += 1;
-      sub.remainingDays = Math.max(0, sub.totalDays - sub.consumedDays);
-      sub.isPausedTomorrow = false;
-
-      if (sub.consumedDays >= sub.totalDays) {
-        sub.status = "Completed";
-        sub.nextDeliveryDate = "All 10 Days Consumed";
-      } else {
-        sub.status = "Active";
-        sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
-      }
-
-      saveAdminData();
-      showAdminToast(`Recorded Day ${sub.consumedDays}/10 Consumed for ${sub.customerName}! ${sub.remainingDays} days remaining.`);
-    }
-
-    function adminTogglePause(subId) {
-      const sub = subscriptions.find(s => s.id === subId);
-      if (!sub) return;
-
-      const isCurrentlyPaused = sub.isPausedTomorrow || sub.status === 'Paused for Tomorrow';
-      if (isCurrentlyPaused) {
-        sub.isPausedTomorrow = false;
-        sub.status = "Active";
-        sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
-        sub.pausedDates = (sub.pausedDates || []).filter(d => !d.includes("Tomorrow") && !d.includes("20 Sep"));
-        saveAdminData();
-        showAdminToast(`▶️ Resumed subscription for ${sub.customerName} for tomorrow's dispatch.`);
-      } else {
-        sub.isPausedTomorrow = true;
-        sub.status = "Paused for Tomorrow";
-        sub.nextDeliveryDate = "Resumes Day After Tomorrow (12:30 PM)";
-        if (!sub.pausedDates) sub.pausedDates = [];
-        if (!sub.pausedDates.includes("20 Sep 2026")) sub.pausedDates.push("20 Sep 2026");
-        sub.remainingDays = sub.totalDays - sub.consumedDays;
-        saveAdminData();
-        showAdminToast(`⏸️ Paused subscription for ${sub.customerName}. Excluded from tomorrow's kitchen batch.`);
-      }
-    }
-
-    function adminResetPlan(subId) {
-      const sub = subscriptions.find(s => s.id === subId);
-      if (!sub) return;
-      sub.totalDays = 10;
-      sub.consumedDays = 1;
-      sub.remainingDays = 9;
-      sub.status = "Active";
-      sub.isPausedTomorrow = false;
-      sub.nextDeliveryDate = "Tomorrow (12:30 PM)";
-      sub.pausedDates = [];
-      saveAdminData();
-      showAdminToast(`🔄 Reset ${sub.customerName}'s 10-day plan (1/10 consumed, 9 days remaining).`);
-    }
-
-    function resetAllDemoSubscriptions() {
-      subscriptions = JSON.parse(JSON.stringify(MENU_DATA.initialSubscriptions));
-      saveAdminData();
-      showAdminToast("🔄 All demo subscriptions have been reset.");
-    }
-
-    function openNewSubModal() {
-      document.getElementById('new-sub-modal').classList.remove('hidden');
-    }
-
-    function closeNewSubModal() {
-      document.getElementById('new-sub-modal').classList.add('hidden');
-    }
-
-    function handleCreateNewSubscription(e) {
-      e.preventDefault();
-      const name = document.getElementById('new-sub-name').value.trim();
-      const phone = document.getElementById('new-sub-phone').value.trim();
-      const meal = document.getElementById('new-sub-meal').value;
-      const address = document.getElementById('new-sub-address').value.trim();
-      const consumed = parseInt(document.getElementById('new-sub-consumed').value) || 1;
-
-      const newSub = {
-        id: "SUB-10D-" + Math.floor(10000 + Math.random() * 90000),
-        customerName: name,
-        customerPhone: phone,
-        customerAddress: address,
-        planId: "plan-trial",
-        planName: "10-Day Food Subscription Plan",
-        mealType: meal,
-        totalDays: 10,
-        consumedDays: consumed,
-        remainingDays: 10 - consumed,
-        status: "Active",
-        isPausedTomorrow: false,
-        pauseCutoff: "5:30 PM",
-        nextDeliveryDate: "Tomorrow (12:30 PM)",
-        pausedDates: []
-      };
-
-      subscriptions.unshift(newSub);
-      saveAdminData();
-      closeNewSubModal();
-      showAdminToast(`✓ Created 10-Day Subscription for ${name}!`);
-    }
-
-    function showAdminToast(msg) {
-      const toast = document.getElementById('admin-toast');
-      toast.textContent = msg;
-      toast.className = 'fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold text-white transition-all transform duration-300 bg-zinc-950 border border-amber-400/50';
-      toast.classList.remove('hidden');
-      setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 4000);
-    }
-
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', () => {
-      loadAdminData();
-    });
-  </script>
+  <script src="js/db.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>

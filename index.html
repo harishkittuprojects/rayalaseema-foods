@@ -44,6 +44,11 @@
   <link rel="stylesheet" href="css/style.css" />
 
   <script>
+    // Route to /admin if accessed via /admin or #admin
+    if (window.location.pathname.endsWith('/admin') || window.location.pathname.endsWith('/admin/') || window.location.hash === '#admin') {
+      window.location.replace('admin.html');
+    }
+
     window.scrollToDinnerMenu = function(e) {
       if (e) {
         if (e.preventDefault) e.preventDefault();
@@ -1836,7 +1841,9 @@
   <div id="toast-container"></div>
 
   <!-- Application Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/data.js?v=20260925_2"></script>
+  <script src="js/db.js"></script>
   <script src="js/app.js?v=20260925_2"></script>
 </body>
 </html>

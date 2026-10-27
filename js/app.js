@@ -104,6 +104,9 @@ class AppState {
 
   saveSubscriptions() {
     localStorage.setItem('rck_subscriptions', JSON.stringify(this.subscriptions));
+    if (window.RCK_DB && typeof window.RCK_DB.saveSubscriptions === 'function') {
+      window.RCK_DB.saveSubscriptions(this.subscriptions);
+    }
   }
 
   canPauseTomorrow() {
@@ -145,6 +148,9 @@ class AppState {
 
   saveOrders() {
     localStorage.setItem('rck_orders', JSON.stringify(this.orders));
+    if (window.RCK_DB && typeof window.RCK_DB.saveOrders === 'function') {
+      window.RCK_DB.saveOrders(this.orders);
+    }
     this.updateOrdersUI();
   }
 
@@ -361,6 +367,20 @@ document.addEventListener('DOMContentLoaded', () => {
       offset: 50
     });
   }
+
+  // Live re-render when Supabase or Admin CMS data updates
+  window.addEventListener('rck_data_updated', () => {
+    try {
+      renderFeaturedProducts();
+      renderCategoriesGrid();
+      renderServicesPage();
+      renderSubscriptionPlans();
+      renderMonthlySubscribersMenu();
+      renderReviews();
+    } catch (e) {
+      console.warn('Re-render on data update error:', e);
+    }
+  });
 });
 
 // Single Page Application Router
