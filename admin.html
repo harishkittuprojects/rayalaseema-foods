@@ -132,9 +132,9 @@
         <!-- Sync Indicator, Cutoff Clock & Actions -->
         <div class="flex flex-wrap items-center gap-2.5">
           <!-- Database Sync Status Pill -->
-          <div id="db-status-badge" onclick="switchAdminTab('supabase')" title="Supabase Database Status" class="px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40 cursor-pointer hover:bg-emerald-900/60 transition">
+          <div id="db-status-badge" onclick="switchAdminTab('supabase')" title="Database Live Status" class="px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 bg-emerald-950/60 text-emerald-300 border-emerald-500/40 cursor-pointer hover:bg-emerald-900/60 transition">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="db-status-text">Supabase Active</span>
+            <span id="db-status-text">Database Active</span>
           </div>
 
           <!-- Cutoff Clock Badge -->
@@ -265,50 +265,19 @@
           </div>
         </div>
 
-        <!-- Recent Activity & Quick Links -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Recent Orders / Subscriptions -->
-          <div class="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <h3 class="text-base font-bold text-white">Tomorrow's Kitchen Dispatch Prep</h3>
-                <p class="text-xs text-zinc-400">Subscribers who will receive lunch delivery at 12:30 PM tomorrow</p>
-              </div>
-              <button onclick="switchAdminTab('subscriptions')" class="text-xs text-amber-400 hover:underline font-bold">
-                View Full Kitchen Ledger →
-              </button>
+        <!-- Tomorrow's Kitchen Dispatch Prep -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-white">Tomorrow's Kitchen Dispatch Prep</h3>
+              <p class="text-xs text-zinc-400">Active subscribers scheduled for tomorrow's 12:30 PM lunch delivery</p>
             </div>
-            <div id="dashboard-kitchen-summary" class="space-y-2.5">
-              <!-- Dynamically filled -->
-            </div>
+            <button onclick="switchAdminTab('subscriptions')" class="text-xs text-amber-400 hover:underline font-bold self-start sm:self-auto">
+              View Full Kitchen Ledger →
+            </button>
           </div>
-
-          <!-- Cloudinary & Supabase Quick Status -->
-          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-4">
-            <h3 class="text-base font-bold text-white">Connected Cloud Services</h3>
-            
-            <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-1.5">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Supabase Database
-                </span>
-                <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded">Connected</span>
-              </div>
-              <p class="text-[11px] text-zinc-400">Project: <span class="text-zinc-200">sjcjxetwxrdxwnhzpzaq</span></p>
-            </div>
-
-            <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                  <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span> Cloudinary Media
-                </span>
-                <span class="text-[10px] font-bold text-blue-400 bg-blue-950 px-2 py-0.5 rounded">Active</span>
-              </div>
-              <p class="text-[11px] text-zinc-400">Cloud: <span class="text-zinc-200">ufqzv6wv</span></p>
-              <button onclick="switchAdminTab('cloudinary')" class="w-full py-1.5 bg-zinc-800 hover:bg-zinc-700 text-blue-300 text-xs font-bold rounded-lg transition">
-                ☁️ Open Media Uploader
-              </button>
-            </div>
+          <div id="dashboard-kitchen-summary" class="space-y-2.5">
+            <!-- Dynamically filled -->
           </div>
         </div>
 
