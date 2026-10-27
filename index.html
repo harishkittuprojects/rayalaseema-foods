@@ -63,12 +63,23 @@
 </head>
 <body class="bg-[#FAFAFA] text-zinc-800 antialiased selection:bg-amber-300 selection:text-zinc-950 flex flex-col min-h-screen">
 
-  <!-- ==================== CINEMATIC FULLSCREEN INTRO VIDEO (DESKTOP & MOBILE EDGE-TO-EDGE) ==================== -->
+  <!-- ==================== CINEMATIC FULLSCREEN INTRO VIDEO (PERFECT MOBILE & DESKTOP PRESENTATION) ==================== -->
   <div id="brand-video-splash" onclick="dismissSplashVideo()" class="fixed inset-0 z-[100] w-full h-full bg-black flex items-center justify-center cursor-pointer select-none overflow-hidden transition-all duration-700 ease-out m-0 p-0 border-0">
-    <video id="splash-intro-video" autoplay muted playsinline class="w-full h-full object-cover object-center m-0 p-0 border-0">
+    <!-- Ambient blurred background video filling entire screen without borders or black cuts -->
+    <video id="splash-bg-ambient" autoplay muted loop playsinline webkit-playsinline="true" x5-playsinline="true" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" class="absolute inset-0 w-full h-full object-cover blur-3xl opacity-60 scale-125 pointer-events-none">
       <source src="rayalaseema-foods.mp4" type="video/mp4">
       <source src="https://res.cloudinary.com/ufqzv6wv/video/upload/v1793110336/rjmodwaibzooeka4ni1b.mp4" type="video/mp4">
     </video>
+    <!-- Cinematic Vignette Overlay -->
+    <div class="absolute inset-0 bg-black/40 pointer-events-none"></div>
+
+    <!-- Crisp, uncropped foreground video: 100% visible emblem and animation on all screen sizes -->
+    <div class="relative z-10 w-full h-full flex items-center justify-center p-0 pointer-events-none">
+      <video id="splash-intro-video" autoplay muted playsinline webkit-playsinline="true" x5-playsinline="true" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" class="w-full h-full max-h-screen object-contain pointer-events-none drop-shadow-2xl">
+        <source src="rayalaseema-foods.mp4" type="video/mp4">
+        <source src="https://res.cloudinary.com/ufqzv6wv/video/upload/v1793110336/rjmodwaibzooeka4ni1b.mp4" type="video/mp4">
+      </video>
+    </div>
   </div>
 
   <!-- ==================== HEADER / NAVBAR ==================== -->
@@ -1876,26 +1887,32 @@
     (function() {
       const splash = document.getElementById('brand-video-splash');
       const video = document.getElementById('splash-intro-video');
+      const bgVideo = document.getElementById('splash-bg-ambient');
 
       if (!splash || !video) return;
 
       let splashTimeout = null;
 
       function configureMediumVideo() {
-        // Medium slow pace: natural, smooth, and easily readable (1.4x speed, ~6-7 seconds)
-        video.playbackRate = 1.4;
+        // Medium slow pace: natural, smooth, and easily readable (1.35x speed, ~6-7 seconds)
+        video.playbackRate = 1.35;
+        if (bgVideo) bgVideo.playbackRate = 1.35;
       }
 
       // Configure playback speed on metadata load & play
       video.addEventListener('loadedmetadata', configureMediumVideo);
       video.addEventListener('play', configureMediumVideo);
+      if (bgVideo) {
+        bgVideo.addEventListener('loadedmetadata', configureMediumVideo);
+        bgVideo.addEventListener('play', configureMediumVideo);
+      }
 
       // Auto dismiss when video finishes
       video.addEventListener('ended', () => {
         dismissSplashVideo();
       });
 
-      // Comfortable medium timer matching the video
+      // Comfortable medium timer matching the video length
       splashTimeout = setTimeout(() => {
         dismissSplashVideo();
       }, 7000);
@@ -1904,6 +1921,9 @@
       video.play().then(() => {
         configureMediumVideo();
       }).catch(() => {});
+      if (bgVideo) {
+        bgVideo.play().catch(() => {});
+      }
 
       // Lock page scroll while splash video is active so no scrollbar jitter appears on mobile
       try { document.body.style.overflow = 'hidden'; } catch (e) {}
@@ -1915,6 +1935,7 @@
         setTimeout(() => {
           splash.classList.add('hidden');
           if (video) video.pause();
+          if (bgVideo) bgVideo.pause();
         }, 500);
       };
 
@@ -1924,8 +1945,10 @@
         void splash.offsetWidth;
         splash.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
         video.currentTime = 0;
+        if (bgVideo) bgVideo.currentTime = 0;
         configureMediumVideo();
         video.play().then(() => configureMediumVideo()).catch(() => {});
+        if (bgVideo) bgVideo.play().catch(() => {});
         splashTimeout = setTimeout(() => {
           dismissSplashVideo();
         }, 7000);
